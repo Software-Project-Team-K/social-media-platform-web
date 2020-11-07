@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+    
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Silvaro | Login</title>
+        <link rel="stylesheet" href="main.css">
+    </head>
+    
+  
+    
+    <body>
+
+        
+        <div class="row" style="height: 600px;">  
+            
+            <div class="logo colx6" style="height: inherit; padding: 50px; text-align: center;">
+                
+                <img src="Silvaro.png">
+                <div class="logotxt">
+                    <p id="logo">Silvaro</p>
+                    <p>Welcome To your mini-world!</p>
+                    <p>simple and  social platform.</p>
+                </div>
+                
+            </div>
+            
+            
+            
+            
+            
+            <div class="colx4" style="height: inherit;">
+                
+                <div class="loginbox">
+            
+                    <div id="switch" style="text-align: center;">
+                    <p style="margin: 0; padding: 5px 0; font-family: serif; font-variant: small-caps;"><simp id="slogin">Login</simp>&emsp;|&emsp;<simp id="sreg">Register</simp></p>
+                    </div>
+                   
+                    <div id="login">
+                    <p>User/Email:&ensp;</p><input type="email" placeholder="Enter Username"><br>
+                    <p>Password:&ensp;&ensp;</p><input  type="password" placeholder="Enter Password"><br><br/><br/><br/><br/>
+                    <button style="width: 100px;">Login</button>&emsp;<a>Restore Account</a>
+                    </div>
+                    
+                    <div id="register" style="display: none;">
+                    <p>Full Name:&emsp;&ensp;</p><input type="text" style="width: 100px;" placeholder="Firstname">
+                     <input type="text" style="width: 100px;" placeholder="Lastname"><br>
+                    <p>Email address:&ensp;</p><input  type="email" placeholder="Enter Email"><br>
+                    <p>Password:&emsp;&ensp;&emsp;</p><input  type="password" placeholder="Enter Password"><br>
+                    <p>Phone Number:&ensp;</p><input  type="number" placeholder="Enter Mobile Number"><br>
+                    <p>Date of Birth:&ensp;&ensp;</p><input type="date"><br><br/>
+                    <button style="width: 200px;">Complete Register</button>
+                    </div>
+
+                </div>
+                
+            </div>
+    
+        
+        </div>
+        
+        <script type="text/javascript" src="jquery.js"></script>
+         <script>
+             $(function() {
+                 
+        $("#slogin,#sreg").hover(function(event) {
+        $(this).css("color","blue");},function(event) {
+         $(this).css("color","midnightblue"); 
+        });
+                 
+        $("#slogin").click(function(event) {
+        $("#register").css("display","none");
+        $("#login").css("display","block");
+        });
+                 
+        $("#sreg").click(function(event) {
+        $("#register").css("display","block");
+        $("#login").css("display","none");
+        });      
+                 
+                 
+        });
+        </script>
+    </body>  
+</html>
+            

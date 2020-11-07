@@ -1,0 +1,127 @@
+.logotxt > p{
+    font-family: serif; color: black; font-size: 100%;
+    font-weight: 900;
+    margin: 0;
+    font-style: italic;
+}
+
+.logotxt > #logo{
+    font-family: monospace; font-variant: small-caps; font-size: 600%; color: silver; font-style: italic; font-weight: bolder;
+}
+
+.loginbox{
+    border: 2px black solid;
+    border-radius: 15px;
+    height: 400px;
+    background-color: rgba(50,50,50,0.2);
+    width: 60%;
+    position: relative;
+    left: 20%;
+    top:20%;
+    
+}
+
+#switch{
+    font-size: 180%; 
+    border-bottom: 2px solid black; 
+    border-radius: 15px;
+    margin-bottom: 35px; 
+    color: midnightblue;
+    font-weight: 900;
+    background-color: 	rgba(230, 230, 230,0.6);  
+}
+
+#login,#register{
+    position: absolute;
+    left: 30px;
+}
+
+#login p,#register p{
+    display: inline-block;
+    margin-bottom: 15px;
+}
+#register button{
+    position: absolute;
+    left: 50px;
+}
+#login button{
+    position: absolute;
+    left: 30px;
+    bottom: -80px;
+}
+#login a{
+    position: absolute;
+    left: 140px;
+    bottom: -80px;
+}
+
+
+/**/
+
+
+body{
+    margin: 0;
+}
+
+body::before {
+  content: "";
+  background-image: url(bg.jpg);
+  opacity: 0.5;
+  top: 0;   
+  left: 0;
+  bottom: 0;
+  right: 0;
+  position: absolute;
+  z-index: -1; 
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+* {
+box-sizing:border-box;
+}
+
+[class*="colx"] {
+    width: 100%;
+    float: left;
+    padding: 5px;
+    //border: 1px dashed silver;
+}
+
+@media only screen and (min-width: 768px) {
+.colx1 {
+    width: 10%;
+}
+.colx2 {
+    width: 20%;
+}
+.colx3 {
+    width: 30%;
+}
+.colx4 {
+    width: 40%;
+}
+.colx5 {
+    width: 50%;
+}
+.colx6 {
+    width: 60%;
+}
+.colx7 {
+    width: 70%;
+}
+.colx8 {
+    width: 80%;
+}
+.colx9 {
+    width: 90%;
+}
+.colx10 {
+    width: 100%;
+}}
+
+.row::after {
+  content: "";
+  clear: both;
+  display: table;
+}
