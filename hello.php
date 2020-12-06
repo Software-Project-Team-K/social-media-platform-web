@@ -1,6 +1,6 @@
 <?php
-session_start();
-if(isset($_SESSION['username']))header("location: index.php");
+        session_start();
+        if(isset($_SESSION['user']))header("location: index.php");
 ?>
 <!DOCTYPE html>
 <html>
@@ -38,7 +38,7 @@ if(isset($_SESSION['username']))header("location: index.php");
 
                         <div>
                         <p id="errMsg" style ="height: 12px; text-align:center; color:red; <?php echo (isset($_SESSION['page'])||isset($_SESSION['page2']))? "color:red;":"color:green;"; ?> font-family:monospace; font-weight:bolder;">
-                           <?php if(isset($_SESSION['error']))echo $_SESSION['error']; unset($_SESSION['error']); unset($_SESSION['page2']); ?>
+                           <?php if(isset($_SESSION['error']))echo $_SESSION['error']; unset($_SESSION['error']);  unset($_SESSION['page2']); ?>
                         </p>        
                         </div>
 

@@ -1,6 +1,8 @@
 <?php
 
+                    
                     require 'connect.php';
+                    require 'classes.php';
                     session_start();
 
                     if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -22,13 +24,11 @@
                     $row = mysqli_fetch_assoc($result);
                     $username =$row['username'];
                     $realpass = $row['password'];
-                    $realname = $row['f_name']." ".$row['l_name'];
-
-                    if ($realpass==$password)
+                    $firstname = $row['f_name'];
+                    $lastname = $row['l_name'];
+                    if ($password==$realpass)
                     {
-                    
-                    $_SESSION['username'] = $username;
-                    $_SESSION['realname'] = $realname;
+                    $_SESSION['user'] = new user($firstname,$lastname,$username);
                     header("Location: index.php");
                     }
                     else {$_SESSION['error']="Invalid Password!";  $_SESSION['page2']="true"; header("location: hello.php");die;}
@@ -37,14 +37,5 @@
 
                     $conn->close();
 
-
-
-
-                    function test_input($data) {
-                        $data = trim($data);
-                        $data = stripslashes($data);
-                        $data = htmlspecialchars($data);
-                        return $data;
-                        }
 ?>
         

@@ -1,12 +1,7 @@
-<?php
-
-                    $server = "localhost";
-                    $user = "root";
-                    $pass = "";
-                    $dbname = "silvaro";
-    
-                    $conn = new mysqli($server, $user, $pass ,$dbname);
-
-                    if ($conn->connect_error) {
-                    die("Connection failed: " . $conn->connect_error);}
+<?php       
+                    $_server = "localhost";
+                    $_user = "root";
+                    $_pass = "";
+                    $_dbname = "silvaro";
+                    $conn = new mysqli($_server, $_user, $_pass ,$_dbname) or die("Connection failed: " . $conn->connect_error);
 ?>

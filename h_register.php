@@ -1,6 +1,8 @@
 <?php
 
+
                     require 'connect.php';
+                    require 'classes.php';
                     session_start();
 
                     $f_name = $l_name = $email = $password = $phone_num = "";
@@ -13,15 +15,10 @@
                     $phone_c = "/^[0-9+][0-9]{8,15}$/";
                     $valid = TRUE;
 
-                    function test_input($data) {
-                        $data = trim($data);
-                        $data = stripslashes($data);
-                        $data = htmlspecialchars($data);
-                        return $data;
-                        }
 
+                    //Dynamic Validation AJAX
                     if ($_SERVER["REQUEST_METHOD"] == "GET") {
-                        $value = $_GET["q"];
+                        $value = test_input($_GET["q"]);
                         $type = $_GET["t"];
 
                         switch ($type) {
@@ -65,7 +62,7 @@
 
                     
 
-
+                    // Data processing and Store
                     if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $f_name = test_input($_POST["f_name"]);
                     $l_name = test_input($_POST["l_name"]);
@@ -107,15 +104,14 @@
                     $conn->query($sql);
 
 
-                    $username = strtolower($f_name)."_".$conn->insert_id;
+                    $username = $conn->insert_id."_".strtolower($f_name);
                     $sql = "UPDATE users SET username='$username' WHERE id=$conn->insert_id";
                     $conn->query($sql);
                     {$_SESSION['error']="Registered Successfully, You Can Login Now!"; unset($_SESSION['page']); header("location: hello.php");}
                     mkdir($username);
                     copy("default_p.php",$username."/"."index.php");
-                    copy("connect.php",$username."/"."connect.php");
                     copy("default_pp.jpg",$username."/"."pp.jpg");
-                }
+                   }   
 
                     $conn->close();
 
