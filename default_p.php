@@ -17,7 +17,7 @@ session_start();
   
     
     <body>
-    <div style="position:relative; left:5%; width:90%; text-align:center; background-color:silver;">
+    <div style="position:relative; left:30%; width:40%; text-align:center; background-color:silver;">
 
 
     

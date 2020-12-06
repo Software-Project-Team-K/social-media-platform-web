@@ -19,7 +19,7 @@ if(!isset($_SESSION['username']))header("location: hello.php");
     
     <body>
 
-        <div style="width:100%; text-align:center; font-size:200%; border: 2px green solid; background-color:silver;" >
+        <div style="width:50%; position:relative; left:25%; text-align:center; font-size:200%; border: 2px green solid; background-color:silver;" >
         <p><a href="<?php echo  $_SESSION['username']; ?>">Visit Profile</a></p>
         <p><a href="logout.php">Logout</a></p>
         </div>
