@@ -1,0 +1,343 @@
+body{
+    margin: 0;
+    background-color: rgb(205, 195, 226);
+}
+*{
+    box-sizing: border-box;
+}
+#nav{
+    border: indianred 2px solid;
+    height: 45px;
+    width: 100%;
+    position: fixed;
+    z-index: 1;
+    background-color: indigo;
+}
+#navbut{
+    position: absolute;
+    left: 950px;
+    top: 3px;
+}
+#navbut>button{
+    background-color: transparent;
+    color: white;
+    font-weight: 600;
+    font-size: 16px;
+    border: 0;
+    margin:10px;
+}
+#NCP {
+    border: black 2px solid;
+    height: 340px;
+    background-color: white;
+}
+
+#cover{
+    border: blue 2px solid;
+    height: 87%;
+}
+img{
+    height: 100%;
+    width: 100%;
+}
+#PNB{
+    border: yellow 2px solid;
+    position: absolute;
+    left: 100px;
+    top: 192px;
+}
+#pp{
+    border: crimson 2px solid;
+    height: 190px;
+    width: 190px;
+    border-radius: 95px;
+}
+#profile{
+    border-radius: 95px;
+}
+#changepp{
+    background-color: transparent;
+    color: indigo;
+    font-weight: 600;
+    font-size: 16px;
+    border: 0;
+    position: relative;
+    right: 50px;
+    bottom: 10px;
+}
+#name{
+    border: darkgreen 2px solid;
+    height: 50px;
+    width: 200px;
+    position: relative;
+    right:10px;
+    bottom:10px;
+    
+}
+#name>p{
+    font-size: 30px;
+    font-weight: bolder;
+    font-family: Arial, Helvetica, sans-serif;
+    color: black;
+    text-align:left;
+    margin:0;
+    margin-top: 7px;
+}
+/*#button ,*/ #name , #pp {
+    display: inline-block;
+}
+/*#button{
+    position: relative;
+    left:400px;
+    bottom:25px;
+}
+#button > button{
+    border-radius: 8px;
+    border: 0;
+    background-color:  rgb(205, 195, 226);
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0 10px;
+}*/
+#BAFP{
+   border: tomato 3px solid;
+   height: 1100px;
+   width:35%;
+   position: absolute;
+   left: 60px;
+   top: 410px;
+}
+#bioblock{
+    border: chocolate 2px solid;
+    height: 200px;
+    width: 100%;
+    border-radius: 10px;
+    background-color: white;
+}
+#bio>p{
+    font-size: 24px;
+    font-weight: 600;
+    font-family: Arial, Helvetica, sans-serif;
+    color:rgb(123, 67, 163);
+    text-align:left;
+    position: relative;
+    left: 10px;
+    bottom: 15px;
+}
+#bio > button{
+    background-color:  transparent;
+    color: indigo;
+    font-weight: 600;
+    font-size: 16px;
+    text-decoration-line: underline;
+    border: 0;
+    position: relative;
+    left: 380px;
+    bottom: 65px;
+}
+#biobox{
+    border: black 2px solid;
+    height: 160px;
+    width: 100%;
+    position: relative;
+    bottom:60px ;
+}
+#aboutblock{
+    border: royalblue 2px solid;
+    height: 200px;
+    width: 100%;
+    margin-top: 20px;
+    border-radius: 10px;
+    background-color: white;
+}
+#about>p{
+    font-size: 24px;
+    font-weight: 600;
+    font-family: Arial, Helvetica, sans-serif;
+    color:rgb(123, 67, 163);
+    text-align:left;
+    position: relative;
+    left: 10px;
+    bottom: 15px;
+}
+#about > button{
+    background-color: transparent;
+    color: indigo;
+    font-weight: 600;
+    font-size: 16px;
+    text-decoration-line: underline;
+    border: 0;
+    position: relative;
+    left: 380px;
+    bottom: 65px;
+}
+#aboutbox{
+    border: black 2px solid;
+    height: 160px;
+    width: 100%;
+    position: relative;
+    bottom:60px ;
+}
+#friendsblock{
+    border: fuchsia 2px solid;
+    height: 250px;
+    width: 100%;
+    margin-top: 20px;
+    border-radius: 10px;
+    background-color: white;
+}
+#friends>p{
+    font-size: 24px;
+    font-weight: 600;
+    font-family: Arial, Helvetica, sans-serif;
+    color:rgb(123, 67, 163);
+    text-align:left;
+    position: relative;
+    left: 10px;
+    bottom: 15px;
+}
+#friends > button{
+    background-color: transparent;
+    color: indigo;
+    font-weight: 600;
+    font-size: 16px;
+    text-decoration-line: underline;
+    border: 0;
+}
+#minfr{
+    position: relative;
+    left: 380px;
+    bottom: 65px; 
+}
+#viewfr{
+    position: relative;
+    left: 285px;
+    top: 145px;
+}
+#friendsbox{
+    border: black 2px solid;
+    height: 180px;
+    width: 100%;
+    position: relative;
+    bottom:60px ;
+}
+#fr1name{
+    border: 0;
+    background-color: transparent;
+    font-weight: 400;
+    font-size: 18px;
+    text-decoration-line: underline;
+    position: relative;
+    left: 50px;
+    top: 15px;
+}
+#fr2name{
+    border: 0;
+    background-color: transparent;
+    font-weight: 400;
+    font-size: 18px;
+    text-decoration-line: underline;
+    position: relative;
+    left: 200px;
+    bottom: 142px;
+}
+#fr3name{
+    border: 0;
+    background-color: transparent;
+    font-weight: 400;
+    font-size: 18px;
+    text-decoration-line: underline;
+    position: relative;
+    left: 360px;
+    bottom: 298px;
+}
+#photosblock{
+    border: green 2px solid;
+    height: 380px;
+    width: 100%;
+    margin-top: 20px;
+    border-radius: 10px;
+    background-color: white;
+}
+#photos >p{
+    font-size: 24px;
+    font-weight: 600;
+    font-family: Arial, Helvetica, sans-serif;
+    color:rgb(123, 67, 163);
+    text-align:left;
+    position: relative;
+    left: 10px;
+    bottom: 15px;
+}
+#photos > button{
+    background-color: transparent;
+    color: indigo;
+    font-weight: 600;
+    font-size: 16px;
+    text-decoration-line: underline;
+    border: 0;
+}
+#minph{
+    position: relative;
+    left: 380px;
+   bottom: 65px;
+}
+#viewph{
+    position: relative;
+    left: 285px;
+    top: 275px;
+}
+#photosbox{
+    border: black 2px solid;
+    height: 292px;
+    width: 100%;
+    position: relative;
+    bottom:50px ;
+}
+#statblock{
+    border: fuchsia 3px solid;
+    height: 200px;
+    width: 50%;
+    margin-top: 20px;
+    border-radius: 10px;
+    background-color: white;
+    position: absolute;
+    left: 600px;
+    top: 390px;
+}
+#statblock >p{
+    color: gray;
+    font-size: 24px;
+    position: relative;
+    left: 20px;
+    bottom: 160px;
+}
+#statbox{
+    border: black 2px solid;
+    height: 40px;
+    width: 100%;
+    position: relative;
+    bottom: 75px;
+}
+#upphotovid{
+    background-color: transparent;
+    color: indigo;
+    font-weight: 600;
+    font-size: 16px;
+    text-decoration-line: underline;
+    border: 0;
+    position: relative;
+    top: 5px;
+}
+#post{
+    background-color: indigo;
+    color: white;
+    font-weight: 600;
+    font-size: 20px;
+    text-align: center;
+    border: 0;
+    border-radius: 5px;
+    position: relative;
+    left: 415px;
+    top: 5px;
+}

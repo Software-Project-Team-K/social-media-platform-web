@@ -1,2 +1,0 @@
-# SoftwareProject
-Software Project Repository
