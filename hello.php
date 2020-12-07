@@ -1,7 +1,11 @@
 <?php
+
         session_start();
         if(isset($_SESSION['user']))header("location: index.php");
+        if(isset($_SESSION['validator']))unset($_SESSION['validator']);
+
 ?>
+
 <!DOCTYPE html>
 <html>
     
@@ -37,27 +41,27 @@
                    <div>
 
                         <div>
-                        <p id="errMsg" style ="height: 12px; text-align:center; color:red; <?php echo (isset($_SESSION['page'])||isset($_SESSION['page2']))? "color:red;":"color:green;"; ?> font-family:monospace; font-weight:bolder;">
-                           <?php if(isset($_SESSION['error']))echo $_SESSION['error']; unset($_SESSION['error']);  unset($_SESSION['page2']); ?>
+                        <p id="errMsg" style ="height: 12px; text-align:center; <?php  if($_SESSION['color']=="green") echo "color:green;"; else echo "color:red;" ?> font-family:monospace; font-weight:bolder;">
+                           <?php if(isset($_SESSION['error']))echo $_SESSION['error']; unset($_SESSION['error']);  unset($_SESSION['color']); ?>
                         </p>        
                         </div>
 
 
                     <form id="login" method="POST" action="h_login.php">           
-                        <p>Email/Username:</p>  <input  type="text" placeholder="Enter Email or User" name="logID">
-                        <p>Password:</p>    <input  type="password" placeholder="Enter Password" name="password">
-                        <input class="next" type="submit" value="Login">  
+                        <p>Email/Username:</p>  <input class="log" type="text" placeholder="Enter Email or User" name="logID">
+                        <p>Password:</p>    <input class="log" type="password" placeholder="Enter Password" name="password">
+                        <input class="next" type="submit" value="Login" disabled>  
                     </form>
                     
                     <form id="register" method="POST" action="h_register.php" style="display: none;" >
                         <p>Full Name:</p>
                         <div style="float: right; margin: 15px 0; height: 20px; padding: 0; width: 50%;">
-                        <input type="text" name="f_name"  onblur="checker(this.value,this.name)" placeholder="Firstname" style="width: 50%;"><input type="text" name="l_name" onblur="checker(this.value,this.name)" placeholder="Lastname" style="width: 50%;"></div>
-                        <p>Email address:</p><input  type="email"  onblur="checker(this.value,this.name)" name="email" placeholder="Enter Email">
-                        <p>Password:</p><input  type="password"  onblur="checker(this.value,this.name)" name="password" placeholder="Enter Password">
-                        <p>RE-Enter Password:</p><input type="password"  name="password2" placeholder="Re-Enter Password">
-                        <p>Phone Number:</p><input type="text" name="phone_num" onblur="checker(this.value,this.name)" placeholder="Enter Mobile Number">
-                        <p>Date of Birth:</p><input  type="date">
+                        <input type="text" name="f_name" class="reg"  onblur="checker(this.value,this.name)" placeholder="Firstname" style="width: 50%;"><input type="text" class="reg" name="l_name" onblur="checker(this.value,this.name)" placeholder="Lastname" style="width: 50%;"></div>
+                        <p>Email address:</p><input  type="email" class="reg" onblur="checker(this.value,this.name)" name="email" placeholder="Enter Email">
+                        <p>Password:</p><input  type="password" class="reg" onblur="checker(this.value,this.name)" name="password" placeholder="Enter Password">
+                        <p>RE-Enter Password:</p><input type="password" class="reg" onblur="checker(this.value,this.name)" name="password2" placeholder="Re-Enter Password">
+                        <p>Phone Number:</p><input type="text" name="phone_num" class="reg" onblur="checker(this.value,this.name)" placeholder="Enter Mobile Number">
+                        <p>Date of Birth:</p><input class="reg" type="date">
                         <input class="next" type="submit" value="Register">  
                     </form>
                     </div>
@@ -71,15 +75,14 @@
         
         <script type="text/javascript" src="jquery.js"></script>
         <script>
+     
 
-        startAtLog();
-        <?php if(isset($_SESSION['page'])) {unset($_SESSION['page']); echo "startAtReg();"; }?>
 
         $(function() {
-                 
         $("#slogin").click(function(event) {
         $("#register").css("display","none");
         $("#login").css("display","block");
+        $("#errMsg").css("color","red");
         document.getElementById("errMsg").innerHTML = "</br>";
         });
                  
@@ -91,35 +94,52 @@
         });      
         });
 
-        function startAtLog() {
-            var x = document.getElementById("register");
-            x.style.display = "none";
-            var y = document.getElementById("login");
-            y.style.display = "block";
+        setInterval(function () {
+            enableLog();
+            enableReg();
+        }, 100);
+
+        function enableLog() {
+           var next = document.getElementsByClassName("next");
+           var values = document.getElementsByClassName("log");
+           var disable = false;
+           for(var i=0;i<values.length;i++){
+               if(values[i].value=="")disable=true;
+           }
+           
+            next[0].disabled = disable;
         }
 
-
-
-        function startAtReg() {
-            var x = document.getElementById("register");
-            x.style.display = "block";
-            var y = document.getElementById("login");
-            y.style.display = "none";
+        function enableReg() {
+           var next = document.getElementsByClassName("next");
+           var values = document.getElementsByClassName("reg");
+           var disable = false;
+           for(var i=0;i<values.length;i++){
+               if(values[i].value=="")disable=true;
+           }
+           openButton(disable,next);
         }
-        
 
-        function checker(str,type) {
-    
+        function openButton(disable,next){
+            if(disable==false){
             var xmlhttp = new XMLHttpRequest();
             xmlhttp.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200) {
-                document.getElementById("errMsg").innerHTML = this.responseText;
+            if (this.readyState == 4 && this.status == 200) next[1].disabled = (this.responseText == "true"); };
+            xmlhttp.open("GET", "button_register.php", true);
+            xmlhttp.send();
             }
+            else 
+            next[1].disabled = true;
+        }
+
+        function checker(str,type) {
+            var xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) document.getElementById("errMsg").innerHTML = this.responseText;
             };
             xmlhttp.open("GET", "h_register.php?q=" + str+"&t="+type, true);
             xmlhttp.send();
         }
-    
         </script>
         
     </body>  

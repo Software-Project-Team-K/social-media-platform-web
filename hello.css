@@ -54,6 +54,7 @@
 
 #switchbar p{
   margin: 10px 0;
+  cursor: pointer;
 }
 
 form{
@@ -92,6 +93,7 @@ input.next{
     font-family: sans-serif;
     background-color: rgba(95, 129, 231, 0.137);
     border: rgb(65, 105, 225) 1px solid;
+    background-color: gainsboro;
 }
 
 input:focus{
