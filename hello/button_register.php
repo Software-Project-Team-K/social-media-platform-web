@@ -1,7 +1,7 @@
 <?php 
 
-    require 'connect.php';
-    require 'classes.php';
+
+    require '../assets/classes.php';
     session_start();
 
       //Dynamic Validation AJAX

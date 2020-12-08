@@ -3,8 +3,8 @@
                     class user{
                         private $username;
                         private $f_name;
-                        private$l_name;
-                        private$full_name;
+                        private $l_name;
+                        private $full_name;
 
                         function __construct($fn,$ln,$id){
                             $this->f_name=$fn;
@@ -106,6 +106,32 @@
                             return $this->errors;
                         }
                     }
+
+                    class connect{
+
+
+                        private  $_server = "localhost";
+                        private  $_user = "root";
+                        private  $_pass = "";
+                        private  $_dbname = "silvaro";
+                        public   $conn;
+
+                        function __construct(){
+                            $this->conn = new mysqli($this->_server, $this->_user, $this->_pass ,$this->_dbname) or die("Connection failed: " . $this->conn->connect_error);
+                        }
+
+                        function __destruct(){
+                            $this->conn->close();
+                        }
+                    }
+
+
+
+
+
+
+
+
 
                     function test_input($data) {
                         $data = trim($data);

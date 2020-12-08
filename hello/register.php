@@ -1,8 +1,8 @@
 <?php
 
                     
-                    require 'connect.php';
-                    require 'classes.php';
+                    require '../assets/classes.php';
+                    $connect = new connect();
                     session_start();    
 
 
@@ -15,7 +15,7 @@
                     if ($_SERVER["REQUEST_METHOD"] == "GET") {
                         $input = test_input($_GET["q"]);
                         $type = $_GET["t"];
-                        $errors = $validator->validate($input,$type,$conn);
+                        $errors = $validator->validate($input,$type,$connect->conn);
                         end($errors);
                         echo ($errors[key($errors)]);  
                     }
@@ -28,19 +28,15 @@
                         $password = test_input($_POST["password"]);
                         $phone_num = test_input($_POST["phone_num"]);
 
-                        $conn->query("INSERT INTO users(f_name,l_name,password,phone_num,email) VALUES('$f_name','$l_name','$password','$phone_num','$email')");
-                        $username = $conn->insert_id."_".strtolower($f_name);
-                        $conn->query("UPDATE users SET username='$username' WHERE id=$conn->insert_id");
+                        $connect->conn->query("INSERT INTO users(f_name,l_name,password,phone_num,email) VALUES('$f_name','$l_name','$password','$phone_num','$email')");
+                        $username = $connect->conn->insert_id."_".strtolower($f_name);
+                        $connect->conn->query("UPDATE users SET username='$username' WHERE email='$email'");
 
-                        {$_SESSION['error']="Registered Successfully, You Can Login Now!"; $_SESSION['color']="green"; header("location: hello.php");}
+                        {$_SESSION['error']="Registered Successfully, You Can Login Now!"; $_SESSION['color']="green"; header("location: ./");}
 
-                        mkdir($username);
-                        copy("default_p.php",$username."/"."index.php");
-                        copy("default_pp.jpg",$username."/"."pp.jpg");
+                        mkdir("../".$username);
+                        copy("../assets/default/default_p.php","../".$username."/"."index.php");
                      }   
 
-
-
-                   $conn->close();
 ?>
         

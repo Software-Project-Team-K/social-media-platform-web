@@ -25,12 +25,12 @@
 .fullbox{
     border: 1px darkblue solid;
     border-radius: 15px;
-    background-image: url(logbox.jpg);
+    background-image: url(../assets/img/logbox.jpg);
     background-size: cover;
-    width: 35%;
+    width: 30%;
     display:inline-block;
     position: relative;
-    left: 15%;
+    left: 20%;
     margin-top: 10%;
     vertical-align: top;
 }
@@ -119,7 +119,7 @@ body{
 
 body::before {
   content: "";
-  background-image: url(background.jpg);
+  background-image: url(../assets/img/background.jpg);
   opacity: 0.5;
   top: 0;   
   left: 0;

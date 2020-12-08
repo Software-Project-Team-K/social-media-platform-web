@@ -1,7 +1,7 @@
 <?php
 
         session_start();
-        if(isset($_SESSION['user']))header("location: index.php");
+        if(isset($_SESSION['user']))header("location: ../");
         if(isset($_SESSION['validator']))unset($_SESSION['validator']);
 
 ?>
@@ -13,9 +13,9 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Silvaro | Hello!</title>
-        <link rel="stylesheet" href="hello.css">
-        <link rel="icon" href="logo.png">
+        <title>Silvaro | Hello !</title>
+        <link rel="stylesheet" href="main.css">
+        <link rel="icon" href="../assets/img/icn_logo.png">
     </head>
     
   
@@ -24,7 +24,7 @@
         
             
             <div class ="fulllogo">
-                <img src="logo.png">
+                <img src="../assets/img/icn_logo.png">
                 <div class="logotxt" >
                     <p id="logo">Silvaro</p>
                     <p>Welcome to your mini-world!</p>
@@ -47,13 +47,13 @@
                         </div>
 
 
-                    <form id="login" method="POST" action="h_login.php">           
+                    <form id="login" method="POST" action="login.php">           
                         <p>Email/Username:</p>  <input class="log" type="text" placeholder="Enter Email or User" name="logID">
                         <p>Password:</p>    <input class="log" type="password" placeholder="Enter Password" name="password">
                         <input class="next" type="submit" value="Login" disabled>  
                     </form>
                     
-                    <form id="register" method="POST" action="h_register.php" style="display: none;" >
+                    <form id="register" method="POST" action="register.php" style="display: none;" >
                         <p>Full Name:</p>
                         <div style="float: right; margin: 15px 0; height: 20px; padding: 0; width: 50%;">
                         <input type="text" name="f_name" class="reg"  onblur="checker(this.value,this.name)" placeholder="Firstname" style="width: 50%;"><input type="text" class="reg" name="l_name" onblur="checker(this.value,this.name)" placeholder="Lastname" style="width: 50%;"></div>
@@ -73,7 +73,7 @@
 
 
         
-        <script type="text/javascript" src="jquery.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script>
      
 
@@ -89,8 +89,8 @@
         $("#sreg").click(function(event) {
         $("#register").css("display","block");
         $("#login").css("display","none");
-        $("#errMsg").css("color","red");
-        document.getElementById("errMsg").innerHTML = "</br>";
+        $("#errMsg").css("color","blue");
+        document.getElementById("errMsg").innerHTML = "Please fill the data form to register!";
         });      
         });
 
@@ -133,11 +133,12 @@
         }
 
         function checker(str,type) {
+            document.getElementById("errMsg").style.color = "red";
             var xmlhttp = new XMLHttpRequest();
             xmlhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) document.getElementById("errMsg").innerHTML = this.responseText;
             };
-            xmlhttp.open("GET", "h_register.php?q=" + str+"&t="+type, true);
+            xmlhttp.open("GET", "register.php?q=" + str+"&t="+type, true);
             xmlhttp.send();
         }
         </script>
