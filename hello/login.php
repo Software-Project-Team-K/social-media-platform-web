@@ -11,29 +11,20 @@
                     $password = test_input($_POST["password"]);
                     }
 
-                    
-                    $chk = "/@/";
-                    $valid = preg_match($chk,$logID);
-                    if ($valid == TRUE) $sql ="SELECT password, f_name, l_name, username FROM users WHERE email='$logID'";
-                    else  $sql ="SELECT password, f_name, l_name, username FROM users WHERE username='$logID'";
 
-                    $result = $connect->conn->query($sql);
-
+                    $result = $connect->conn->query("SELECT * FROM users WHERE email='$logID' or username='$logID'");
         
                     if (mysqli_num_rows($result) == 0) {$_SESSION['error']="Invalid Email/Username!";  $_SESSION['color']="red"; header("location: ./"); die();}
 
                     $row = mysqli_fetch_assoc($result);
-                    $username =$row['username'];
                     $realpass = $row['password'];
-                    $firstname = $row['f_name'];
-                    $lastname = $row['l_name'];
 
-     
                     if ($password==$realpass)
                     {
-                    $_SESSION['user'] = new user($firstname,$lastname,$username);
+                    $_SESSION['user'] = new user($row);
                     header("Location: ./");
                     }
                     else {$_SESSION['error']="Invalid Password!";  $_SESSION['color']="red"; header("location: ./");}
+
+                    
 ?>
-        

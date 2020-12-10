@@ -22,7 +22,7 @@
                                         <input type="text" style="width:20%; position: relative; left:5px; bottom:15px;">
                                         <div id="navbuttons">
                   
-                                            <button><a href='.$_SESSION["user"]->id().'><img src="assets/default/default_pp.jpg"></a></button>
+                                            <button><a href='.$_SESSION["user"]->get_id().'><img src="assets/default/default_pp.jpg"></a></button>
                                             <button><img src="assets/img/icn_msg.png"></button>
                                             <button><img src="assets/img/icn_notification.png"></button>
                                             <button><a href="assets/operation/logout.php"><img src="assets/img/icn_settings.png"></a></button>
@@ -37,15 +37,9 @@
         
 ?>
 
-        <div style="width:70%; margin: 50px 15%; height: 150px; border: 4px royalblue solid;"></div>
-        <div style="width:70%; margin: 50px 15%; height: 150px; border: 4px red solid;"></div>
-        <div style="width:70%; margin: 50px 15%; height: 150px; border: 4px green solid;"></div>
-        <div style="width:70%; margin: 50px 15%; height: 150px; border: 4px yellow solid;"></div>
-        <div style="width:70%; margin: 50px 15%; height: 150px; border: 4px silver solid;"></div>
-        <div style="width:70%; margin: 50px 15%; height: 150px; border: 4px blue solid;"></div>
-        <div style="width:70%; margin: 50px 15%; height: 150px; border: 4px orange solid;"></div>
-        <div style="width:70%; margin: 50px 15%; height: 150px; border: 4px purple solid;"></div>
-        <div style="width:70%; margin: 50px 15%; height: 150px; border: 4px orchid solid;"></div>
+
+
+
 
     </body>  
 </html>

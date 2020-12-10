@@ -2,7 +2,7 @@
                     $server = "localhost";
                     $user = "root";
                     $pass = "";
-                    $dbname = "silvaro";
+                    $dbname = "silvaro2";
                         
                     $conn = new mysqli($server, $user, $pass);
                     if ($conn->connect_error) {
@@ -27,8 +27,9 @@
                         f_name VARCHAR(20) NOT NULL,
                         l_name VARCHAR(20) NOT NULL,
                         phone_num INT(15) UNSIGNED,
-                        reg_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-
+                        reg_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                        profile_pic VARCHAR(60) NOT NULL DEFAULT '../assets/default/default_pp.jpg',
+                        cover_pic VARCHAR(60) NOT NULL DEFAULT '../assets/default/default_cover.jpg'
                     )";
 
                     if ($conn->query($sql) === TRUE) {

@@ -1,14 +1,18 @@
 <?php
 
-//need correction
             require '../classes.php';
+            $connect = new connect;
             session_start();
 
+            $type = $_POST['type'];
+            $filename;
+            if($type =="pp") $filename="current_pp";
+            else if($type =="cover") $filename="current_cover";
 
-            $target_dir = $_SESSION['user']->id()."/";
+            $target_dir = "../../".$_SESSION['user']->get_id()."/";
             $uploadOk = 1;
             $imageFileType = strtolower(pathinfo($target_dir . basename($_FILES["fileToUpload"]["name"]),PATHINFO_EXTENSION));
-            $target_file = $target_dir . "pp.".$imageFileType;
+            $target_file = $target_dir.$filename.".".$imageFileType;
 
             // Check if image file is a actual image or fake image
             if(isset($_POST["submit"])) {
@@ -29,12 +33,13 @@
               $uploadOk = 0;
             }
 
-            // Check if $uploadOk is set to 0 by an error
+            // Check if $uploadOk is set to 0
             if ($uploadOk == 0)  echo "Sorry, your file was not uploaded.";
-
-            // if everything is ok, try to upload file
             else {
+
               move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file);
+              if($type =="pp")  $_SESSION['user']->update_profile_pic("current_pp.".$imageFileType,$connect);
+              else if($type =="cover") $_SESSION['user']->update_cover_pic("current_cover.".$imageFileType,$connect);
               header("Location: $target_dir");
             }
     
