@@ -1,9 +1,8 @@
 <?php
-
+        require "../assets/classes.php";
         session_start();
         if(isset($_SESSION['user']))header("location: ../");
         if(isset($_SESSION['validator']))unset($_SESSION['validator']);
-
 ?>
 
 <!DOCTYPE html>
@@ -18,11 +17,8 @@
         <link rel="icon" href="../assets/img/icn_logo.png">
     </head>
     
-  
     <body>
 
-        
-            
             <div class ="fulllogo">
                 <img src="../assets/img/icn_logo.png">
                 <div class="logotxt" >
@@ -42,7 +38,7 @@
 
                         <div>
                         <p id="errMsg" style ="height: 12px; text-align:center; <?php  if($_SESSION['color']=="green") echo "color:green;"; else echo "color:red;" ?> font-family:monospace; font-weight:bolder;">
-                           <?php if(isset($_SESSION['error']))echo $_SESSION['error']; unset($_SESSION['error']);  unset($_SESSION['color']); ?>
+                           <?php if(isset($_SESSION['msg']))echo $_SESSION['msg']; unset($_SESSION['msg']);  unset($_SESSION['color']); ?>
                         </p>        
                         </div>
 
