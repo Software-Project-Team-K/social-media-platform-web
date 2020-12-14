@@ -1,7 +1,7 @@
 <?php
 
             require '../classes.php';
-            $connect = new connect;
+            $connect = new connection;
             session_start();
 
             $type = $_POST['type'];
@@ -41,6 +41,5 @@
               if($type =="pp")  $_SESSION['user']->update_profile_pic("current_pp.".$imageFileType,$connect);
               else if($type =="cover") $_SESSION['user']->update_cover_pic("current_cover.".$imageFileType,$connect);
               header("Location: $target_dir");
-            }
-    
+            }  
 ?>

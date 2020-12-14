@@ -1,5 +1,6 @@
 <?php
 
+                    //CLASS >> CURRENT USER DATA
                     class user{
 
                         private $username;
@@ -34,33 +35,24 @@
                         }
                     }
 
-                    
-                    class connect{
-
+                    //CLASS >> CONNECTION TO DATABASE
+                    class connection{
 
                         private  $_server = "localhost";
                         private  $_user = "root";
                         private  $_pass = "";
-                        private  $_dbname = "silvaro2";
+                        private  $_dbname = "silvaro";
                         public   $conn;
 
                         function __construct(){
                             $this->conn = new mysqli($this->_server, $this->_user, $this->_pass ,$this->_dbname) or die("Connection failed: " . $this->conn->connect_error);
                         }
-
                         function __destruct(){
                             $this->conn->close();
                         }
                     }
 
-                    function test_input($data) {
-                        $data = trim($data);
-                        $data = stripslashes($data);
-                        $data = htmlspecialchars($data);
-                        return $data;
-                    }
-
-
+                    //CLASS >> DYNAMIC VALIDATE THE INPUT 
                     class dynamic_validation{
 
                         private $errors = array("</br>");
@@ -82,9 +74,7 @@
                         private $error_7 = "The phone must be valid and contains only digits!";
                         private $pw = "";
            
-
                         
-
                         function validate($input,$type,$conn){
                             switch ($type) {
                                 case "f_name"   :
@@ -148,6 +138,14 @@
                         function get_errors(){
                             return $this->errors;
                         }
+                    }
+
+                    //FUNCTION >> CLEAR THE INPUT 
+                    function test_input($data) {
+                        $data = trim($data);
+                        $data = stripslashes($data);
+                        $data = htmlspecialchars($data);
+                        return $data;
                     }
 
 ?>

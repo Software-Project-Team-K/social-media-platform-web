@@ -2,14 +2,12 @@
 
                     
                     require '../assets/classes.php';
-                    $connect = new connect();
+                    $connect = new connection();
                     session_start();    
-
 
                     // Dynamic Validation AJAX (Create Errors Object)
                     if(!isset($_SESSION['validator'])) $_SESSION['validator'] = new dynamic_validation(); 
                     $validator = $_SESSION['validator']; 
-
 
                     // Dynamic Validation AJAX (Processing)
                     if ($_SERVER["REQUEST_METHOD"] == "GET") {
@@ -32,11 +30,10 @@
                         $username = $connect->conn->insert_id."_".strtolower($f_name);
                         $connect->conn->query("UPDATE users SET username='$username' WHERE email='$email'");
 
-                        {$_SESSION['error']="Registered Successfully, You Can Login Now!"; $_SESSION['color']="green"; header("location: ./");}
+                        {$_SESSION['msg']="Registered Successfully, You Can Login Now!"; $_SESSION['color']="green"; header("location: ./");}
 
                         mkdir("../".$username);
                         copy("../assets/default/default_p.php","../".$username."/"."index.php");
                      }   
-
 ?>
         
