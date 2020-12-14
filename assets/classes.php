@@ -10,8 +10,12 @@
                         private $profile_pic;
                         private $cover_pic;
 
-                        function __construct($row){
-                            
+                        function __construct($logID){
+                            //get user data from parameter (username or email)
+                            $connect = new connection;
+                            $result = $connect->conn->query("SELECT * FROM users WHERE email='$logID' or username='$logID'");
+                            $row = mysqli_fetch_assoc($result);
+                            //assign the data
                             $this->f_name= $row['f_name'];
                             $this->l_name= $row['l_name'];
                             $this->full_name = $this->f_name." ".$this->l_name;
@@ -19,12 +23,10 @@
                             $this->profile_pic= $row['profile_pic'];
                             $this->cover_pic= $row['cover_pic'];
                         }
-
                         function get_name() {return $this->full_name;}
                         function get_id()  {return $this->username;}
                         function get_profile_pic() {return $this->profile_pic;}
                         function get_cover_pic()  {return $this->cover_pic;}
-
                         function update_profile_pic($link,$connect){
                             $this->profile_pic = $link;
                             $connect->conn->query("UPDATE users SET profile_pic='$this->profile_pic' WHERE username='$this->username'");

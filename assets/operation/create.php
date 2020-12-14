@@ -32,8 +32,8 @@
                         l_name VARCHAR(20) NOT NULL,
                         phone_num INT(15) UNSIGNED,
                         reg_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-                        profile_pic VARCHAR(60) NOT NULL DEFAULT '../assets/default/default_pp.jpg',
-                        cover_pic VARCHAR(60) NOT NULL DEFAULT '../assets/default/default_cover.jpg',
+                        profile_pic VARCHAR(60) NOT NULL DEFAULT '../assets/img/default_pp.jpg',
+                        cover_pic VARCHAR(60) NOT NULL DEFAULT '../assets/img/default_cover.jpg',
                         friends VARCHAR(300)
                     )";
                     if ($conn->query($sql) === TRUE) echo "Table created successfully"."<br>";

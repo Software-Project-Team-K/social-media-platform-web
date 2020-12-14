@@ -2,18 +2,31 @@
                 require '../assets/classes.php';
                 session_start();
                 if(!isset($_SESSION['user']))header("location: ../");
-        
-        
+
+                //aquire the target username
+                $target_id = substr($_SERVER['REQUEST_URI'],strpos($_SERVER['REQUEST_URI'],"/",1)+1);
+                $target_id = substr($target_id,0,strlen($target_id)-1);
+                //check if the target is the user
+                if($_SESSION['user']->get_id() ==$target_id){
+                    $_SESSION['style']="../assets/profile/main.css";
+                    $_SESSION['target'] = $_SESSION['user'];
+                }
+                else{
+                    $_SESSION['style']="../assets/profile/guest.css";
+                    $_SESSION['target'] = new user($target_id);
+                }
+
+                
                 echo '
                                 <!DOCTYPE html>
                                 <html>
         
                                 <head>
-                                    <link rel="stylesheet" href="../main.css">
+                                    <link rel="stylesheet" href="'.$_SESSION["style"].'">
                                     <meta charset="utf-8">
                                     <meta http-equiv="X-UA-Compatible" content="IE=edge">
                                     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                                    <title>Silvaro | '.$_SESSION["user"]->get_name().'</title>
+                                    <title>Silvaro | '.$_SESSION["target"]->get_name().'</title>
                                     <link rel="icon" href="../assets/img/icn_logo.png">
         
                                     <!--Navigation Bar-->
@@ -22,7 +35,7 @@
                                         <input type="text" style="width:20%; position: relative; left:5px; bottom:15px;">
                                         <div id="navbuttons">
                   
-                                            <button><a href=""><img src="'.$_SESSION["user"]->get_profile_pic().'"></a></button>
+                                            <button><a href="../'.$_SESSION["user"]->get_id().'"><img src="../'.$_SESSION["user"]->get_id()."/".$_SESSION["user"]->get_profile_pic().'"></a></button>
                                             <button><img src="../assets/img/icn_msg.png"></button>
                                             <button><img src="../assets/img/icn_notification.png"></button>
                                             <button><a href="../assets/operation/logout.php"><img src="../assets/img/icn_settings.png"></a></button>
@@ -40,13 +53,16 @@
         <div id="NCP">  
                 <div id="cover">
                     <button id="coverBtn"><img src="../assets/img/icn_upload.png"></button>
-                    <img src=<?php echo $_SESSION['user']->get_cover_pic(); ?>>
+                    <img src=<?php echo "../".$_SESSION["target"]->get_id()."/".$_SESSION['target']->get_cover_pic(); ?>>
                 </div>
                 <div id="PNB">
                     <div style="display: inline-block; margin: 0 5%;">
-                        <img id="pp" src=<?php echo $_SESSION['user']->get_profile_pic(); ?>>
+                        <img id="pp" src=<?php echo "../".$_SESSION["target"]->get_id()."/".$_SESSION['target']->get_profile_pic(); ?>>
                         <button id="ppBtn"><img src="../assets/img/icn_upload.png"></button>
-                        <p><?php echo $_SESSION['user']->get_name(); ?></p>
+                        <p><?php echo $_SESSION['target']->get_name(); ?></p>
+                    </div>
+                    <div id="buttons">
+                        <button>Add Friend</button>
                     </div>
                 </div>
         </div>

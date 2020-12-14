@@ -1,7 +1,7 @@
 <?php
 
                     
-                    require '../assets/classes.php';
+                    require '../classes.php';
                     $connect = new connection();
                     session_start();    
 
@@ -30,10 +30,10 @@
                         $username = $connect->conn->insert_id."_".strtolower($f_name);
                         $connect->conn->query("UPDATE users SET username='$username' WHERE email='$email'");
 
-                        {$_SESSION['msg']="Registered Successfully, You Can Login Now!"; $_SESSION['color']="green"; header("location: ./");}
+                        {$_SESSION['msg']="Registered Successfully, You Can Login Now!"; $_SESSION['color']="green"; header("location: ../../");}
 
-                        mkdir("../".$username);
-                        copy("../assets/default/default_p.php","../".$username."/"."index.php");
+                        mkdir("../../".$username);
+                        copy("../profile/index.php","../../".$username."/"."index.php");
                      }   
 ?>
         
