@@ -34,7 +34,8 @@
                         reg_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                         profile_pic VARCHAR(60) NOT NULL DEFAULT '../assets/img/default_pp.jpg',
                         cover_pic VARCHAR(60) NOT NULL DEFAULT '../assets/img/default_cover.jpg',
-                        friends VARCHAR(300)
+                        friends VARCHAR(300),
+                        fr_requests VARCHAR(300)
                     )";
                     if ($conn->query($sql) === TRUE) echo "Table created successfully"."<br>";
                     else echo "Error creating Table: " . $conn->error."<br>";
