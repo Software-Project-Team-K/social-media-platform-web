@@ -7,15 +7,25 @@
 
                     if ($_SERVER["REQUEST_METHOD"] == "GET") {
                     $target_id = $_GET['target'];
-                    
-                    if($_SESSION['user']->IsFriend($target_id)){
-                        $_SESSION['user']->removeFriend($target_id);
-                    }
-                    else{
-                        if($_SESSION['user']->IsFrRequest($target_id)) $_SESSION['user']->cancelRequest($target_id);
-                        else $_SESSION['user']->friendRequest($target_id);
-                    } 
-                    
+                    $operation = $_GET['op'];
+
+                    switch ($operation) {
+                        case 'Add Friend':
+                            $_SESSION['user']->friendRequest($target_id);
+                            break;
+                        case 'Unfriend':
+                            $_SESSION['user']->removeFriend($target_id);
+                            break;
+                        case 'Accept':
+                            $_SESSION['user']->addFriend($target_id);
+                            break;
+                        case 'Refuse':
+                            $_SESSION['target']->cancelRequest($_SESSION['user']->get_id());
+                            break;
+                        case 'Cancel Request':
+                            $_SESSION['user']->cancelRequest($target_id);
+                            break;
+                    }    
                 }
 
                 header("location: ../../$target_id");

@@ -64,8 +64,10 @@
                     <form id="buttons" method="GET" action="../assets/operation/friend_button.php">
                         <input  type="hidden" name = "target" value = "<?php echo $target_id ?>">
                         <?php
-                        if(!($_SESSION["user"]->isFrRequest($target_id))) echo '<input type="submit" value="Add Friend">';
-                        else echo '<input type="submit" value="Remove Request">';
+                        if($_SESSION["user"]->isFriend($target_id)) echo '<input type="submit" name="op" value="Unfriend">';
+                        else if(($_SESSION["target"]->isFrRequest($_SESSION['user']->get_id()))) echo '<input type="submit" name="op" value="Accept"><input type="submit" name="op" value="Refuse">';
+                        else if(!($_SESSION["user"]->isFrRequest($target_id))) echo '<input type="submit" name="op" value="Add Friend">';
+                        else echo '<input type="submit" name="op" value="Cancel Request">';
                         ?>                    
                     </form>
                 </div>
