@@ -1,22 +1,22 @@
 #nav{
-    border-bottom: darkblue 1px solid;
-    height: 45px;
+    border-bottom: purple 1px solid;
+    height: 40px;
     width: 100%;
     position: fixed;
     z-index: 1;
-    background-color: royalblue;
+    background-color: indigo;
 }
 #navbuttons{
 float: right;
 }
 #navbuttons button{
-    background-color: white;
-    border: 1px black solid;
-    width:36px;
-    height:36px;
-    border-radius: 18px;
-    margin: 4px 15px;
+    border: 0px;
+    width:30px;
+    height:30px;
+    border-radius: 15px;
+    margin: 5px 15px;
     padding: 0;
+    background-color: transparent;
 }
 #navbuttons a{
     padding: 0;
@@ -157,7 +157,7 @@ body::before{
     height: 100%;
     position: fixed;
     z-index: -2;
-    background-image: url(../assets/img/background.jpg);
+    background-image: url(../img/background.jpg);
     background-repeat: no-repeat;
     background-size: cover;
 }

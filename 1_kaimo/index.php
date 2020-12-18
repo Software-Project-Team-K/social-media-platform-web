@@ -17,11 +17,11 @@
                 }
 
                 
-                echo '
-                                <!DOCTYPE html>
-                                <html>
+             echo '
+                    <!DOCTYPE html>
+                        <html>
         
-                                <head>
+                            <head>
                                     <link rel="stylesheet" href="'.$_SESSION["style"].'">
                                     <meta charset="utf-8">
                                     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -31,21 +31,18 @@
         
                                     <!--Navigation Bar-->
                                     <div id="nav">
-                                        <a href="../"><img src="../assets/img/icn_logo.png" style="width: 50px; height: 95%; margin: 0 15px;"></a>
-                                        <input type="text" style="width:20%; position: relative; left:5px; bottom:15px;">
+                                        <a href="../"><img src="../assets/img/icn_logo.png" style="width: 30px;  margin: 5px 20px;"></a>
+                                        <input type="text" style="width:20%; position: relative; left:10px; bottom:15px; border-radius:10px;">
                                         <div id="navbuttons">
-                  
                                             <button><a href="../'.$_SESSION["user"]->get_id().'"><img src="../'.$_SESSION["user"]->get_id()."/".$_SESSION["user"]->get_profile_pic().'"></a></button>
                                             <button><img src="../assets/img/icn_msg.png"></button>
                                             <button><img src="../assets/img/icn_notification.png"></button>
                                             <button><a href="../assets/operation/logout.php"><img src="../assets/img/icn_settings.png"></a></button>
                                         </div> 
                                     </div>
-                                    <div style="height:45px; background-color: white;"></div>
-        
-                                </head>
-        
-                                <body>'
+                                    <div style="height:40px; background-color: white;"></div>
+                            </head>
+                         <body>'
 ?>
 
 
@@ -68,7 +65,7 @@
                         else if(($_SESSION["target"]->isFrRequest($_SESSION['user']->get_id()))) echo '<input type="submit" name="op" value="Accept"><input type="submit" name="op" value="Refuse">';
                         else if(!($_SESSION["user"]->isFrRequest($target_id))) echo '<input type="submit" name="op" value="Add Friend">';
                         else echo '<input type="submit" name="op" value="Cancel Request">';
-                        ?>                    
+                        ?>                                   
                     </form>
                 </div>
         </div>
