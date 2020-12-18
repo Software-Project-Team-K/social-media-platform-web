@@ -1,0 +1,305 @@
+body{
+    margin: 0;
+    background-color: whitesmoke;
+}
+*{
+    box-sizing: border-box;
+}
+img{
+    height: 100%;
+    width: 100%;
+}
+#nav{
+    height: 45px;
+    width: 100%;
+    position: fixed;
+    z-index: 1;
+    background-color: indigo;
+}
+#logo-home{
+    background-color: transparent;
+    border: 0;
+    height: 45px;
+    width: 45px;
+}
+#search{
+    background-color: transparent;
+    border: 0;
+    position:relative;
+    left:370px;
+    bottom:47px;
+}
+#navbuttons >button {
+    background-color: transparent;
+    border: 0;
+    margin:20px;
+    position: relative;
+    left: 950px;
+    bottom: 100px;
+}
+#NCP {
+    border-bottom: black 2px solid;
+    height: 340px;
+    background-color: white;
+}
+#NCP > button ,#PNB > button{
+    background-color:lightgrey;
+    border: black 2px solid;
+    width: 36px;
+    height: 36px;
+    border-radius:18px;
+}
+#PNB{
+    position: absolute;
+    left: 100px;
+    top: 192px;
+}
+#name , #pp {
+    display: inline-block;
+}
+#pp{
+    border: white 10px solid;
+    height: 190px;
+    width: 190px;
+    border-radius: 95px;
+}
+#name{
+    height: 50px;
+    width: 200px;
+    position: relative;
+    right:50px;
+}
+#name>p{
+    font-size: 30px;
+    font-weight: bolder;
+    font-family: Arial, Helvetica, sans-serif;
+    color: black;
+    text-align:left;
+    margin:0;
+    margin-top: 7px;
+}
+#bioblock{
+    border: indigo 1px solid;
+    height: 200px;
+    width: 35%;
+    border-radius: 10px;
+    background-color: white;
+    position: absolute;
+    left: 60px;
+    top: 410px;
+}
+#bioblock>p{
+    font-size: 24px;
+    font-weight: 600;
+    font-family: Arial, Helvetica, sans-serif;
+    color:rgb(123, 67, 163);
+    text-align:left;
+    position: relative;
+    left: 10px;
+    bottom: 15px;
+}
+#bioblock > button{
+    background-color:  transparent;
+    color: indigo;
+    font-weight: 600;
+    font-size: 16px;
+    text-decoration-line: underline;
+    border: 0;
+    position: relative;
+    left: 380px;
+    bottom: 65px;
+}
+#aboutblock{
+    border:  indigo 1px solid;
+    height: 200px;
+    width: 35%;
+    border-radius: 10px;
+    background-color: white;
+    position: absolute;
+    left: 60px;
+    top: 630px;
+}
+#aboutblock>p{
+    font-size: 24px;
+    font-weight: 600;
+    font-family: Arial, Helvetica, sans-serif;
+    color:rgb(123, 67, 163);
+    text-align:left;
+    position: relative;
+    left: 10px;
+    bottom: 15px;
+}
+#aboutblock > button{
+    background-color: transparent;
+    color: indigo;
+    font-weight: 600;
+    font-size: 16px;
+    text-decoration-line: underline;
+    border: 0;
+    position: relative;
+    left: 380px;
+    bottom: 65px;
+}
+#friendsblock{
+    border: indigo 1px solid;
+    height: 250px;
+    width: 35%;
+    border-radius: 10px;
+    background-color: white;
+    position: absolute;
+    left: 60px;
+    top: 850px;
+}
+#friendsblock>p{
+    font-size: 24px;
+    font-weight: 600;
+    font-family: Arial, Helvetica, sans-serif;
+    color:rgb(123, 67, 163);
+    text-align:left;
+    position: relative;
+    left: 10px;
+    bottom: 15px;
+}
+#min-viewfr{
+    background-color: transparent;
+    color: indigo;
+    font-weight: 600;
+    font-size: 16px;
+    text-decoration-line: underline;
+    border: 0;
+}
+#frname{
+    border: 0;
+    background-color: transparent;
+    font-weight: 400;
+    font-size: 18px;
+    text-decoration-line: underline;
+}
+#photosblock{
+    border: indigo 1px solid;
+    height: 380px;
+    width: 35%;
+    border-radius: 10px;
+    background-color: white;
+    position: absolute;
+    left: 60px;
+    top: 1120px;
+}
+#photosblock >p{
+    font-size: 24px;
+    font-weight: 600;
+    font-family: Arial, Helvetica, sans-serif;
+    color:rgb(123, 67, 163);
+    text-align:left;
+    position: relative;
+    left: 10px;
+    bottom: 15px;
+}
+#minp-viewph{
+    background-color: transparent;
+    color: indigo;
+    font-weight: 600;
+    font-size: 16px;
+    text-decoration-line: underline;
+    border: 0;
+}
+#statblock{
+    border:  indigo 1px solid;
+    height: 150px;
+    width: 50%;
+    margin-top: 20px;
+    border-radius: 10px;
+    background-color: white;
+    position: absolute;
+    left: 600px;
+    top: 390px;
+}
+#statblock >p{
+    color: gray;
+    font-size: 24px;
+    position: relative;
+    left: 20px;
+    bottom: 130px;
+}
+#statbox{
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    background-color: whitesmoke;
+    height: 40px;
+    width: 100%;
+    position: relative;
+    bottom: 85px;
+}
+#upphotovid{
+    background-color: transparent;
+    color: indigo;
+    font-weight: 600;
+    font-size: 16px;
+    text-decoration-line: underline;
+    border: 0;
+    position: relative;
+    left: 5px;
+    top:5px;
+}
+#post{
+    background-color: indigo;
+    color: white;
+    font-weight: 600;
+    font-size: 20px;
+    text-align: center;
+    border: 0;
+    border-radius: 5px;
+    position: relative;
+    left: 420px;
+    top: 8px;
+}
+#postwordblock{
+    border: indigo 1px solid;
+    height: 150px;
+    width: 50%;
+    border-radius: 10px;
+    background-color: white;
+    position: absolute;
+    left: 600px;
+    top: 580px;
+}
+#LCS{
+    width: 100%;
+    height: 25%;
+    position: relative;
+    bottom: 85px;
+}
+#LCS>button{
+    background-color: transparent;
+    border: 0;
+}
+#love1{
+    width: 40px;height: 30px;
+    position: relative;
+    left: 65px;
+}
+#love2{
+    width: 40px;height: 30px;
+    position: relative;
+    left: 80px;
+}
+#comment{
+    width: 40px;height: 30px;
+    position: relative;
+    left: 175px;
+}
+#share{
+    width: 40px;height: 30px;
+    position: relative;
+    left: 320px;
+}
+#postpicblock{
+    border: indigo 1px solid;
+    height: 550px;
+    width: 50%;
+    border-radius: 10px;
+    background-color: white;
+    position: absolute;
+    left: 600px;
+    top: 750px;
+}
