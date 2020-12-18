@@ -31,7 +31,7 @@
                 <div class="fullbox">
             
                     <div id="switchbar">
-                        <div style="border-right: purple 1px solid;"><p id="slogin">Login</p></div><div><p id="sreg">Register</p></div>
+                        <div style="border-right: indigo 2px solid;"><p id="slogin">Login</p></div><div><p id="sreg">Register</p></div>
                     </div>
 
                    <div>
@@ -85,7 +85,7 @@
         $("#sreg").click(function(event) {
         $("#register").css("display","block");
         $("#login").css("display","none");
-        $("#errMsg").css("color","indigo");
+        $("#errMsg").css("color","blue");
         document.getElementById("errMsg").innerHTML = "Please fill the data form to register!";
         });      
         });

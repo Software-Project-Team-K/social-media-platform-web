@@ -7,15 +7,10 @@
                 $target_id = substr($_SERVER['REQUEST_URI'],strpos($_SERVER['REQUEST_URI'],"/",1)+1);
                 $target_id = substr($target_id,0,strlen($target_id)-1);
                 //check if the target is the user
-                if($_SESSION['user']->get_id() ==$target_id){
-                    $_SESSION['style']="../assets/profile/main.css";
-                    $_SESSION['target'] = $_SESSION['user'];
-                }
-                else{
-                    $_SESSION['style']="../assets/profile/guest.css";
-                    $_SESSION['target'] = new user($target_id);
-                }
-
+                
+                if($_SESSION['user']->get_id() == $target_id) $_SESSION['style']="../assets/profile/main.css";
+                else $_SESSION['style']="../assets/profile/guest.css";
+                $_SESSION['target'] = new user($target_id);
                 
              echo '
                     <!DOCTYPE html>
@@ -98,12 +93,38 @@
 
 
         <!-- User Details-->
-        <div style="width:25%; margin: 20px 0 20px 2%; height: 1000px; border: 2px red solid; display:inline-block;">
-
+        <div style="width:30%; margin: 20px 1%; height: 800px; display:inline-block; vertical-align:top;">
+            <div id="friendsblock">
+                <p>Friends  (<?php echo $_SESSION['target']->get_friends_no();?>)</p>
+                <a href="">See More</a>
+                <hr>
+                <!-- friends units -->
+                <div style="margin: 0 0 0 2%"> 
+                <?php
+                $friends = $_SESSION['target']->get_friends();
+                $friends_no = $_SESSION['target']->get_friends_no();
+                if($friends_no!=0){
+                    $start = 0;
+                    for($i=0; $i<6; $i++){
+                    if($i == $friends_no) break;
+                    $end = strpos($friends,",",$start + 1);
+                    $friend = new user(substr($friends,$start,$end - $start));
+                    $start = $end + 1;
+                    echo'
+                        <div class="friendunit">
+                            <img src="../'. $friend->get_id()."/". $friend->get_profile_pic().'"><br>
+                            <a href="../'.$friend->get_id().'">' . $friend->get_name() . '</a>
+                        </div>';
+                    }
+                }
+                ?>
+                </div>
+                <!-- end friends units -->
+            </div>
         </div>
 
         <!-- Posts Section-->
-        <div style="width:65%; margin: 20px 2%; height: 1000px; border: 2px black solid; display:inline-block;">
+        <div style="width:60%; margin: 20px 1%; height: 1000px; border: 2px black solid; display:inline-block;">
 
         </div>
 

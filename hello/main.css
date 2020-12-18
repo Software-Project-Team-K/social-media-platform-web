@@ -24,7 +24,7 @@
     margin: 15px 0 5px 0 ;
 }
 .fullbox{
-    border: 2px purple dashed;
+    border: 2px indigo solid;
     border-radius: 15px;
     background-image: url(../assets/img/logbox.jpg);
     background-size: cover;
@@ -36,7 +36,7 @@
 #switchbar{
     text-align: center;
     font-size: 115%; 
-    border-bottom: 2px solid purple; 
+    border-bottom: 2px solid indigo; 
     border-radius: 15px;
     color: indigo;
     font-weight: bolder;
@@ -72,7 +72,7 @@ form > input{
     width: 50%;
 }
 input{
-    border: indigo 1px solid;
+    border: violet 2px solid;
     border-radius: 5px;
     text-align: center;
 }
@@ -88,12 +88,13 @@ input.next{
 input:focus{
     outline: 0;
 }
-input:hover{
-    border: 2px  violet solid;
+input.next:hover{
+    color:white;
+    border: 3px  violet solid;
 }
 #sreg:hover , #slogin:hover {
-    color: violet;
-    text-shadow: 1px 1px 1px white ;
+    color: white;
+    text-shadow: 3px 3px 7px violet ;
 }
 /**/
 body{
@@ -102,12 +103,11 @@ body{
 body::before {
   content: "";
   background-image: url(../assets/img/default_cover.jpg);
-  opacity: 0.9;
   top: 0;   
   left: 0;
   bottom: 0;
   right: 0;
-  position: absolute;
+  position: fixed;
   z-index: -1; 
   background-repeat: no-repeat;
   background-size: cover;

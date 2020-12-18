@@ -10,6 +10,7 @@
                         private $profile_pic;
                         private $cover_pic;
                         private $friends;
+                        private $friends_no;
                         private $fr_requests;
 
                         function __construct($logID){
@@ -25,6 +26,7 @@
                             $this->profile_pic= $row['profile_pic'];
                             $this->cover_pic= $row['cover_pic'];
                             $this->friends = $row['friends'];
+                            $this->friends_no = $row['friends_no'];
                             $this->fr_requests = $row['fr_requests'];
                         }
                         function get_name() {return $this->full_name;}
@@ -32,6 +34,7 @@
                         function get_profile_pic() {return $this->profile_pic;}
                         function get_cover_pic()  {return $this->cover_pic;}
                         function get_friends(){return $this->friends;}
+                        function get_friends_no(){return $this->friends_no;}
                         function get_fr_requests(){return $this->fr_requests;}
                         function update_profile_pic($link){
                             $connect = new connection;
@@ -64,20 +67,29 @@
                         }
                         function addFriend($target_id){
                             $connect = new connection;
-                            $this->friends = $this->friends."$target_id".",";;
+                            $this->friends = $this->friends."$target_id".",";
                             $connect->conn->query("UPDATE users SET friends='$this->friends' WHERE username='$this->username'");
+                            $this->friends_no += 1;
+                            $connect->conn->query("UPDATE users SET friends='$this->friends' WHERE username='$this->username'");
+                            $connect->conn->query("UPDATE users SET friends_no='$this->friends_no' WHERE username='$this->username'");
                             $target = new user($target_id);
                             $target->cancelRequest($this->username);
                             $trg_friends = $target->get_friends()."$this->username".",";
+                            $trg_friends_no = $target->get_friends_no() + 1;
                             $connect->conn->query("UPDATE users SET friends='$trg_friends' WHERE username='$target_id'");
+                            $connect->conn->query("UPDATE users SET friends_no='$trg_friends_no' WHERE username='$target_id'");
                         }
                         function removeFriend($target_id){
                             $connect = new connection;
                             $this->friends = str_replace($target_id.",","",$this->friends);
+                            $this->friends_no -= 1;
                             $connect->conn->query("UPDATE users SET friends='$this->friends' WHERE username='$this->username'");
+                            $connect->conn->query("UPDATE users SET friends_no='$this->friends_no' WHERE username='$this->username'");
                             $target = new user($target_id);
                             $trg_friends =  $this->friends = str_replace($this->username.",","",$target->get_friends());
+                            $trg_friends_no = $target->get_friends_no() - 1;
                             $connect->conn->query("UPDATE users SET friends='$trg_friends' WHERE username='$target_id'");
+                            $connect->conn->query("UPDATE users SET friends_no='$trg_friends_no' WHERE username='$target_id'");
                         }
                     }
 
@@ -87,7 +99,7 @@
                         private  $_server = "localhost";
                         private  $_user = "root";
                         private  $_pass = "";
-                        private  $_dbname = "silvaro";
+                        private  $_dbname = "chatverse";
                         public   $conn;
 
                         function __construct(){

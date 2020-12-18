@@ -4,14 +4,14 @@
                     $server = "localhost";
                     $user = "root";
                     $pass = "";
-                    $dbname = "silvaro";
+                    $dbname = "chatverse";
                         
                     //CONNECT TO THE SERVER
                     $conn = new mysqli($server, $user, $pass);
                     if ($conn->connect_error) die("Connection failed: " . $conn->connect_error);
 
                     //DELETE DATABASE IF EXISTS
-                    $sql = "DROP DATABASE IF EXISTS silvaro";
+                    $sql = "DROP DATABASE IF EXISTS chatverse";
                     $conn->query($sql);
 
                     //CREATE DATABASE
@@ -24,7 +24,7 @@
 
                     //CREATE TABLES
                     $sql = "CREATE TABLE users(
-                        id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                        id INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
                         username VARCHAR(25),
                         password VARCHAR(20) NOT NULL,
                         email VARCHAR(30) NOT NULL,
@@ -34,8 +34,9 @@
                         reg_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                         profile_pic VARCHAR(60) NOT NULL DEFAULT '../assets/img/default_pp.jpg',
                         cover_pic VARCHAR(60) NOT NULL DEFAULT '../assets/img/default_cover.jpg',
-                        friends VARCHAR(300),
-                        fr_requests VARCHAR(300)
+                        friends VARCHAR(300) NOT NULL DEFAULT '',
+                        friends_no INT(10) UNSIGNED DEFAULT 0,
+                        fr_requests VARCHAR(300) NOT NULL DEFAULT ''
                     )";
                     if ($conn->query($sql) === TRUE) echo "Table created successfully"."<br>";
                     else echo "Error creating Table: " . $conn->error."<br>";

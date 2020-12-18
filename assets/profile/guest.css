@@ -90,9 +90,9 @@ float: right;
 #PNB p{
     font-size: 25px;
     font-weight: bold;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: serif;
     font-style: italic;
-    color: black;
+    color: rgb(60, 0, 50);
     display: inherit;
     margin: 0;
     position: relative;
@@ -103,7 +103,46 @@ float: right;
     margin: 0 10% 0 40%; 
     vertical-align:bottom;
 }
-
+/*haidi*/
+#friendsblock{
+    border: black 2px solid;
+    width: 100%;
+    border-radius: 10px;
+    background-color: rgba(76, 0, 130, 0.65);
+}
+#friendsblock > p{
+    font-size: 18px;
+    font-weight: bolder;
+    font-family: serif;
+    color: gainsboro;
+    margin: 5px 15px 0px 15px;
+    display:inline-block;
+}
+#friendsblock > a{
+    float:right;
+    margin: 7px 15px 5px 15px;
+    color: gainsboro;
+    text-decoration-line:none;
+    font-weight: bold; 
+    font-size: 15px;
+}
+.friendunit{
+    display:inline-block;
+    text-align:center;
+    margin: 1% 1% 1% 1%;
+    width: 30%;
+}
+.friendunit > img{
+    width: 100%;
+    height: 120px;
+    border: 2px white solid;
+    border-radius: 20px;
+}
+.friendunit > a{
+    color:white;
+    font-style: italic;
+    text-decoration-line: none;
+}
 /* The Modal (background) */
 .modal {
     display: none; /* Hidden by default */
