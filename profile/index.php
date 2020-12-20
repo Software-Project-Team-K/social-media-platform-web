@@ -3,21 +3,25 @@
                 session_start();
                 if(!isset($_SESSION['user']))header("location: ../");
 
-                //aquire the target username
+                //aquire the usernames
+                $user_id = $_SESSION['user']->get_id();
                 $target_id = substr($_SERVER['REQUEST_URI'],strpos($_SERVER['REQUEST_URI'],"/",1)+1);
-                $target_id = substr($target_id,0,strlen($target_id)-1);
-                //check if the target is the user
-                
-                if($_SESSION['user']->get_id() == $target_id) $_SESSION['style']="../assets/profile/main.css";
-                else $_SESSION['style']="../assets/profile/guest.css";
+                $target_id = strtolower(substr($target_id,0,strlen($target_id)-1));
+                //refetch the data
+                $_SESSION['user'] = new user($user_id);
                 $_SESSION['target'] = new user($target_id);
+                //check if the target is the user
+                $isVisitor = TRUE;
+                if($user_id == $target_id) $isVisitor = FALSE;
+
+
                 
              echo '
                     <!DOCTYPE html>
                         <html>
         
                             <head>
-                                    <link rel="stylesheet" href="'.$_SESSION["style"].'">
+                                    <link rel="stylesheet" href="../profile/main.css">
                                     <meta charset="utf-8">
                                     <meta http-equiv="X-UA-Compatible" content="IE=edge">
                                     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -29,7 +33,7 @@
                                         <a href="../"><img src="../assets/img/icn_logo.png" style="width: 30px;  margin: 5px 20px;"></a>
                                         <input type="text" style="width:20%; position: relative; left:10px; bottom:15px; border-radius:10px;">
                                         <div id="navbuttons">
-                                            <button><a href="../'.$_SESSION["user"]->get_id().'"><img src="../'.$_SESSION["user"]->get_id()."/".$_SESSION["user"]->get_profile_pic().'"></a></button>
+                                            <button><a href="../'.$user_id.'"><img src="../'.$user_id."/".$_SESSION["user"]->get_profile_pic().'"></a></button>
                                             <button><img src="../assets/img/icn_msg.png"></button>
                                             <button><img src="../assets/img/icn_notification.png"></button>
                                             <button><a href="../assets/operation/logout.php"><img src="../assets/img/icn_settings.png"></a></button>
@@ -44,22 +48,23 @@
 
         <div id="NCP">  
                 <div id="cover">
-                    <button id="coverBtn"><img src="../assets/img/icn_upload.png"></button>
-                    <img src=<?php echo "../".$_SESSION["target"]->get_id()."/".$_SESSION['target']->get_cover_pic(); ?>>
+                    <?php if(!$isVisitor) echo '<button id="coverBtn"><img src="../assets/img/icn_upload.png"></button>'?>
+                    <img src=<?php echo "../".$target_id."/".$_SESSION['target']->get_cover_pic(); ?>>
                 </div>
                 <div id="PNB">
                     <div style="display: inline-block; margin: 0 5%;">
-                        <img id="pp" src=<?php echo "../".$_SESSION["target"]->get_id()."/".$_SESSION['target']->get_profile_pic(); ?>>
-                        <button id="ppBtn"><img src="../assets/img/icn_upload.png"></button>
+                        <img id="pp" src=<?php echo "../".$target_id."/".$_SESSION['target']->get_profile_pic(); ?>>
+                        <?php if(!$isVisitor) echo '<button id="ppBtn"><img src="../assets/img/icn_upload.png"></button>' ;?>
                         <p><?php echo $_SESSION['target']->get_name(); ?></p>
                     </div>
                     <form id="buttons" method="GET" action="../assets/operation/friend_button.php">
                         <input  type="hidden" name = "target" value = "<?php echo $target_id ?>">
                         <?php
-                        if($_SESSION["user"]->isFriend($target_id)) echo '<input type="submit" name="op" value="Unfriend">';
-                        else if(($_SESSION["target"]->isFrRequest($_SESSION['user']->get_id()))) echo '<input type="submit" name="op" value="Accept"><input type="submit" name="op" value="Refuse">';
-                        else if(!($_SESSION["user"]->isFrRequest($target_id))) echo '<input type="submit" name="op" value="Add Friend">';
-                        else echo '<input type="submit" name="op" value="Cancel Request">';
+                        if($isVisitor){
+                        if(friendship::isFriend($user_id,$target_id)) echo '<input type="submit" name="op" value="Unfriend">';
+                        else if(friendship::isFrRequest($target_id,$user_id)) echo '<input type="submit" name="op" value="Accept"><input type="submit" name="op" value="Refuse">';
+                        else if(!(friendship::isFrRequest($user_id,$target_id))) echo '<input type="submit" name="op" value="Add Friend">';
+                        else echo '<input type="submit" name="op" value="Cancel Request">';}
                         ?>                                   
                     </form>
                 </div>

@@ -6,24 +6,25 @@
                     session_start();
 
                     if ($_SERVER["REQUEST_METHOD"] == "GET") {
+                    $user_id = $_SESSION['user']->get_id();
                     $target_id = $_GET['target'];
                     $operation = $_GET['op'];
 
                     switch ($operation) {
                         case 'Add Friend':
-                            $_SESSION['user']->friendRequest($target_id);
+                            friendship::friendRequest($user_id,$target_id);
                             break;
                         case 'Unfriend':
-                            $_SESSION['user']->removeFriend($target_id);
+                            friendship::removeFriend($user_id,$target_id);
                             break;
                         case 'Accept':
-                            $_SESSION['user']->addFriend($target_id);
+                            friendship::addFriend($user_id,$target_id);
                             break;
                         case 'Refuse':
-                            $_SESSION['target']->cancelRequest($_SESSION['user']->get_id());
+                            friendship::cancelRequest($target_id,$user_id);
                             break;
                         case 'Cancel Request':
-                            $_SESSION['user']->cancelRequest($target_id);
+                            friendship::cancelRequest($user_id,$target_id);
                             break;
                     }    
                 }
