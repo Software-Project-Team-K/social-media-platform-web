@@ -33,7 +33,9 @@
                         {$_SESSION['msg']="Registered Successfully, You Can Login Now!"; $_SESSION['color']="green"; header("location: ../../");}
 
                         mkdir("../../".$username);
-                        copy("../profile/index.php","../../".$username."/"."index.php");
+                        $myfile = fopen("../../".$username."/index.php", "w");
+                        fwrite($myfile, "<?php   require '../profile/index.php'   ?>");
+                        fclose($myfile);
                      }   
 ?>
         

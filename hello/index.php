@@ -12,7 +12,7 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Silvaro | Hello !</title>
+        <title>Chatverse | Hello!</title>
         <link rel="stylesheet" href="main.css">
         <link rel="icon" href="../assets/img/icn_logo.png">
     </head>
@@ -22,16 +22,16 @@
             <div class ="fulllogo">
                 <img src="../assets/img/icn_logo.png">
                 <div class="logotxt" >
-                    <p id="logo">Silvaro</p>
+                    <p id="logo">Chatverse</p>
                     <p>Welcome to your mini-world!</p>
-                    <p>simple social platform.</p>
+                    <p>modern social platform.</p>
                 </div>
             </div>
                        
                 <div class="fullbox">
             
                     <div id="switchbar">
-                        <div style="border-right: darkblue 1px solid;"><p id="slogin">Login</p></div><div><p id="sreg">Register</p></div>
+                        <div style="border-right: indigo 2px solid;"><p id="slogin">Login</p></div><div><p id="sreg">Register</p></div>
                     </div>
 
                    <div>
