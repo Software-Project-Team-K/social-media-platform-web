@@ -12,13 +12,13 @@
                                 <meta charset="utf-8">
                                 <meta http-equiv="X-UA-Compatible" content="IE=edge">
                                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                                <title>Silvaro | Home</title>
+                                <title>Chatverse | Home</title>
                                 <link rel="icon" href="assets/img/icn_logo.png">
             
                                  <!--Navigation Bar-->
                                  <div id="nav">
-                                    <a href=""><img src="assets/img/icn_logo.png" style="width: 50px; height: 95%; margin: 0 15px;"></a>
-                                    <input type="text" style="width:20%; position: relative; left:5px; bottom:15px;">
+                                 <a href="../"><img src="assets/img/icn_logo.png" style="width: 30px;  margin: 5px 20px;"></a>
+                                  <input type="text" style="width:20%; position: relative; left:10px; bottom:15px; border-radius:10px;">
                                         <div id="navbuttons">
                                                 <button><a href='.$_SESSION["user"]->get_id().'><img src="'.$_SESSION["user"]->get_id()."/".$_SESSION["user"]->get_profile_pic().'"></a></button>
                                                 <button><img src="assets/img/icn_msg.png"></button>
@@ -27,7 +27,7 @@
                                                 <button><a href="assets/operation/logout.php"><img src="assets/img/icn_settings.png"></a></button>
                                             </div> 
                                         </div>
-                                <div style="height:45px; background-color: white;"></div>
+                                <div style="height:40px; background-color: white;"></div>
                             </head>
                         <body>'
 ?>
