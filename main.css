@@ -169,3 +169,35 @@ body{
 *{
     box-sizing: border-box;
 }
+/* Settings & Logout Menu*/
+.sub-menu-settings
+{
+    position: fixed;
+    right: 120px;
+}
+.sub-menu-settings ul
+{
+    position: absolute;
+    background: #d3d3d3;
+    width: 90px;
+    height: 50px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-direction: column;
+    list-style: none;
+    border-radius: 5px;
+    opacity: 0;
+    pointer-events: none;
+    transform: translate(10px);
+    transition: all 0.4s ease;
+}
+.sub-menu-settings a
+{
+    color: black;
+    text-decoration: none;
+}
+.sub-menu-settings ul: focus + div ul {
+    opacity: 1;
+    pointer-events: all;
+}
