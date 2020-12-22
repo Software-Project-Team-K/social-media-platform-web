@@ -1,6 +1,7 @@
 <?php
 
             require '../classes.php';
+            $connect = new connection;
             session_start();
 
             $type = $_POST['type'];
@@ -37,8 +38,8 @@
             else {
 
               move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file);
-              if($type =="pp")  $_SESSION['user']->update_profile_pic("current_pp.".$imageFileType);
-              else if($type =="cover") $_SESSION['user']->update_cover_pic("current_cover.".$imageFileType);
+              if($type =="pp")  $_SESSION['user']->update_profile_pic("current_pp.".$imageFileType,$connect);
+              else if($type =="cover") $_SESSION['user']->update_cover_pic("current_cover.".$imageFileType,$connect);
               header("Location: $target_dir");
             }  
 ?>

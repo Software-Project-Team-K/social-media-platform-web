@@ -3,88 +3,47 @@
                     //CLASS >> CURRENT USER DATA
                     class user{
 
-                        private $data;
+                        private $username;
+                        private $f_name;
+                        private $l_name;
+                        private $full_name;
+                        private $profile_pic;
+                        private $cover_pic;
 
                         function __construct($logID){
                             //get user data from parameter (username or email)
                             $connect = new connection;
                             $result = $connect->conn->query("SELECT * FROM users WHERE email='$logID' or username='$logID'");
-                            $this->data = mysqli_fetch_assoc($result);
+                            $row = mysqli_fetch_assoc($result);
+                            //assign the data
+                            $this->f_name= $row['f_name'];
+                            $this->l_name= $row['l_name'];
+                            $this->full_name = $this->f_name." ".$this->l_name;
+                            $this->username= $row['username'];
+                            $this->profile_pic= $row['profile_pic'];
+                            $this->cover_pic= $row['cover_pic'];
                         }
-                        function get_name() {return $this->data['f_name']." ".$this->data['l_name'];}
-                        function get_id()  {return $this->data['username'];}
-                        function get_profile_pic() {return $this->data['profile_pic'];}
-                        function get_cover_pic()  {return $this->data['cover_pic'];}
-                        function get_friends(){return $this->data['friends'];}
-                        function get_friends_no(){return $this->data['friends_no'];}
-                        function get_fr_requests(){return $this->data['fr_requests'];}
-                        function update_profile_pic($link){
-                            $connect = new connection;
-                            $username = $this->get_id();
-                            $connect->conn->query("UPDATE users SET profile_pic='$link' WHERE username='$username'");}
-                        function update_cover_pic($link){
-                            $connect = new connection;
-                            $username = $this->get_id();
-                            $connect->conn->query("UPDATE users SET cover_pic='$link' WHERE username='$username'");}
+                        function get_name() {return $this->full_name;}
+                        function get_id()  {return $this->username;}
+                        function get_profile_pic() {return $this->profile_pic;}
+                        function get_cover_pic()  {return $this->cover_pic;}
+                        function update_profile_pic($link,$connect){
+                            $this->profile_pic = $link;
+                            $connect->conn->query("UPDATE users SET profile_pic='$this->profile_pic' WHERE username='$this->username'");
+                        }
+                        function update_cover_pic($link,$connect){
+                            $this->cover_pic = $link;
+                            $connect->conn->query("UPDATE users SET cover_pic='$this->cover_pic' WHERE username='$this->username'");
+                        }
                     }
 
-                    //CLASS >> FRIENDSHIP
-                    class friendship{
-                        static function isFriend($user_id,$target_id){
-                            $user = new user($user_id);
-                            return strstr($user->get_friends(),$target_id);
-                        }
-                        static function isFrRequest($user_id,$target_id){
-                            $target= new user($target_id);
-                            return strstr($target->get_fr_requests(),$user_id);
-                        }
-                        static function friendRequest($user_id,$target_id){
-                            $connect = new connection;
-                            $target = new user($target_id);
-                            $fr_requests = $target->get_fr_requests().$user_id.",";
-                            $connect->conn->query("UPDATE users SET fr_requests='$fr_requests' WHERE username='$target_id'");
-                        }
-                        static function cancelRequest($user_id,$target_id){
-                            $connect = new connection;
-                            $target = new user($target_id);
-                            $fr_requests = str_replace($user_id.",","",$target->get_fr_requests());
-                            $connect->conn->query("UPDATE users SET fr_requests='$fr_requests' WHERE username='$target_id'");
-                        }
-                        static function addFriend($user_id,$target_id){
-                            $connect = new connection;
-                            $user = new user($user_id);
-                            $user_friends = $user->get_friends()."$target_id".",";
-                            $user_friends_no = $user->get_friends_no() + 1;
-                            $connect->conn->query("UPDATE users SET friends='$user_friends' WHERE username='$user_id'");
-                            $connect->conn->query("UPDATE users SET friends_no='$user_friends_no' WHERE username='$user_id'");
-                            $target = new user($target_id);
-                            friendship::cancelRequest($target_id,$user_id);
-                            $trg_friends = $target->get_friends()."$user_id".",";
-                            $trg_friends_no = $target->get_friends_no() + 1;
-                            $connect->conn->query("UPDATE users SET friends='$trg_friends' WHERE username='$target_id'");
-                            $connect->conn->query("UPDATE users SET friends_no='$trg_friends_no' WHERE username='$target_id'");
-                        }
-                        static function removeFriend($user_id,$target_id){
-                            $connect = new connection;
-                            $user = new user($user_id);
-                            $user_friends =  str_replace($target_id.",","",$user->get_friends());
-                            $user_friends_no = $user->get_friends_no() - 1;
-                            $connect->conn->query("UPDATE users SET friends='$user_friends' WHERE username='$user_id'");
-                            $connect->conn->query("UPDATE users SET friends_no='$user_friends_no' WHERE username='$user_id'");
-                            $target = new user($target_id);
-                            $trg_friends = str_replace($user_id.",","",$target->get_friends());
-                            $trg_friends_no = $target->get_friends_no() - 1;
-                            $connect->conn->query("UPDATE users SET friends='$trg_friends' WHERE username='$target_id'");
-                            $connect->conn->query("UPDATE users SET friends_no='$trg_friends_no' WHERE username='$target_id'");
-                        } 
-                    }
                     //CLASS >> CONNECTION TO DATABASE
                     class connection{
 
                         private  $_server = "localhost";
                         private  $_user = "root";
                         private  $_pass = "";
-                        private  $_dbname = "chatverse";
+                        private  $_dbname = "silvaro";
                         public   $conn;
 
                         function __construct(){
@@ -94,6 +53,7 @@
                             $this->conn->close();
                         }
                     }
+
                     //CLASS >> DYNAMIC VALIDATE THE INPUT 
                     class dynamic_validation{
 
@@ -181,6 +141,7 @@
                             return $this->errors;
                         }
                     }
+
                     //FUNCTION >> CLEAR THE INPUT 
                     function test_input($data) {
                         $data = trim($data);
