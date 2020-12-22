@@ -173,31 +173,25 @@ body{
 .sub-menu-settings
 {
     position: fixed;
-    right: 120px;
+    right: 30px;
+    display: none;
 }
 .sub-menu-settings ul
 {
-    position: absolute;
-    background: #d3d3d3;
-    width: 90px;
-    height: 50px;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    flex-direction: column;
     list-style: none;
-    border-radius: 5px;
-    opacity: 0;
-    pointer-events: none;
-    transform: translate(10px);
-    transition: all 0.4s ease;
+    border-radius: 5px; 
 }
 .sub-menu-settings a
 {
     color: black;
     text-decoration: none;
 }
-.sub-menu-settings ul: focus + div ul {
-    opacity: 1;
-    pointer-events: all;
+.sub-menu-settings li{
+    font-size: 110%;
+    font-weight: bolder;
+    float: left;
+    clear: left;
+    padding: 5px 0;
+    border-bottom: 2px solid olivedrab;
+    text-align: center;
 }

@@ -23,7 +23,7 @@
                                                 <button><a href='.$_SESSION["user"]->get_id().'><img src="'.$_SESSION["user"]->get_id()."/".$_SESSION["user"]->get_profile_pic().'"></a></button>
                                                 <button><img src="assets/img/icn_msg.png"></button>
                                                 <button><img src="assets/img/icn_notification.png"></button>
-                                                <button><img src="assets/img/icn_settings.png">
+                                                <button onclick="toggle();"><img src="assets/img/icn_settings.png">
                                                     <div class="sub-menu-settings">
                                                             <ul>
                                                                 <li><a href="settings/index.php">Settings</li>
@@ -43,7 +43,16 @@
 
 
 
+    <script>
 
+       function toggle(){
+       var x = document.getElementsByClassName("sub-menu-settings")[0];
+       if(x.style.display =="none")
+       x.style.display = "block";
+       else 
+       x.style.display = "none";
+        }
+    </script>
 
 
     </body>  
