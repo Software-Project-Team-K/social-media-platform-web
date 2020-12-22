@@ -9,7 +9,7 @@
                     if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $logID = strtolower(test_input($_POST["logID"]));
                     $password = test_input($_POST["password"]);}
-
+                    
                     //Check If The User not Exists
                     $result = $connect->conn->query("SELECT * FROM users WHERE email='$logID' or username='$logID'");
                     if (mysqli_num_rows($result) == 0) {$_SESSION['msg']="Invalid Email/Username!";  $_SESSION['color']="red"; header("location: ../../"); die();}

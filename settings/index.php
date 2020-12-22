@@ -1,17 +1,12 @@
-<?php
-require '../assets/classes.php';
-//include("../assets/operation/change_settings.php")
-?>
-
 <html lang="en">
 
 <head>
     <meta charset="utf-8">
 
-    <title>account settings</title>
+    <title>Account Settings</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="navigation_bar.css" rel="stylesheet">
     <link href="http://netdna.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
+    
     <link href="syles.css" rel="stylesheet">
     <style type="text/css">
         body {
@@ -125,23 +120,46 @@ require '../assets/classes.php';
         }
 
     </style>
+<?php 
+                require '../assets/classes.php';
+                session_start();
+                if(!isset($_SESSION['user']))header("location: ../");
+
+                //aquire the usernames
+                $user_id = $_SESSION['user']->get_id();
+
+
+
+             echo '
+                    <!DOCTYPE html>
+                        <html>
+        
+                            <head>
+                                    <link rel="stylesheet" href="../profile/main.css">
+                                    <meta charset="utf-8">
+                                    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+                                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                                    <title>Chatverse | Account Settings</title>
+                                    <link rel="icon" href="../assets/img/icn_logo.png">
+        
+                                    <!--Navigation Bar-->
+                                    <div id="nav">
+                                        <a href="../"><img src="../assets/img/icn_logo.png" style="width: 30px;  margin: 5px 20px;"></a>
+                                        <input type="text" style="width:20%; position: relative; left:10px; bottom:15px; border-radius:10px;">
+                                        <div id="navbuttons">
+                                            <button><a href="../'.$user_id.'"><img src="../'.$user_id."/".$_SESSION["user"]->get_profile_pic().'"></a></button>
+                                            <button><img src="../assets/img/icn_msg.png"></button>
+                                            <button><img src="../assets/img/icn_notification.png"></button>
+                                            <button><a href=""><img src="../assets/img/icn_settings.png"></a></button>
+                                            <button><a href="../assets/operation/logout.php"><img src="../assets/img/icn_settings.png"></a></button>
+                                        </div> 
+                                    </div>
+                                    <div style="height:40px; background-color: white;"></div>'
+?>
+
+
 </head>
-
 <body style="">
-
-
-    <div id="nav">
-        <button id="logo-home"><img src="white logo transparent back.png" style="width: 120px;height: 75px;
-            position: relative;right:40px;bottom: 14px;"></button>
-        <input type="text" style="width:300px; position: relative; left:400px;bottom:17px ;">
-        <button id="search"><img src="search icon.png" style="width: 15px; height:15px;"></button>
-        <div id="navbuttons">
-            <button><img src="notification1.png" style="width: 30px;height: 30px;"></button>
-            <button><img src="messages9.png" style="width: 32px;height: 32px; position: relative; top: 3px; "></button>
-            <button><img src="down arrow3.png" style="width: 27px;height: 27px;position: relative;;top: 2px;"></button>
-        </div>
-
-    </div>
 
 
     <div class="container light-style flex-grow-1 container-p-y">
@@ -224,5 +242,4 @@ require '../assets/classes.php';
     </script>
 
 </body>
-
 </html>

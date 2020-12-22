@@ -23,8 +23,8 @@
                                                 <button><a href='.$_SESSION["user"]->get_id().'><img src="'.$_SESSION["user"]->get_id()."/".$_SESSION["user"]->get_profile_pic().'"></a></button>
                                                 <button><img src="assets/img/icn_msg.png"></button>
                                                 <button><img src="assets/img/icn_notification.png"></button>
-                                                <button><a href="settings/settings.php"><img src="assets/img/icn_settings.png"></a></button>
-                                                <button><a href="assets/operation/logout.php"><img src="assets/img/icn_logout.png"></a></button>
+                                                <button><a href="settings/"><img src="assets/img/icn_settings.png"></a></button>
+                                                <button><a href="assets/operation/logout.php"><img src="assets/img/icn_settings.png"></a></button>
                                             </div> 
                                         </div>
                                 <div style="height:45px; background-color: white;"></div>
