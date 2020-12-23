@@ -60,6 +60,7 @@
                                         <label class="form-label">E-mail</label>
                                         <input type="text" name="email" class="form-control mb-1" value="">
                                     </div>
+                                    <input type="hidden" name="operation" value="email">
                                     <input type="submit" name="update_details" value="Save Changes">
                                 </form>
                             </div>
@@ -67,21 +68,43 @@
                         </div>
                         <div class="tab-pane fade" id="account-change-password">
                             <div class="card-body pb-2">
+                                <form id="change2" method="POST" action="../assets/operation/change_settings.php">
+                                    <div class="form-group">
+                                        <label class="form-label">Current password</label>
+                                        <input type="password" name="current_pass" class="form-control">
+                                    </div>
 
-                                <div class="form-group">
-                                    <label class="form-label">Current password</label>
-                                    <input type="password" class="form-control">
-                                </div>
+                                    <div class="form-group">
+                                        <label class="form-label">New password</label>
+                                        <input type="password" name="new_pass" class="form-control">
+                                    </div>
 
-                                <div class="form-group">
-                                    <label class="form-label">New password</label>
-                                    <input type="password" class="form-control">
-                                </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Repeat new password</label>
+                                        <input type="password" name="new_pass2" class="form-control">
+                                    </div>
+                                    <input type="hidden" name="operation" value="pass">
+                                    <input type="submit" name="update_password" value="Save Changes">
+                                </form>
+                                <form id="change3" method="POST" action="../assets/operation/change_settings.php">
+                                    <div class="form-group">
+                                        <label class="form-label">Show Friends</label>
+                                        <input type="checkbox" name="check0" value="1">
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label class="form-label">Show User Details</label>
+                                        <input type="checkbox" name="check1" value="1">
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label class="form-label">Enable Market</label>
+                                        <input type="checkbox" name="check2" value="1">
+                                    </div>
 
-                                <div class="form-group">
-                                    <label class="form-label">Repeat new password</label>
-                                    <input type="password" class="form-control">
-                                </div>
+                                    <input type="hidden" name="operation" value="check">
+                                    <input type="submit" name="checkboxes" value="Save Changes">
+                                </form>  
                         </div>
                     </div>
                 </div>

@@ -12,6 +12,7 @@
                             $this->data = mysqli_fetch_assoc($result);
                         }
                         function get_name() {return $this->data['f_name']." ".$this->data['l_name'];}
+                        function get_password() {return $this->data['password'];}
                         function get_id()  {return $this->data['username'];}
                         function get_profile_pic() {return $this->data['profile_pic'];}
                         function get_cover_pic()  {return $this->data['cover_pic'];}

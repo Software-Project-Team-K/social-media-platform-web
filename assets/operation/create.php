@@ -36,7 +36,10 @@
                         cover_pic VARCHAR(60) NOT NULL DEFAULT '../assets/img/default_cover.jpg',
                         friends VARCHAR(300) NOT NULL DEFAULT '',
                         friends_no INT(10) UNSIGNED DEFAULT 0,
-                        fr_requests VARCHAR(300) NOT NULL DEFAULT ''
+                        fr_requests VARCHAR(300) NOT NULL DEFAULT '',
+                        show_friends INT(1) UNSIGNED DEFAULT 0,
+                        show_user_details INT(1) UNSIGNED DEFAULT 0,
+                        enable_market INT(1) UNSIGNED DEFAULT 0
                     )";
                     if ($conn->query($sql) === TRUE) echo "Table created successfully"."<br>";
                     else echo "Error creating Table: " . $conn->error."<br>";
