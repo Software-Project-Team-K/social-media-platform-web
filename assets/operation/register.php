@@ -15,7 +15,7 @@
                         $type = $_GET["t"];
                         $errors = $validator->validate($input,$type,$connect->conn);
                         end($errors);
-                        echo ($errors[key($errors)]);  
+                        echo ($errors[key($errors)]);
                     }
 
                     // Data processing and Store
@@ -25,17 +25,19 @@
                         $email = strtolower(test_input($_POST["email"]));
                         $password = test_input($_POST["password"]);
                         $phone_num = test_input($_POST["phone_num"]);
+                        $gender = $_POST["gender"];
+                        $birth_date = $_POST["birth_date"];
 
-                        $connect->conn->query("INSERT INTO users(f_name,l_name,password,phone_num,email) VALUES('$f_name','$l_name','$password','$phone_num','$email')");
-                        $username = $connect->conn->insert_id."_".strtolower($f_name);
-                        $connect->conn->query("UPDATE users SET username='$username' WHERE email='$email'");
+                        $connect->conn->query("INSERT INTO users(f_name,l_name,password,phone_num,email,gender,birth_date) VALUES('$f_name','$l_name','$password','$phone_num','$email','$gender','$birth_date')");
+                        $id = $connect->conn->insert_id;
 
-                        {$_SESSION['msg']="Registered Successfully, You Can Login Now!"; $_SESSION['color']="green"; header("location: ../../");}
+                        {$_SESSION['msg']="Registered Successfully, You Can Login Now!"; $_SESSION['color']="green";}
 
-                        mkdir("../../".$username);
-                        $myfile = fopen("../../".$username."/index.php", "w");
+                        mkdir("../../".$id);
+                        $myfile = fopen("../../".$id."/index.php", "w");
                         fwrite($myfile, "<?php   require '../profile/index.php'   ?>");
                         fclose($myfile);
+                        header("location: ../../");
                      }   
 ?>
         

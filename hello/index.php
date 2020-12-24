@@ -1,14 +1,47 @@
 <?php
         require "../assets/classes.php";
+        include ('config.php');
         session_start();
         if(isset($_SESSION['user']))header("location: ../");
         if(isset($_SESSION['validator']))unset($_SESSION['validator']);
+
+
+//Include Configuration File
+
+if(isset($_GET["code"]))
+{
+ $token = $google_client->fetchAccessTokenWithAuthCode($_GET["code"]);
+ if(!isset($token['error']))
+ {
+  $google_client->setAccessToken($token['access_token']);
+  $_SESSION['access_token'] = $token['access_token'];
+  $google_service = new Google_Service_Oauth2($google_client);
+  $data = $google_service->userinfo->get();
+  if(!empty($data['id']))
+  {
+    $_SESSION['google_id'] = $data['id'];
+    header("Location: ../assets/operation/login.php");
+  }
+ }
+}   
+
+//This is for check user has login into system by using Google account, if User not login into system then it will execute if block of code and make code for display Login link for Login using Google account.
+if(!isset($_SESSION['access_token']))
+{
+ $login_button = '<a href="'.$google_client->createAuthUrl().'"><img style="width:130px; border-radius:10px;" src="http://localhost/social-media-platform-web/assets/img/google_logo.png" /></a>';
+}
 ?>
 
 <!DOCTYPE html>
 <html>
     
     <head>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>
+  
+
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -37,33 +70,38 @@
                    <div>
 
                         <div>
-                        <p id="errMsg" style ="height: 12px; text-align:center; <?php  if($_SESSION['color']=="green") echo "color:green;"; else echo "color:red;" ?> font-family:monospace; font-weight:bolder;">
+                        <p id="errMsg" style ="height: 12px; margin-top:10px; text-align:center; <?php  if($_SESSION['color']=="green") echo "color:green;"; else echo "color:red;" ?> font-family:monospace; font-weight:bolder;">
                            <?php if(isset($_SESSION['msg']))echo $_SESSION['msg']; unset($_SESSION['msg']);  unset($_SESSION['color']); ?>
                         </p>        
                         </div>
 
 
                     <form id="login" method="POST" action="../assets/operation/login.php">           
-                        <p>Email/Username:</p>  <input class="log" type="text" placeholder="Enter Email or User" name="logID">
+                        <p>Email/Username:</p>  <input class="log" type="text" placeholder="Enter Email/ID or Phone" name="logID">
                         <p>Password:</p>    <input class="log" type="password" placeholder="Enter Password" name="password">
+                        <?php echo '<div style="clear:left; display:inline-block; width:40%; position:relative; top:12px;">'.$login_button . '</div>'; ?>  
                         <input class="next" type="submit" value="Login" disabled>  
                     </form>
                     
                     <form id="register" method="POST" action="../assets/operation/register.php" style="display: none;" >
                         <p>Full Name:</p>
                         <div style="float: right; margin: 15px 0; height: 20px; padding: 0; width: 50%;">
-                        <input type="text" name="f_name" class="reg"  onblur="checker(this.value,this.name)" placeholder="Firstname" style="width: 50%;"><input type="text" class="reg" name="l_name" onblur="checker(this.value,this.name)" placeholder="Lastname" style="width: 50%;"></div>
+                        <input type="text" name="f_name" class="reg"  onblur="checker(this.value,this.name)" placeholder="Firstname" style="width: 50%; height:100%;"><input type="text" class="reg" name="l_name" onblur="checker(this.value,this.name)" placeholder="Lastname" style="width: 50%;height:100%;"></div>
                         <p>Email address:</p><input  type="email" class="reg" onblur="checker(this.value,this.name)" name="email" placeholder="Enter Email">
                         <p>Password:</p><input  type="password" class="reg" onblur="checker(this.value,this.name)" name="password" placeholder="Enter Password">
                         <p>RE-Enter Password:</p><input type="password" class="reg" onblur="checker(this.value,this.name)" name="password2" placeholder="Re-Enter Password">
                         <p>Phone Number:</p><input type="text" name="phone_num" class="reg" onblur="checker(this.value,this.name)" placeholder="Enter Mobile Number">
-                        <p>Date of Birth:</p><input class="reg" type="date">
-                        <input class="next" type="submit" value="Register">  
+                        <p>Date of Birth:</p><input class="reg" onblur="checker(this.value,this.name)" name="birth_date" type="date">
+                        <p>Select Gender:</p>
+                        <div style="clear:right; text-align:right;padding:10px; width:90%;">
+                        <input type="radio" id="male" name="gender" value="male" checked="checked"><samp> Male &emsp;</samp>
+                        <input type="radio" id="female" name="gender" value="female"><samp> Female</samp>
+                        </div>
+                        <input class="next" type="submit" value="Register"> 
+
                     </form>
                     </div>
                 </div>
-
-                
 
               
 
@@ -85,7 +123,7 @@
         $("#sreg").click(function(event) {
         $("#register").css("display","block");
         $("#login").css("display","none");
-        $("#errMsg").css("color","blue");
+        $("#errMsg").css("color","yellow");
         document.getElementById("errMsg").innerHTML = "Please fill the data form to register!";
         });      
         });
@@ -102,7 +140,6 @@
            for(var i=0;i<values.length;i++){
                if(values[i].value=="")disable=true;
            }
-           
             next[0].disabled = disable;
         }
 

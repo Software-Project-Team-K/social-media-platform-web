@@ -1,5 +1,5 @@
 .fulllogo{
-    margin: 100px 35% 0 10%;
+    margin: 120px 35% 0 10%;
     text-align: center; 
     width:20%; 
     display:inline-block;
@@ -9,8 +9,7 @@
     height: 70%;
 }
 .logotxt > p{
-    font-family: serif; color:black; font-size: 100%;
-    font-weight: 900;
+    font-family: serif; color:rgb(226, 226, 226); font-size: 100%;
     margin: 3px 0;
     font-style: italic;
 }
@@ -26,10 +25,8 @@
 .fullbox{
     border: 2px indigo solid;
     border-radius: 15px;
-    background-image: url(../assets/img/logbox.jpg);
-    background-size: cover;
     width: 30%;
-    margin: 10% 0;
+    margin: 7% 0;
     display:inline-block;
     vertical-align: top;
 }
@@ -91,8 +88,9 @@ input:focus{
 input.next:hover{
     color:white;
     border: 3px  violet solid;
+    cursor: pointer;
 }
-#sreg:hover , #slogin:hover {
+#sreg:hover  , #slogin:hover {
     color: white;
     text-shadow: 3px 3px 7px violet ;
 }
