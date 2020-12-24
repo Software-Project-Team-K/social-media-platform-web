@@ -24,10 +24,10 @@
                                                 <button><img src="assets/img/icn_msg.png"></button>
                                                 <button><img src="assets/img/icn_notification.png"></button>
                                                 <button onclick="toggle();"><img src="assets/img/icn_settings.png">
-                                                    <div class="sub-menu-settings">
+                                                    <div class="sub-menu-settings" style="display:none">
                                                             <ul>
-                                                                <li><a href="settings/index.php">Settings</li>
-                                                                <li><a href="assets/operation/logout.php">Log out</li>
+                                                                <li><a href="settings/index.php">Settings</a></li>
+                                                                <li><a href="assets/operation/logout.php">Logout</a></li>
                                                             </ul>
                                                         
                                                     </div> 
@@ -44,7 +44,6 @@
 
 
     <script>
-
        function toggle(){
        var x = document.getElementsByClassName("sub-menu-settings")[0];
        if(x.style.display =="none")

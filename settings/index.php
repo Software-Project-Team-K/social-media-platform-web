@@ -13,7 +13,7 @@
                         <html>
         
                             <head>
-                                    <link rel="stylesheet" href="../profile/main.css">
+                                    <link rel="stylesheet" href="../main.css">
                                     <meta charset="utf-8">
                                     <meta http-equiv="X-UA-Compatible" content="IE=edge">
                                     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -28,11 +28,28 @@
                                             <button><a href="../'.$user_id.'"><img src="../'.$user_id."/".$_SESSION["user"]->get_profile_pic().'"></a></button>
                                             <button><img src="../assets/img/icn_msg.png"></button>
                                             <button><img src="../assets/img/icn_notification.png"></button>
-                                            <button><a href=""><img src="../assets/img/icn_settings.png"></a></button>
-                                            <button><a href="../assets/operation/logout.php"><img src="../assets/img/icn_settings.png"></a></button>
+                                            <button onclick="toggle()"><img src="../assets/img/icn_settings.png">
+                                            <div class="sub-menu-settings" style="display:none">
+                                                    <ul>
+                                                        <li><a href="../settings/index.php">Settings</a></li>
+                                                        <li><a href="../assets/operation/logout.php">Logout</a></li>
+                                                    </ul>
+                                                    
+                                                </div> 
+                                            </button>  
                                         </div> 
                                     </div>
-                                    <div style="height:40px; background-color: white;"></div>'
+                                    <div style="height:40px; background-color: white;"></div>
+                                    
+                                    <script>
+                                    function toggle(){
+                                    var x = document.getElementsByClassName("sub-menu-settings")[0];
+                                    if(x.style.display =="none")
+                                    x.style.display = "block";
+                                    else 
+                                    x.style.display = "none";
+                                    }
+                                    </script>'
 ?>
 
 
