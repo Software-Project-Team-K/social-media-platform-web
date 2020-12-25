@@ -1,33 +1,4 @@
-#nav{
-    border-bottom: black 1px solid;
-    height: 40px;
-    width: 100%;
-    position: fixed;
-    z-index: 1;
-    background-image: linear-gradient(rgb(93, 0, 160),indigo);
-}
-#navbuttons{
-float: right;
-}
-#navbuttons button{
-    border: 0px;
-    width:30px;
-    height:30px;
-    border-radius: 15px;
-    margin: 5px 15px;
-    padding: 0;
-    background-color: transparent;
-}
-#navbuttons a{
-    padding: 0;
-    border-radius: inherit;
-}
-#navbuttons img {
-    width: 100%;
-    height: 100%;
-    border-radius: inherit;
-}
-/************************************/
+@import "http://localhost/social-media-platform-web/assets/common.css";
 #NCP {
     height: 350px;
     background-color:transparent;
@@ -142,20 +113,16 @@ float: right;
     text-decoration-line: none;
 }
 #user_info div > p{
- font-weight: 500;
- font-size: 90%;
- font-style: normal;
+ font-weight: bolder;
+ color: rgb(90, 73, 168);
+ font-size: 13px;
 }
 #user_info samp{
     color:darkmagenta;
     font-weight: bolder;
-    font-size: 130%;
+    font-size: 120%;
     font-style: italic;
 }
-
-
-
-
 /* The Modal (background) */
 .modal {
     display: none; /* Hidden by default */
@@ -179,7 +146,6 @@ float: right;
     text-align: center;
     border-radius: 10px;
   }
-  
   /* The Close Button */
   .close {
     color: darkred;
@@ -190,32 +156,8 @@ float: right;
     font-size: 32px;
     font-weight: bold;
   }
-  
   .close:hover, .close:focus {
     color: black;
     text-decoration: none;
     cursor: pointer;
   }
-/************************************/
-button:hover{
-    cursor: pointer;
-}
-button:focus{
-    outline: 0;
-}
-body::before{
-    content: "";
-    width: 100%;
-    height: 100%;
-    position: fixed;
-    z-index: -2;
-    background-image: url(../assets/img/background.jpg);
-    background-repeat: no-repeat;
-    background-size: cover;
-}
-body{
-    margin: 0;
-}
-*{
-    box-sizing: border-box;
-}

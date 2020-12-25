@@ -45,8 +45,10 @@
                             $connect = new connection;
                             $id = $this->get_id();
                             $result = $connect->conn->query("SELECT * FROM users WHERE google_id='$google'");
-                            if (mysqli_num_rows($result) == 0) $connect->conn->query("UPDATE users SET google_id='$google' WHERE id='$id'");
-                            else echo 'This Google Account already associated.';
+                            if (mysqli_num_rows($result) == 0) {
+                            $connect->conn->query("UPDATE users SET google_id='$google' WHERE id='$id'");
+                            echo 'This Google Account associated Successfully!.';}
+                            else echo 'This Google Account already associated!.';
                         }
                     }
 

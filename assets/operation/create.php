@@ -29,7 +29,7 @@
                         email VARCHAR(30) NOT NULL,
                         f_name VARCHAR(20) NOT NULL,
                         l_name VARCHAR(20) NOT NULL,
-                        phone_num INT(15) UNSIGNED,
+                        phone_num INT(20) UNSIGNED,
                         gender VARCHAR(10),
                         bio VARCHAR (50) DEFAULT 'Hey there! im a new Chatverse User!',
                         google_id VARCHAR(25) DEFAULT 'X',

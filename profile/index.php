@@ -30,19 +30,33 @@
         
                                     <!--Navigation Bar-->
                                     <div id="nav">
-                                        <a href="../"><img src="../assets/img/icn_logo.png" style="width: 30px;  margin: 5px 20px;"></a>
-                                        <input type="text" style="width:20%; position: relative; left:10px; bottom:15px; border-radius:10px;">
-                                        <div id="navbuttons">
-                                            <button><a href="../'.$user_id.'"><img src="../'.$user_id."/".$_SESSION["user"]->get_profile_pic().'"></a></button>
-                                            <button><img src="../assets/img/icn_msg.png"></button>
-                                            <button><img src="../assets/img/icn_notification.png"></button>
-                                            <button><a href="../assets/operation/logout.php"><img src="../assets/img/icn_settings.png"></a></button>
-                                        </div> 
-                                    </div>
-                                    <div style="height:40px; background-color: white;"></div>
-                            </head>
-                         <body>'
-?>
+                                       <a href="../"><img src="../assets/img/icn_logo.png" style="width: 30px;  margin: 5px 20px;"></a>
+                                       <input type="text" style="width:20%; position: relative; left:10px; bottom:15px; border-radius:10px;">
+                                           <div id="navbuttons">
+                                                   <button><a href="../'.$_SESSION["user"]->get_id().'"><img src="../'.$_SESSION["user"]->get_id()."/".$_SESSION["user"]->get_profile_pic().'"></a></button>
+                                                   <button><img src="../assets/img/icn_msg.png"></button>
+                                                   <button><img src="../assets/img/icn_notification.png"></button>
+                                                   <button id="arrow"><img src="../assets/img/icn_settings.png"></button>
+                                                   <ul id="menu">
+                                                           <li><a href="../settings">Account Settings</li>
+                                                           <li><a href="../assets/operation/logout.php">Logout</a></li>
+                                                   </ul>
+                                               </div> 
+                                           </div>
+                                   <div style="height:40px; background-color: white;"></div>
+   
+                                   <script>
+                                   var arrow = document.getElementById("arrow");
+                                   var menu = document.getElementById("menu");  
+                                   arrow.onclick = function() {
+                                       if(menu.style.display == "block")menu.style.display = "none"
+                                       else menu.style.display = "block";}
+                                    </script>
+   
+   
+                               </head>
+                           <body>'
+   ?>
 
 
 
@@ -80,18 +94,15 @@
                     <p>User Info</p>
                     <hr>
                     <div style="padding:0 10px;"> 
-                        <p><samp>Bio: </samp><?php
-
-
+                        <p><samp>Bio: </samp>
+                        <?php
                          echo $_SESSION['target']->get_bio();
-                         if(!$isVisitor){
-                            echo '<button id="bioBtn" style="float:right; background-color:transparent; border:0px;"><img style="width:15px; height:15px;; margin:0;" src="../assets/img/edit_txt_icon.png"></button>';
-                         }
+                         if(!$isVisitor) echo '<button id="bioBtn" style="float:right; background-color:transparent; border:0px;"><img style="width:15px; height:15px;; margin:0;" src="../assets/img/edit_txt_icon.png"></button>';
                          ?></p>
                         <p><samp>Email: </samp><?php echo $_SESSION['target']->get_email()?> </p>
                         <p><samp>Phone: </samp><?php echo $_SESSION['target']->get_phone()?> </p>
                         <p><samp>Gender: </samp><?php echo $_SESSION['target']->get_gender()?> </p>
-                        <p><samp>Date of Birth: </samp>
+                        <p><samp>Birthdate: </samp>
                         <?php
                         $date=date_create($_SESSION['target']->get_birth_date());
                         echo date_format($date,"Y/m/d");
@@ -147,7 +158,7 @@
         <div id="uploadPPBox" class="modal">
             <div class="modal-content">
             <span class="close">&times;</span>
-                <form action="../assets/operation/upload.php" method="post" enctype="multipart/form-data">
+                <form action="../assets/operation/upload_pic.php" method="post" enctype="multipart/form-data">
                     <input type="hidden" name="type" value="pp">
                     <input style="background-color: gray; width:70%;" type="file" name="fileToUpload" id="fileToUpload"></br></br>
                     <input style="background-color: silver; width:25%;" type="submit" name="submit" value="Upload" >
@@ -158,7 +169,7 @@
         <div id="uploadCoverBox" class="modal">
             <div class="modal-content">
             <span class="close">&times;</span>
-                <form action="../assets/operation/upload.php" method="post" enctype="multipart/form-data">
+                <form action="../assets/operation/upload_pic.php" method="post" enctype="multipart/form-data">
                     <input type="hidden" name="type" value="cover">
                     <input style="background-color: gray; width:70%;" type="file" name="fileToUpload" id="fileToUpload"></br></br>
                     <input style="background-color: silver; width:25%;" type="submit" name="submit" value="Upload" >
@@ -168,7 +179,7 @@
         <div id="uploadBioBox" class="modal">
             <div class="modal-content">
             <span class="close">&times;</span>
-                <form action="../assets/operation/bio.php" method="post">
+                <form action="../assets/operation/update_bio.php" method="post">
                     <input style="background-color: white; width:70%;" type="text" name="bio"></br></br>
                     <input style="background-color: silver; width:25%;" type="submit" name="submit" value="Upload Bio" >
                 </form>
