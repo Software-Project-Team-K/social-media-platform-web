@@ -136,7 +136,7 @@
                         private $error_5 = "The password [8-16 Digits] must contains at least one letter and number!";
                         private $error_6 = "The Password doesnt match the Re-Password!";
                         private $error_7 = "The phone must be valid and contains only digits!";
-                        private $error_8 = "Sorry, You shoud be at least 16 Years old to sign up!";
+                        private $error_8 = "Sorry, You shoud be at least 13 Years old to sign up!";
                         private $pw = "";
            
                         
@@ -189,7 +189,7 @@
                                     $datebirth = date_create($input);
                                     $datecurrent = date_create();
                                     $interval = date_diff($datecurrent, $datebirth);
-                                    $valid = ($interval->format('%y') >= 16)? TRUE:False;
+                                    $valid = ($interval->format('%y') >= 13)? TRUE:False;
                                     if($valid) $this->remove_error($this->error_8);
                                     else $this->add_error($this->error_8);
                                 break;

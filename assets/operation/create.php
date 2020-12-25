@@ -30,7 +30,7 @@
                         f_name VARCHAR(20) NOT NULL,
                         l_name VARCHAR(20) NOT NULL,
                         phone_num INT(15) UNSIGNED,
-                        gender VARCHAR(15),
+                        gender VARCHAR(10),
                         bio VARCHAR (50) DEFAULT 'Hey there! im a new Chatverse User!',
                         google_id VARCHAR(25) DEFAULT 'X',
                         reg_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,

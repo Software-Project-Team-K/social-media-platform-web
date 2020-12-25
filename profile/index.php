@@ -73,13 +73,13 @@
 
 
         <!-- User Details-->
-        <div style="width:30%; margin: 20px 1%; height: 800px; display:inline-block; vertical-align:top;">
+        <div style="width:25%; margin: 20px 1%; height: 800px; display:inline-block; vertical-align:top;">
 
             <!-- user info section -->
                 <div id="user_info" class="datablock">
                     <p>User Info</p>
                     <hr>
-                    <div style="padding:0 10px; font-style:italic; font-family:serif; font-size:80%;"> 
+                    <div style="padding:0 10px;"> 
                         <p><samp>Bio: </samp><?php
 
 
@@ -96,7 +96,7 @@
                         $date=date_create($_SESSION['target']->get_birth_date());
                         echo date_format($date,"Y/m/d");
                         ?></p>
-                    </div>
+                     </div>
                 </div>
 
             <!-- friends section -->

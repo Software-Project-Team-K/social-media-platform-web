@@ -70,16 +70,16 @@ if(!isset($_SESSION['access_token']))
                    <div>
 
                         <div>
-                        <p id="errMsg" style ="height: 12px; margin-top:10px; text-align:center; <?php  if($_SESSION['color']=="green") echo "color:green;"; else echo "color:red;" ?> font-family:monospace; font-weight:bolder;">
-                           <?php if(isset($_SESSION['msg']))echo $_SESSION['msg']; unset($_SESSION['msg']);  unset($_SESSION['color']); ?>
+                        <p id="errMsg" style ="height: 10px; margin-top:10px; text-align:center; color:orange; font-family:monospace; font-size:90%; font-weight:bolder; <?php if($_SESSION['color']=="green") echo 'color:rgb(0,255,0);';  else if($_SESSION['color']=="red")  echo 'color:rgb(255,0,0);';  ?>">
+                           <?php if(isset($_SESSION['msg']))echo $_SESSION['msg']; else echo'Welcome! Please Login to Enter.'; unset($_SESSION['msg']);  unset($_SESSION['color']); ?> 
                         </p>        
                         </div>
 
 
                     <form id="login" method="POST" action="../assets/operation/login.php">           
-                        <p>Email/Username:</p>  <input class="log" type="text" placeholder="Enter Email/ID or Phone" name="logID">
+                        <p>Email | ID:</p>  <input class="log" type="text" placeholder="Enter Email/ID or Phone" name="logID">
                         <p>Password:</p>    <input class="log" type="password" placeholder="Enter Password" name="password">
-                        <?php echo '<div style="clear:left; display:inline-block; width:40%; position:relative; top:12px;">'.$login_button . '</div>'; ?>  
+                        <?php echo '<div style="clear:left; display:inline-block; width:40%; position:relative; top:15px;">'.$login_button . '</div>'; ?>  
                         <input class="next" type="submit" value="Login" disabled>  
                     </form>
                     
@@ -94,8 +94,8 @@ if(!isset($_SESSION['access_token']))
                         <p>Date of Birth:</p><input class="reg" onblur="checker(this.value,this.name)" name="birth_date" type="date">
                         <p>Select Gender:</p>
                         <div style="clear:right; text-align:right;padding:10px; width:90%;">
-                        <input type="radio" id="male" name="gender" value="male" checked="checked"><samp> Male &emsp;</samp>
-                        <input type="radio" id="female" name="gender" value="female"><samp> Female</samp>
+                        <input type="radio" id="male" name="gender" value="Male" checked="checked"><samp> Male &emsp;</samp>
+                        <input type="radio" id="female" name="gender" value="Female"><samp> Female</samp>
                         </div>
                         <input class="next" type="submit" value="Register"> 
 
@@ -116,8 +116,8 @@ if(!isset($_SESSION['access_token']))
         $("#slogin").click(function(event) {
         $("#register").css("display","none");
         $("#login").css("display","block");
-        $("#errMsg").css("color","red");
-        document.getElementById("errMsg").innerHTML = "</br>";
+        $("#errMsg").css("color","orange");
+        document.getElementById("errMsg").innerHTML = "Welcome! Please Login to Enter.";
         });
                  
         $("#sreg").click(function(event) {
@@ -128,10 +128,18 @@ if(!isset($_SESSION['access_token']))
         });      
         });
 
+
+
+
+
+
+
+
+
         setInterval(function () {
             enableLog();
             enableReg();
-        }, 100);
+        }, 50);
 
         function enableLog() {
            var next = document.getElementsByClassName("next");
@@ -141,6 +149,18 @@ if(!isset($_SESSION['access_token']))
                if(values[i].value=="")disable=true;
            }
             next[0].disabled = disable;
+            if(next[0].disabled == false){
+                next[0].style.color="white";
+                next[0].style.textShadow= "3px 3px 7px indigo" ;
+                next[0].style.cursor="pointer";
+                next[0].style.border="2px rgb(0,255,0) solid";
+            }
+            else{
+                next[0].style.color="rgb(220, 170, 255)";
+                next[0].style.textShadow= "0px 0px 0px indigo" ;
+                next[0].style.cursor="not-allowed";
+                next[0].style.border="2px rgb(255,0,0) solid";
+            }
         }
 
         function enableReg() {
@@ -151,22 +171,36 @@ if(!isset($_SESSION['access_token']))
                if(values[i].value=="")disable=true;
            }
            openButton(disable,next);
+           if(next[1].disabled == false){
+                next[1].style.color="white";
+                next[1].style.textShadow= "3px 3px 7px indigo" ;
+                next[1].style.cursor="pointer";
+                next[1].style.border="2px rgb(0,255,0) solid";
+            }
+            else{
+                next[1].style.color="rgb(220, 170, 255)";
+                next[1].style.textShadow= "0px 0px 0px indigo" ;
+                next[1].style.cursor="not-allowed";
+                next[1].style.border="2px rgb(255,0,0) solid";
+            }
+
         }
 
         function openButton(disable,next){
             if(disable==false){
             var xmlhttp = new XMLHttpRequest();
             xmlhttp.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200) next[1].disabled = (this.responseText == "true"); };
+            if (this.readyState == 4 && this.status == 200) next[1].disabled = (this.responseText == "true")};
             xmlhttp.open("GET", "../assets/operation/lock_register.php", true);
             xmlhttp.send();
             }
-            else 
-            next[1].disabled = true;
+            else {
+                next[1].disabled = true;
+            }
         }
 
         function checker(str,type) {
-            document.getElementById("errMsg").style.color = "red";
+            document.getElementById("errMsg").style.color = "orangered";
             var xmlhttp = new XMLHttpRequest();
             xmlhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) document.getElementById("errMsg").innerHTML = this.responseText;
