@@ -1,0 +1,73 @@
+#nav{
+    border-bottom: black 1px solid;
+    height: 40px;
+    width: 100%;
+    position: fixed;
+    z-index: 1;
+    background-image: linear-gradient(rgb(93, 0, 160),indigo);
+}
+#navbuttons{
+float: right;
+}
+#navbuttons button{
+    border: 0px;
+    width:30px;
+    height:30px;
+    border-radius: 15px;
+    margin: 5px 15px;
+    padding: 0;
+    background-color: transparent;
+}
+#navbuttons a{
+    padding: 0;
+    border-radius: inherit;
+    text-decoration: none;
+}
+#navbuttons img {
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+}
+#navbuttons ul{
+    display: none;
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+    text-align: right;
+    width: fit-content;
+    position: absolute;
+    right: 0;
+}
+#navbuttons li{
+    text-align: center;
+    margin: 5px 0;
+    padding: 0 5px;
+    border: rgb(95, 0, 160) 2px solid;
+    border-radius: 10px;
+    font-family: monospace;
+    font-weight: bolder;
+    font-style: italic;
+    background-color: whitesmoke;
+}
+button:hover{
+    cursor: pointer;
+}
+button:focus{
+    outline: 0;
+}
+body::before{
+    content: "";
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    z-index: -2;
+    background-image: url(http://localhost/social-media-platform-web/assets/img/background.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+body{
+    margin: 0;
+}
+*{
+    box-sizing: border-box;
+}
