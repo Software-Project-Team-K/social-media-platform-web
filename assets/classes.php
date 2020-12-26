@@ -26,16 +26,18 @@
                         function get_fr_requests(){return $this->data['fr_requests'];}
                         function getnumofposts()
                         {
+                            $connect = new connection;
                             $id=$this->get_id();
-                            $query=mysqli_query($this->con,"SELECT no_post FROM users WHERE id='$id'");
+                            $query=mysqli_query($connect->conn,"SELECT no_post FROM users WHERE id='$id'");
                             $row=mysqli_fetch_array($query);
                             return $row['no_post'];
                     
                         }
                         function isclosed()
                                 {
+                                    $connect = new connection;
                                     $id=$this->get_id();
-                                    $query=mysqli_query($this->con,"SELECT user_closed FROM users WHERE id='$id'");
+                                    $query=mysqli_query($connect->conn,"SELECT user_closed FROM users WHERE id='$id'");
                                     $row=mysqli_fetch_array($query);
                                     if($row['user_closed']=='yes')
                                     {
@@ -282,7 +284,7 @@ class Post
                 $user_to="none";
             }
             //insert post into database
-            $insert=mysqli_query($this->con,"INSERT INTO posts VALUES ('','$body','$added_by','$date_added','$user_to','no','no','0')");
+            $insert=mysqli_query($this->con,"INSERT INTO posts VALUES ('','$body','$added_by','$date_added','$user_to','no','0','no')");
            // $database=mysqli_query($htis->con," INSERT INTO posts VALUES  ('','alaa','alaa','2020-6-12','alaa','no','no','0')");
             $returned_id=mysqli_insert_id($this->con);
             //insert notifiacations
