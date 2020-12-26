@@ -83,12 +83,12 @@
 			$.ajax({
 				url:"assets/operation/ajax.php",
 				type:"POST",
-				data:""page=1&userloggedin=" + userloggedin",
+				data:"page=1&userloggedin=" + userloggedin,
 				cache:false,
 
 				success:function(data)
 				{
-					//$('#loading').hide(); //dont show loading sign again 
+					$('#loading').hide(); //dont show loading sign again 
 					$('.posts_area').html(data);
 				}
 			});  //end of ajax
