@@ -58,7 +58,7 @@
                         user_to VARCHAR(75),
                         user_closed VARCHAR(3),
                         likes INT,
-                        deleted VARCHAR(3) default 'no'
+                        deleted VARCHAR(3) 
                     )";
                     if ($conn->query($sql) === TRUE) echo "Table created successfully"."<br>";
                     else echo "Error creating Table: " . $conn->error."<br>";
