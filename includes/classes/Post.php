@@ -1,266 +1,13 @@
 <?php
-
-                    //CLASS >> CURRENT USER DATA
-                    class user{
-
-                        private $data;
-
-                        function __construct($logID){
-                            //get user data from parameter (username or email)
-                            $connect = new connection;
-                            $result = $connect->conn->query("SELECT * FROM users WHERE id='$logID' or email='$logID' or phone_num='$logID'");
-                            $this->data = mysqli_fetch_assoc($result);
-                        }
-
-                        function get_name() {return $this->data['f_name']." ".$this->data['l_name'];}
-                        function get_id()  {return $this->data['id'];}
-                        function get_gender(){return $this->data['gender'];}
-                        function get_email(){return $this->data['email'];}
-                        function get_phone(){return $this->data['phone_num'];}
-                        function get_bio(){return $this->data['bio'];}
-                        function get_birth_date(){return $this->data['birth_date'];}
-                        function get_profile_pic() {return $this->data['profile_pic'];}
-                        function get_cover_pic()  {return $this->data['cover_pic'];}
-                        function get_friends(){return $this->data['friends'];}
-                        function get_friends_no(){return $this->data['friends_no'];}
-                        function get_fr_requests(){return $this->data['fr_requests'];}
-                        function getnumofposts()
-                        {
-                            $id=$this->get_id();
-                            $query=mysqli_query($this->con,"SELECT no_post FROM users WHERE id='$id'");
-                            $row=mysqli_fetch_array($query);
-                            return $row['no_post'];
-                    
-                        }
-                        function isclosed()
-                                {
-                                    $id=$this->get_id();
-                                    $query=mysqli_query($this->con,"SELECT user_closed FROM users WHERE id='$id'");
-                                    $row=mysqli_fetch_array($query);
-                                    if($row['user_closed']=='yes')
-                                    {
-                                        return true;
-                                    }
-                                    else
-                                    {
-                                        return false;
-                                    }
-                                }
-                        function update_profile_pic($link)
-                        {
-                            $connect = new connection;
-                            $id = $this->get_id();
-                            $connect->conn->query("UPDATE users SET profile_pic='$link' WHERE id='$id'");
-                        }
-                        function update_cover_pic($link)
-                        {
-                            $connect = new connection;
-                            $id = $this->get_id();
-                            $connect->conn->query("UPDATE users SET cover_pic='$link' WHERE id='$id'");
-                        }
-                        function update_bio($text)
-                        {
-                            $connect = new connection;
-                            $id = $this->get_id();
-                            $connect->conn->query("UPDATE users SET bio='$text' WHERE id='$id'");
-                        }
-                        function link_google($google){
-                            $connect = new connection;
-                            $id = $this->get_id();
-                            $result = $connect->conn->query("SELECT * FROM users WHERE google_id='$google'");
-                            if (mysqli_num_rows($result) == 0) {
-                            $connect->conn->query("UPDATE users SET google_id='$google' WHERE id='$id'");
-                            echo 'This Google Account associated Successfully!.';}
-                            else echo 'This Google Account already associated!.';
-                        }
-                    }
-
-                    //CLASS >> FRIENDSHIP
-                    class friendship{
-                        static function isFriend($user_id,$target_id){
-                            $user = new user($user_id);
-                            return strstr($user->get_friends(),$target_id);
-                        }
-                        static function isFrRequest($user_id,$target_id){
-                            $target= new user($target_id);
-                            return strstr($target->get_fr_requests(),$user_id);
-                        }
-                        static function friendRequest($user_id,$target_id){
-                            $connect = new connection;
-                            $target = new user($target_id);
-                            $fr_requests = $target->get_fr_requests().$user_id.",";
-                            $connect->conn->query("UPDATE users SET fr_requests='$fr_requests' WHERE id='$target_id'");
-                        }
-                        static function cancelRequest($user_id,$target_id){
-                            $connect = new connection;
-                            $target = new user($target_id);
-                            $fr_requests = str_replace($user_id.",","",$target->get_fr_requests());
-                            $connect->conn->query("UPDATE users SET fr_requests='$fr_requests' WHERE id='$target_id'");
-                        }
-                        static function addFriend($user_id,$target_id){
-                            $connect = new connection;
-                            $user = new user($user_id);
-                            $user_friends = $user->get_friends()."$target_id".",";
-                            $user_friends_no = $user->get_friends_no() + 1;
-                            $connect->conn->query("UPDATE users SET friends='$user_friends' WHERE id='$user_id'");
-                            $connect->conn->query("UPDATE users SET friends_no='$user_friends_no' WHERE id='$user_id'");
-                            $target = new user($target_id);
-                            friendship::cancelRequest($target_id,$user_id);
-                            $trg_friends = $target->get_friends()."$user_id".",";
-                            $trg_friends_no = $target->get_friends_no() + 1;
-                            $connect->conn->query("UPDATE users SET friends='$trg_friends' WHERE id='$target_id'");
-                            $connect->conn->query("UPDATE users SET friends_no='$trg_friends_no' WHERE id='$target_id'");
-                        }
-                        static function removeFriend($user_id,$target_id){
-                            $connect = new connection;
-                            $user = new user($user_id);
-                            $user_friends =  str_replace($target_id.",","",$user->get_friends());
-                            $user_friends_no = $user->get_friends_no() - 1;
-                            $connect->conn->query("UPDATE users SET friends='$user_friends' WHERE id='$user_id'");
-                            $connect->conn->query("UPDATE users SET friends_no='$user_friends_no' WHERE id='$user_id'");
-                            $target = new user($target_id);
-                            $trg_friends = str_replace($user_id.",","",$target->get_friends());
-                            $trg_friends_no = $target->get_friends_no() - 1;
-                            $connect->conn->query("UPDATE users SET friends='$trg_friends' WHERE id='$target_id'");
-                            $connect->conn->query("UPDATE users SET friends_no='$trg_friends_no' WHERE id='$target_id'");
-                        } 
-                    }
-                    //CLASS >> CONNECTION TO DATABASE
-                    class connection{
-
-                        private  $_server = "localhost";
-                        private  $_user = "root";
-                        private  $_pass = "";
-                        private  $_dbname = "chatverse";
-                        public   $conn;
-
-                        function __construct(){
-                            $this->conn = new mysqli($this->_server, $this->_user, $this->_pass ,$this->_dbname) or die("Connection failed: " . $this->conn->connect_error);
-                        }
-                        function __destruct(){
-                            $this->conn->close();
-                        }
-                    }
-                    //CLASS >> DYNAMIC VALIDATE THE INPUT 
-                    class dynamic_validation{
-
-                        private $errors = array("</br>");
-                        private $name_c = "/^[A-Za-z-']+$/";
-                        private $name_c2 = "/[A-Za-z-']{2,10}/";
-                        private $email_c = "/[@]/";
-                        private $pass_c = "/^[A-Za-z0-9]{8,16}$/";
-                        private $pass_c2 = "/[0-9]+/";
-                        private $pass_c3 = "/[A-Za-z]+/";
-                        private $phone_c = "/^[0-9+][0-9]{8,15}$/";
-                        private $error_1 = "The name must contains only Alphabet letters!";
-                        private $error_2 = "Please Enter a real first name!";
-                        private $error_1L = "The last name must contains only Alphabet letters!";
-                        private $error_2L = "Please Enter a real last name!";
-                        private $error_3 = "The email must be vaild!";
-                        private $error_4 = "Email is already used!";
-                        private $error_5 = "The password [8-16 Digits] must contains at least one letter and number!";
-                        private $error_6 = "The Password doesnt match the Re-Password!";
-                        private $error_7 = "The phone must be valid and contains only digits!";
-                        private $error_8 = "Sorry, You shoud be at least 13 Years old to sign up!";
-                        private $pw = "";
-           
-                        
-                        function validate($input,$type,$conn){
-                            switch ($type) {
-                                case "f_name"   :
-                                    $valid = preg_match($this->name_c,$input);
-                                    if($valid==TRUE) $this->remove_error($this->error_1);
-                                    else if($valid==FALSE) $this->add_error($this->error_1);
-                                    $valid = preg_match($this->name_c2,$input);
-                                    if($valid==TRUE) $this->remove_error($this->error_2);
-                                    else if($valid==FALSE) $this->add_error($this->error_2);
-                                break;
-                                case "l_name":
-                                    $valid = preg_match($this->name_c,$input);
-                                    if($valid==TRUE) $this->remove_error($this->error_1L);
-                                    else if($valid==FALSE) $this->add_error($this->error_1L);
-                                    $valid = preg_match($this->name_c2,$input);
-                                    if($valid==TRUE) $this->remove_error($this->error_2L);
-                                    else if($valid==FALSE) $this->add_error($this->error_2L);
-                                break;
-                                case "email":
-                                    $valid = preg_match($this->email_c,$input);
-                                    if($valid) $this->remove_error($this->error_3);
-                                    else $this->add_error($this->error_3);
-                                    $result = $conn->query("SELECT * FROM users WHERE email='$input'");                         
-                                    $valid = (mysqli_num_rows($result) == 0)? TRUE:FALSE;
-                                    if($valid) $this->remove_error($this->error_4);
-                                    else $this->add_error($this->error_4);
-                                break;
-                                case "password":
-                                    $this->pw = $input;
-                                    $valid = preg_match($this->pass_c,$input);
-                                    $valid *= preg_match($this->pass_c2,$input);
-                                    $valid *= preg_match($this->pass_c3,$input);
-                                    if($valid) $this->remove_error($this->error_5);
-                                    else $this->add_error($this->error_5);
-                                break;
-                                case "password2":
-                                    $valid = ($input == $this->pw)? TRUE:False;
-                                    if($valid) $this->remove_error($this->error_6);
-                                    else $this->add_error($this->error_6);
-                                break;
-                                case "phone_num":
-                                    $valid = preg_match($this->phone_c,$input);
-                                    if($valid) $this->remove_error($this->error_7);
-                                    else $this->add_error($this->error_7);
-                                break;
-                                case "birth_date":
-                                    $datebirth = date_create($input);
-                                    $datecurrent = date_create();
-                                    $interval = date_diff($datecurrent, $datebirth);
-                                    $valid = ($interval->format('%y') >= 13)? TRUE:False;
-                                    if($valid) $this->remove_error($this->error_8);
-                                    else $this->add_error($this->error_8);
-                                break;
-                            }    
-                            return $this->errors;
-                        }
-
-                        private function add_error($str){
-                            if(!in_array($str,$this->errors))
-                            array_push($this->errors,$str);
-
-                        }
-                        private function remove_error($str){
-                            if(in_array($str,$this->errors)){
-                            $k = array_search($str,$this->errors);
-                            unset($this->errors[$k]);
-                            }
-                        }
-                        function get_errors(){
-                            return $this->errors;
-                        }
-                    }
-                    //FUNCTION >> CLEAR THE INPUT 
-                    function test_input($data) {
-                        $data = trim($data);
-                        $data = stripslashes($data);
-                        $data = htmlspecialchars($data);
-                        return $data;
-                    }
-
-
-                    
-?>
-
-<?php
-// 
 class Post
 {
     private $user_obj;
-    //$connect 
     private $con;
     public function __construct($con,$user)
     {
         //connect to the data base
         $this->con=$con;
-        $this->user_obj=new user($user);
+        $this->user_obj=new User($con,$user);
     }
     //get fpost
     public function submitpost($body, $user_to)
@@ -276,7 +23,7 @@ class Post
             //current date and time 
             $date_added=date("Y-m-d H:i:S");
             // added by 
-            $added_by=$this->user_obj->get_id();
+            $added_by=$this->user_obj->getusername();
             if($user_to ==$added_by)
             {
                 $user_to="none";
@@ -289,7 +36,7 @@ class Post
             //update post count for user
             $no_post=$this->user_obj->getnumofposts();
             $no_post++;
-            $update_query=mysqli_query($this->con,"UPDATE users SET no_post='$no_post' WHERE id='$added_by' ");
+            $update_query=mysqli_query($this->con,"UPDATE users SET no_post='$no_post' WHERE username='$added_by' ");
 
 
 
@@ -302,7 +49,7 @@ class Post
     {
         //from ajax
         $page=$data['page'];
-        $userloggedin=$this->user_obj->get_id();
+        $userloggedin=$this->user_obj->getusername();
 
         if ($page==1)
         {
@@ -335,20 +82,20 @@ class Post
                 }   
                 else
                 {
-                    $user_to_obj=new user($row['user_to']);
-                    $user_to_name=$user_to_obj->get_name();
+                    $user_to_obj=new User($con,$row['user_to']);
+                    $user_to_name=$user_to_obj->getfirst_lastname();
                     $user_to="to <a href='".$row['user_to'] ."'>".$user_to_name."</a>";
                 }    
                 //if the user closed 
-                $added_by_obj=new user($added_by);
+                $added_by_obj=new User($this->con,$added_by);
                 if($added_by_obj->isclosed())
                 {
                     continue;
-                }  //User
+                }  
                 //check if the user friend
                 
-                $user_logged_obj= new user($userloggedin);
-                if(friendship::isFriend($user_logged_obj,$added_by)){
+                $user_logged_obj= new User($this->con,$userloggedin);
+                if($user_logged_obj->isfriend($added_by)){
                 
                 
                     if($num_iterations ++ < $start)
@@ -373,10 +120,10 @@ class Post
                          $delete_button="";
                     }
                     //user details
-                    $user_details=mysqli_query($this->con, "SELECT f_name,l_name,profile_pic FROM users WHERE id='$added_by'");
+                    $user_details=mysqli_query($this->con, "SELECT first_name,last_name,profile_pic FROM users WHERE username='$added_by'");
                     $user_row=mysqli_fetch_array($user_details);
-                    $first_name=$user_row['f_name'];
-                    $last_name=$user_row['l_name'];
+                    $first_name=$user_row['first_name'];
+                    $last_name=$user_row['last_name'];
                     $profile_pic=$user_row['profile_pic'];
 
                     ?>
@@ -548,7 +295,7 @@ class Post
     {
         //from ajax
         $page=$data['page'];
-        $userloggedin=$this->user_obj->get_id();
+        $userloggedin=$this->user_obj->getusername();
         $profileUser=$data['profileusername'];
 
         if ($page==1)
@@ -598,10 +345,10 @@ class Post
                          $delete_button="";
                     }
                     //user details
-                    $user_details=mysqli_query($this->con, "SELECT f_name,l_name,profile_pic FROM users WHERE id='$added_by'");
+                    $user_details=mysqli_query($this->con, "SELECT first_name,last_name,profile_pic FROM users WHERE username='$added_by'");
                     $user_row=mysqli_fetch_array($user_details);
-                    $first_name=$user_row['f_name'];
-                    $last_name=$user_row['l_name'];
+                    $first_name=$user_row['first_name'];
+                    $last_name=$user_row['last_name'];
                     $profile_pic=$user_row['profile_pic'];
 
                     ?>

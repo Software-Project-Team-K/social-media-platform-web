@@ -2,7 +2,9 @@
             require 'assets/classes.php';
             session_start();
             if(!isset($_SESSION['user']))header("location: hello/");
-        
+            $connect =new connection ;
+            $con = $connect->conn;   
+            $userloggedin= $_SESSION['user']->get_id(); 
         
             echo '
                  <!DOCTYPE html>
@@ -13,6 +15,9 @@
                                 <meta http-equiv="X-UA-Compatible" content="IE=edge">
                                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
                                 <title>Chatverse | Newsfeed</title>
+                                <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+                                <script src="assets/js/bootstrap.js"></script>
+                                <script src="assets/js/bootbox.min.js"></script>
                                 <link rel="icon" href="assets/img/icn_logo.png">
             
                                  <!--Navigation Bar-->
@@ -41,8 +46,101 @@
                             </head>
                         <body>'
 ?>
+<?php 
+    if (isset($_POST['post'])) 
+    {
+        //echo "Hello from post";
+        //die();
+        $post= new Post($con,$userloggedin);
+        //it takes body and user to fro now we make it none just in the start 
+        $post->submitpost($_POST['post_text'],'none');
+        header("Location:index.php");
+    }	
+?>
+ 
+<!-- home -->
+            <div style="width:60%; margin: 20px 20%;  border: 2px black solid; display:inline-block;">
+            <div class="main_column column">
+		<form action="index.php" class="post_form" method="POST">
+			<textarea name="post_text" id ="post_text" placeholder="what's in your mind?"></textarea>
+			<br>
+			<input type="submit" name="post" id="post_button" value="post">
+			<hr>
+		</form>
+		
+		<div class="posts_area"> </div>
+		<img id="loading" src="assets/img/loading.gif">
+
+    	</div>
+
+	<script>
+		var userloggedin ='<?php echo $userloggedin; ?>';
+
+		$(document).ready(function(){
+
+			$('#loading').show();
+			// ajax for loading posts 
+			$.ajax({
+				url:"assets/operation/ajax.php",
+				type:"POST",
+				data:""page=1&userloggedin=" + userloggedin",
+				cache:false,
+
+				success:function(data)
+				{
+					//$('#loading').hide(); //dont show loading sign again 
+					$('.posts_area').html(data);
+				}
+			});  //end of ajax
+		$(window).scroll(function(){
+		var height=$('.posts_area').height(); //div containing posts
+		var scroll_top=$(this).scrollTop();
+		var page=$('.posts_area').find('.nextpage').val();//   created int post class
+		var nomoreposts=$('.posts_area').find('.nomoreposts').val();
+		//alert("hello");
+
+		// function to scroll to the bottom //rl moshkla msh radi yd5ol  el if aslnn
+		if((document.body.scrollHeight == document.body.scrollTop + window.innerHeight) && nomoreposts=='false')
+		{
+			
+			$('#loading').show();
+			alert("hello");
+			var ajaxReq = $.ajax({
+			url:"assets/operation/ajax.php",
+			type:"POST",
+			data:"page=" + page + "&userloggedin=" + userloggedin,
+			cache:false,
+
+				success:function(response)
+				{
+					$('.posts_area').find('.nextpage').remove();
+					$('.posts_area').find('.nomoreposts').remove();
+
+					$('#loading').hide();
+					$('.posts_area').append(response);//add new posts to the existing posts
+				}
+			});  
+
+		}//end if
+
+		return false;
 
 
+		});//end $(window).scroll(function(){*/
+
+
+
+		});
+
+	</script>
+
+
+
+
+
+</div>
+                                                
+            </div>
 
 
 
