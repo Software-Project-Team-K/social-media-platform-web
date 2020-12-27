@@ -40,7 +40,9 @@
                         friends VARCHAR(300) NOT NULL DEFAULT '',
                         friends_no INT(10) UNSIGNED DEFAULT 0,
                         fr_requests VARCHAR(300) DEFAULT '',
-                        new_noti VARCHAR(5) DEFAULT ''
+                        new_noti VARCHAR(5) DEFAULT '',
+                        products_no INT(10) UNSIGNED DEFAULT 0,
+                        enable_market INT(2) UNSIGNED DEFAULT 0
                     )";
                     if ($conn->query($sql) === TRUE) echo "Table created successfully"."<br>";
                     else echo "Error creating Table: " . $conn->error."<br>";
@@ -60,6 +62,17 @@
                     )";
                     if ($conn->query($sql) === TRUE) echo "Table created successfully"."<br>";
                     else echo "Error creating Table: " . $conn->error."<br>";
+
+                    //CREATE NOTIFICATIONS TABLES
+                    $sql = "CREATE TABLE marketplace(
+                        id INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                        seller VARCHAR(25) NOT NULL,
+                        product_name VARCHAR(30) NOT NULL,
+                        product_desc VARCHAR (200) NOT NULL,
+                        product_pic VARCHAR (100) NOT NULL
+                    )";
+                    if ($conn->query($sql) === TRUE) echo "Table created successfully"."<br>";
+                     else echo "Error creating Table: " . $conn->error."<br>";
 
 
 

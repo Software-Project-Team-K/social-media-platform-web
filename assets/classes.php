@@ -41,6 +41,8 @@
                         function get_friends_no(){return $this->data['friends_no'];}
                         function get_fr_requests(){return $this->data['fr_requests'];}
                         function get_noti_statues(){return $this->data['new_noti']; }
+                        function get_market_statues(){return  $this->data['enable_market'];}
+                        function get_products_no(){return $this->data['products_no'];}
                         function update_profile_pic($link)
                         {
                             $connect = new connection;
@@ -58,6 +60,11 @@
                             $connect = new connection;
                             $id = $this->get_id();
                             $connect->conn->query("UPDATE users SET bio='$text' WHERE id='$id'");
+                        }
+                        function enable_market($val){
+                            $connect = new connection;
+                            $id = $this->get_id();
+                            $connect->conn->query("UPDATE users SET enable_market='$val' WHERE id='$id'");
                         }
                         function open_noti(){
                             $connect = new connection;
@@ -154,7 +161,76 @@
 
 
                     }
-                    class marketplace{};
+                    class marketplace{
+                        
+                        private $seller_id;
+                        private $seller;
+                        private $products;
+                        private $products_no;
+
+                        function __construct($user_id){
+                            $this->seller_id =$user_id;
+                            $this->seller = new user($user_id);
+                            $connect = new connection;
+                            $this->products = $connect->conn->query("SELECT * FROM marketplace WHERE seller='$this->seller_id'");
+                            $this->products_no=mysqli_num_rows($this->products);
+                        }
+
+                        function add_product($name,$desc,$pic){
+                            $connect = new connection;
+                            $connect->conn->query("INSERT INTO marketplace(seller,product_name,product_desc,product_pic) VALUES('$this->seller_id','$name','$desc','$pic')");
+                            $this->products_no +=1;
+                            $number = $this->products_no;
+                            $connect->conn->query("UPDATE users SET products_no='$number' WHERE id='$this->seller_id'");
+                        }
+
+                        function remove_product($id){
+                            $connect = new connection;
+                            $connect->conn->query("DELETE FROM marketplace WHERE id='$id'");
+                            $this->products_no -=1;
+                            $number = $this->products_no;
+                            $connect->conn->query("UPDATE users SET products_no='$number' WHERE id='$this->seller_id'");
+                        }
+
+                        function show_some_products(){
+                            $limit = ($this->products_no <6)? $this->products_no:6;
+                            for($i=0;$i<$limit;$i++){
+                            $product=  mysqli_fetch_assoc($this->products);
+                            echo    '<div class="dataunit">
+                                        <img src="market/'. $product['product_pic'].'"><br>
+                                        <a>'. $product['product_name'] . '</a>
+                                    </div>';
+                            }
+                        }
+                        function show_all_products($target_id){
+                        if($this->seller_id == $target_id){
+                            for($i=0;$i<$this->products_no;$i++){
+                            $product=  mysqli_fetch_assoc($this->products);
+                            echo' 
+                             <div id="'.$product['id'].'">
+                            <h3 style="padding:0;margin:0 10%;">'.$product['product_name'].'</h3>
+                             <img src="market/'.$product['product_pic'].'"><div class="body"><p>'.$product['product_desc'].'</p></div>
+                             <br><button onclick="x('.$product['id'].')" style="clear:left; margin:10px 0 2px 10%;">Remove Product</button>
+                            </div>';
+                            }
+                        }
+                        else{
+                            for($i=0;$i<$this->products_no;$i++){
+                                $product=  mysqli_fetch_assoc($this->products);
+                                echo' 
+                                 <div id="'.$product['id'].'">
+                                <h3 style="padding:0;margin:0 10%;">'.$product['product_name'].'</h3>
+                                 <img src="market/'.$product['product_pic'].'"><div class="body"><p>'.$product['product_desc'].'</p></div>
+                                 <br><button name = '.$product['product_name'].' onclick="y(this.name)" style="clear:left; margin:10px 0 2px 10%;">Request Order</button>
+                                </div>';
+                                }
+                        }
+                    }
+                }
+
+                    
+
+                    
 
 
 

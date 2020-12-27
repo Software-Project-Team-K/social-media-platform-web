@@ -2,7 +2,7 @@
             require '../assets/classes.php';
             session_start();
             if(!isset($_SESSION['user']))header("location: ../");
-        
+            $_SESSION['user']=new user($_SESSION['user']->get_id());
         
             echo '
                  <!DOCTYPE html>
@@ -97,7 +97,24 @@ if(!isset($_SESSION['access_token']))
 }
 ?>
 
+<?php 
+if($_SESSION['user']->get_market_statues() == '0'){
+echo'
+    <form  method="POST" action="../assets/operation/db_update.php">
+    <input type="submit" name="submit" value="Enable Market"> 
+    </form>';
+}
+else
+{
+    echo'
+    <form  method="POST" action="../assets/operation/db_update.php">
+    <input type="submit" name="submit" value="Disable Market"> 
+    </form>';
+}
 
+
+
+?>
 
 
     </body>  

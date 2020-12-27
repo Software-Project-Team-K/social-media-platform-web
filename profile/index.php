@@ -114,8 +114,8 @@
         <div style="width:25%; margin: 20px 1%; height: 800px; display:inline-block; vertical-align:top;">
 
             <!-- user info section -->
-                <div id="user_info" class="datablock">
-                    <p>User Info</p>
+            <div id="user_info" class="datablock">
+            <img src="../assets/img/user_info.png"><p>User Info</p>
                     <hr>
                     <div style="padding:0 10px;"> 
                         <p><samp>Bio: </samp>
@@ -136,8 +136,8 @@
 
             <!-- friends section -->
             <div id="friendsblock" class="datablock">
-                <p>Friends  (<?php echo $_SESSION['target']->get_friends_no();?>)</p>
-                <a href="">See More</a>
+            <img src="../assets/img/friends.png"><p>Friends  (<?php echo $_SESSION['target']->get_friends_no();?>)</p>
+                <button id="friendsBtn">See More</button>
                 <hr>
                 <!-- friends units -->
                 <div style="margin: 0 0 0 2%"> 
@@ -152,18 +152,44 @@
                     $friend = new user(substr($friends,$start,$end - $start));
                     $start = $end + 1;
                     echo'
-                        <div class="friendunit">
+                        <div class="dataunit">
                             <img src="../'. $friend->get_id()."/". $friend->get_profile_pic().'"><br>
                             <a href="../'.$friend->get_id().'">' . $friend->get_name() . '</a>
                         </div>';
                     }
                 }
-                else echo '<p style="text-align:center; font-size:150%; margin: 30px;">No Friends To Show</p>'
+                else echo '<p style="text-align:center; color:brown; font-weight:bolder; font-size:150%; margin: 30px;">No Friends To Show</p>'
                 ?>
                 </div>
-                <!-- any other section -->
-
             </div>
+
+            <!-- market section -->
+            <?php if($_SESSION['user']->get_market_statues()==1){
+            
+            echo '
+            
+            <div id="marketblock" class="datablock">
+            <img src="../assets/img/market.png"><p>Marketplace  ('.$_SESSION['target']->get_products_no().')</p>
+                <button id="marketBtn">Open</button>
+                <hr>
+
+                <!-- products units -->
+                <div style="margin: 0 0 0 2%">';
+                
+
+                if($_SESSION['target']->get_products_no()!=0){
+                    $targetMarket = new marketplace($_SESSION['target']->get_id());
+                    $targetMarket->show_some_products();
+                }
+
+                else echo '<p style="text-align:center; color:brown; font-weight:bolder; font-size:150%; margin: 30px;">No Products To Show</p>';
+                echo'
+                </div>
+            </div>';}
+
+            ?>
+
+             <!-- any other section -->
 
          </div>
   
@@ -210,10 +236,59 @@
             </div>
         </div>
 
+        <div id="marketBox" class="modal">
+            <div class="modal-mp-content">
+            <span class="close">&times;</span>
+
+            <?php 
+            $targetMarket = new marketplace($_SESSION['target']->get_id());
+            $targetMarket->show_all_products($_SESSION['user']->get_id());
+            ?>
+
+            </div>
+            <?php if(!$isVisitor){
+            echo '<div class="modal-ma-content">
+                    <form action="../assets/operation/market.php" method="post" enctype="multipart/form-data">
+                            <input type="hidden" name="type" value="add_product">
+                            <p>Product name:</p><input type="text" name="product_name">
+                            <p>Product description:</p><textarea rows="8" type="textbox" name="product_desc"></textarea>
+                            <p>Product image:</p><input style="background-color: gray; width:60%;" type="file" name="fileToUpload"><br></br>
+                            <input type="submit" name="submit" value="Add Product" >
+                    </form>
+            </div>';} ?>
+        </div>
+
 
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script>  //Cover and PP Buttons
+                var marketBox = document.getElementById("marketBox");
+                var marketBtn = document.getElementById("marketBtn");
+                var closeMarket = document.getElementsByClassName("close")[3];
+                marketBtn.onclick = function() {
+                marketBox.style.display = "block";
+                }
+                closeMarket.onclick = function() {
+                marketBox.style.display = "none";
+                }
+                //
+                function x(id){
+                    $.ajax({  
+                        type:"POST",  
+                        url:"../assets/operation/market.php",  
+                        data:"type=remove_product"+'&id='+id,
+                        success: location.reload()
+                    }); 
+                }
+                function y(name){
+                $.ajax({  
+                    type:"POST",  
+                    url:"../assets/operation/market.php",  
+                    data:"type=notify"+'&name='+name,
+                    success: location.reload(),
+                }); 
+                }
+                //
                 var ppBox = document.getElementById("uploadPPBox");
                 var ppBtn = document.getElementById("ppBtn");
                 var closePP = document.getElementsByClassName("close")[0];
@@ -243,8 +318,6 @@
                 closeBio.onclick = function() {
                 bioBox.style.display = "none";
                 }
-
-
         </script>
     </body>  
 </html>

@@ -34,6 +34,7 @@
                         {$_SESSION['msg']="Registered Successfully, You Can Login Now!"; $_SESSION['color']="green";}
 
                         mkdir("../../".$id);
+                        mkdir("../../".$id."/market");
                         $myfile = fopen("../../".$id."/index.php", "w");
                         fwrite($myfile, "<?php   require '../profile/index.php'   ?>");
                         fclose($myfile);

@@ -98,12 +98,6 @@ float: right;
     color: blue;
     font-weight: bolder;
 }
-
-
-
-
-
-
 button:hover{
     cursor: pointer;
 }
