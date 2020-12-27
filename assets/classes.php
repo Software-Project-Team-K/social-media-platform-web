@@ -1,5 +1,22 @@
 <?php
 
+            
+                    //CLASS >> CONNECTION TO DATABASE
+                    class connection{
+                        private  $_server = "localhost";
+                        private  $_user = "root";
+                        private  $_pass = "";
+                        private  $_dbname = "chatverse";
+                        public   $conn;
+                    
+                        function __construct(){
+                        $this->conn = new mysqli($this->_server, $this->_user, $this->_pass ,$this->_dbname) or die("Connection failed: " . $this->conn->connect_error);
+                        }
+                        function __destruct(){
+                        $this->conn->close();
+                         }
+                    }
+
                     //CLASS >> CURRENT USER DATA
                     class user{
 
@@ -23,6 +40,7 @@
                         function get_friends(){return $this->data['friends'];}
                         function get_friends_no(){return $this->data['friends_no'];}
                         function get_fr_requests(){return $this->data['fr_requests'];}
+                        function get_noti_statues(){return $this->data['new_noti']; }
                         function update_profile_pic($link)
                         {
                             $connect = new connection;
@@ -41,6 +59,11 @@
                             $id = $this->get_id();
                             $connect->conn->query("UPDATE users SET bio='$text' WHERE id='$id'");
                         }
+                        function open_noti(){
+                            $connect = new connection;
+                            $id = $this->get_id();
+                            $connect->conn->query("UPDATE users SET new_noti='' WHERE id='$id'");
+                        }
                         function link_google($google){
                             $connect = new connection;
                             $id = $this->get_id();
@@ -51,7 +74,6 @@
                             else echo 'This Google Account already associated!.';
                         }
                     }
-
                     //CLASS >> FRIENDSHIP
                     class friendship{
                         static function isFriend($user_id,$target_id){
@@ -102,22 +124,48 @@
                             $connect->conn->query("UPDATE users SET friends_no='$trg_friends_no' WHERE id='$target_id'");
                         } 
                     }
-                    //CLASS >> CONNECTION TO DATABASE
-                    class connection{
+                    class notification{
 
-                        private  $_server = "localhost";
-                        private  $_user = "root";
-                        private  $_pass = "";
-                        private  $_dbname = "chatverse";
-                        public   $conn;
+                        private $connect;
+                        private $con;
+                        private $user_id;
 
-                        function __construct(){
-                            $this->conn = new mysqli($this->_server, $this->_user, $this->_pass ,$this->_dbname) or die("Connection failed: " . $this->conn->connect_error);
+                        function __construct($user_id){
+                            $this->user_id = $user_id;
+                            $this->connect = new connection;
+                            $this->con = $this->connect->conn;
                         }
-                        function __destruct(){
-                            $this->conn->close();
+
+                        function get_noti(){
+                            $all_notifications = $this->con->query("SELECT * from notifications WHERE receiver='$this->user_id' order by at_time desc LIMIT 8");
+                            for($i = 0; $i < mysqli_num_rows($all_notifications);$i++){
+                            $notifications = mysqli_fetch_assoc($all_notifications);
+                            $sender = new user($notifications['sender']);
+                            $body = $notifications['body'];
+                            $time = $notifications['at_time'];
+                            echo '<div><a href="http://localhost/social-media-platform-web/'.$sender->get_id().'"><img src="http://localhost/social-media-platform-web/' .$sender->get_id().'/'.$sender->get_profile_pic().'"><a/><samp>'.$time.'</samp><p>'.$sender->get_name()." ".$body.'</p></div>';
+                            }
                         }
+                        function add_noti($target_id,$body){
+                            $this->con->query("INSERT INTO notifications(sender,receiver,body) VALUES('$this->user_id','$target_id','$body')");
+                            $this->con->query("UPDATE users SET new_noti='+' WHERE id='$target_id'");
+                        }
+
+
+
                     }
+                    class marketplace{};
+
+
+
+
+
+
+
+
+
+
+
                     //CLASS >> DYNAMIC VALIDATE THE INPUT 
                     class dynamic_validation{
 

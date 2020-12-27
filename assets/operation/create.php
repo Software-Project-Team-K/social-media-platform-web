@@ -22,7 +22,7 @@
                     //CONNECT TO THE DATABASE
                     $conn = new mysqli($server, $user, $pass ,$dbname);
 
-                    //CREATE TABLES
+                    //CREATE USER TABLE 
                     $sql = "CREATE TABLE users(
                         id INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
                         password VARCHAR(20) NOT NULL,
@@ -39,13 +39,38 @@
                         cover_pic VARCHAR(60) NOT NULL DEFAULT '../assets/img/default_cover.jpg',
                         friends VARCHAR(300) NOT NULL DEFAULT '',
                         friends_no INT(10) UNSIGNED DEFAULT 0,
-                        fr_requests VARCHAR(300) DEFAULT ''
+                        fr_requests VARCHAR(300) DEFAULT '',
+                        new_noti VARCHAR(5) DEFAULT ''
                     )";
                     if ($conn->query($sql) === TRUE) echo "Table created successfully"."<br>";
                     else echo "Error creating Table: " . $conn->error."<br>";
                     $sql = "ALTER TABLE users AUTO_INCREMENT=1001";
                     $conn->query($sql);
                     
+
+
+
+                    //CREATE NOTIFICATIONS TABLES
+                    $sql = "CREATE TABLE notifications(
+                        id INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                        sender VARCHAR(20) NOT NULL,
+                        receiver VARCHAR(20) NOT NULL,
+                        body VARCHAR (50) NOT NULL,
+                        at_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+                    )";
+                    if ($conn->query($sql) === TRUE) echo "Table created successfully"."<br>";
+                    else echo "Error creating Table: " . $conn->error."<br>";
+
+
+
+
+
+
+
+
+
+
+
                     //CLOSE THE CONNECTION
                     $conn->close();
 ?>

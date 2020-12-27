@@ -36,19 +36,74 @@ float: right;
     text-align: right;
     width: fit-content;
     position: absolute;
-    right: 0;
+    right: 3px;
+    top: 45px;
 }
 #navbuttons li{
     text-align: center;
     margin: 5px 0;
     padding: 0 5px;
-    border: rgb(95, 0, 160) 2px solid;
-    border-radius: 10px;
+    border: indigo 2px solid;
+    color: black;
+    border-radius: 5px;
     font-family: monospace;
     font-weight: bolder;
     font-style: italic;
     background-color: whitesmoke;
 }
+#noti{
+    display: none;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    right: 5%;
+    top: 47px;
+    border: 3px indigo solid;
+    border-radius: 10px;
+    width: 20%;
+    height: 405px;
+    background-image: url(http://localhost/social-media-platform-web/assets/img/noti_bg.jpg);
+    background-size: cover;
+}
+#noti > div{
+    padding: 5px;
+    margin: 0;
+    border-bottom: 2px indigo solid;
+    width: 100%;
+    height: 50px;
+}
+#noti > div img{
+    border-radius: 5px;
+    width: 38px;
+    height: 38px;
+    display: inline-block;
+    vertical-align: bottom;
+}
+#noti > div p{
+    display: inline-block;
+    margin: 0 0 0 3px;
+    padding: 5px 0;
+    font-size: 13px;
+    font-family: san-serif;
+    font-style: italic;
+    color: black;
+    font-weight: bolder;
+}
+#noti > div samp{
+    position: absolute;
+    right: 15px;
+    margin: 0px 5px;
+    font-size: 12px;
+    font-family: serif;
+    color: blue;
+    font-weight: bolder;
+}
+
+
+
+
+
+
 button:hover{
     cursor: pointer;
 }

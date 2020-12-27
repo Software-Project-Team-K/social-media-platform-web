@@ -71,19 +71,31 @@
     margin: 0 10% 0 40%; 
     vertical-align:bottom;
 }
+#buttons input{
+
+    border-radius: 10px;
+    color: indigo;
+    background-color: rgba(255, 255, 255, 0.5);
+    cursor:pointer;
+    margin-right: 10px;
+    font-weight: bolder;
+}
+#buttons input:focus{
+    outline: none;
+}
 /*haidi*/
 .datablock{
     border: indigo 2px solid;
     width: 100%;
     border-radius: 10px;
-    background-image: linear-gradient(rgba(170, 170, 170, 0.4), rgba(105, 0, 180, 0.4));
+    background-color: rgba(76, 0, 130, 0.4);
     margin: 0 0 20px 0;;
 }
 .datablock > p{
     font-size: 18px;
     font-weight: bolder;
     font-family: serif;
-    color: indigo;
+    color: whitesmoke;
     margin: 10px 15px 0px 15px;
     display:inline-block;
 }
@@ -114,11 +126,11 @@
 }
 #user_info div > p{
  font-weight: bolder;
- color: rgb(90, 73, 168);
+ color: rgb(92, 48, 48);
  font-size: 13px;
 }
 #user_info samp{
-    color:darkmagenta;
+    color:indigo;
     font-weight: bolder;
     font-size: 120%;
     font-style: italic;
