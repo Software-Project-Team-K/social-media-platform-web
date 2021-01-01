@@ -1,16 +1,17 @@
 <?php  
-	require 'config/config.php';
-	include("includes/classes/User.php");
-	include("includes/classes/Post.php");
+	require 'assets/classes.php';
+    $connect =new connection ;
+    $con = $connect->conn;
+    session_start(); 
 
-	if (isset($_SESSION['username'])) {
-		$userloggedin = $_SESSION['username'];
-		$user_details_query = mysqli_query($con, "SELECT * FROM users WHERE username='$userloggedin'");
+	if (isset($_SESSION['user'])) {
+		$userloggedin = $_SESSION['user']->get_id();
+		$user_details_query = mysqli_query($con, "SELECT * FROM users WHERE id='$userloggedin'");
 		$user = mysqli_fetch_array($user_details_query);
 	}
-	else {
+	/*else {
 		header("Location: register.php");
-	}
+	}*/
 
 	?>
 <html>
@@ -165,11 +166,11 @@
                     }//end of time frame
 
 
-                $user_obj=new User($con,$posted_by);
+                $user_obj=new user($posted_by);
                 ?>
                      <div class="comment_section">
-                        <a href="<?php echo $posted_by?>" target="_parent"><img src="<?php echo $user_obj->getprofile_pic();?>" title="<?php $posted_by?>" style="float:left;" height="30"></a>
-                        <a href="<?php echo $posted_by?>" target="_parent"> <b> <?php echo $user_obj->getfirst_lastname(); ?></b></a>
+                        <a href="<?php echo $posted_by?>" target="_parent"><img src="<?php echo $user_obj->get_profile_pic();?>" title="<?php $posted_by?>" style="float:left;" height="30"></a>
+                        <a href="<?php echo $posted_by?>" target="_parent"> <b> <?php echo $user_obj->get_name(); ?></b></a>
                         &nbsp;&nbsp;&nbsp;&nbsp; <?php echo $time_message ."<br>".$comment_body; ?>
                         <hr>
                     </div>
