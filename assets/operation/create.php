@@ -67,7 +67,7 @@
                     //CREATE TABLES for likes
                     $sql = "CREATE TABLE likes(
                         id INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-                       username VARCHAR(75),
+                       username INT,
                        post_id INT
                     )";
                     if ($conn->query($sql) === TRUE) echo "Table created successfully"."<br>";
