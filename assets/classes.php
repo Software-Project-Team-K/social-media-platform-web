@@ -314,17 +314,19 @@ class Post
         {
         $start=($page - 1) * $limit;
         }
-
+        
         $str="";//string to return
         $data_query=mysqli_query($this->con, "SELECT * FROM posts WHERE deleted='no' ORDER BY id DESC");
         if(mysqli_num_rows($data_query) > 0)
         {
+            
             $num_iterations=0; // number of posts checked 
             $count=1;
 
             //fetch data
             while($row=mysqli_fetch_array($data_query))
             {
+                
                 $body=$row['body'];
                 $id=$row['id'];
                 $added_by=$row['added_by'];
@@ -350,7 +352,7 @@ class Post
                 //check if the user friend
                 
                 $user_logged_obj= new user($userloggedin);
-                if(friendship::isFriend($user_logged_obj,$added_by)){
+                if(friendship::isFriend($userloggedin,$added_by) || $added_by==$userloggedin){
                 
                 
                     if($num_iterations ++ < $start)
@@ -379,7 +381,7 @@ class Post
                     $user_row=mysqli_fetch_array($user_details);
                     $first_name=$user_row['f_name'];
                     $last_name=$user_row['l_name'];
-                    $profile_pic=$user_row['profile_pic'];
+                    $profile_pic=$added_by."/".$user_row['profile_pic']; // to get profile
 
                     ?>
 					<script> 
@@ -604,7 +606,7 @@ class Post
                     $user_row=mysqli_fetch_array($user_details);
                     $first_name=$user_row['f_name'];
                     $last_name=$user_row['l_name'];
-                    $profile_pic=$user_row['profile_pic'];
+                    $profile_pic=$added_by."/".$user_row['profile_pic']; ;
 
                     ?>
 					<script> 
