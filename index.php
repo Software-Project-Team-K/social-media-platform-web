@@ -20,7 +20,17 @@
                                  <!--Navigation Bar-->
                                  <div id="nav">
                                     <a href=""><img src="assets/img/icn_logo.png" style="width: 30px;  margin: 5px 20px;"></a>
-                                    <input type="text" style="width:20%; position: relative; left:10px; bottom:15px; border-radius:10px;">
+
+                                    <form>
+                                    <input type="text" id="searchbar">
+                                    </form><button type="submit"><img style="width:12px; padding:0; margin:0;" src="assets/img/icn_search.png"></button>
+                                    <div id="searchbox">
+                                    <div class="searchUnit">
+                                    <samp>Search Results will be shown here!</samp>
+                                    </div>
+                                    </div>
+
+
                                         <div id="navbuttons">
                                                 <button><a href='.$_SESSION["user"]->get_id().'><img src="'.$_SESSION["user"]->get_id()."/".$_SESSION["user"]->get_profile_pic().'"></a></button>
                                                 <button><img src="assets/img/icn_msg.png"></button>
@@ -51,7 +61,6 @@
                                 notiBtn.onclick = function() {
                                     if(noti.style.display == "block")noti.style.display = "none"
                                     else {
-
                                         var xhttp = new XMLHttpRequest();
                                         xhttp.onreadystatechange = function() {
                                           if (this.readyState == 4 && this.status == 200) {
@@ -63,18 +72,42 @@
                                         noti.style.display = "block";
                                     }
                                 }
+
+
+                                /////////
+
+                                var searchBar = document.getElementById("searchbar");
+                                var searchBox = document.getElementById("searchbox");
+                                searchBar.onfocus= function(){
+                                    searchBox.style.display = "block";
+                                }
+                                searchBar.onblur= function(){
+                                    myVar = setInterval(function () {
+                                        searchBox.style.display = "none";
+                                        clearInterval(myVar);
+                                    }, 100);
+                                }
+
+
+                                searchBar.oninput=function(){
+                                var xhttp = new XMLHttpRequest();
+                                xhttp.onreadystatechange = function() {
+                                  if (this.readyState == 4 && this.status == 200) {
+                                    searchBox.innerHTML = this.responseText;
+                                  }
+                                };
+                                xhttp.open("GET","assets/operation/search.php?index=" + searchBar.value);
+                                xhttp.send();
+                                }
+
+
+
                                 </script>
 
 
                             </head>
                         <body>'
 ?>
-
-
-
-
-
-
 
 
 

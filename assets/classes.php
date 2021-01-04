@@ -28,7 +28,7 @@
                             $result = $connect->conn->query("SELECT * FROM users WHERE id='$logID' or email='$logID' or phone_num='$logID'");
                             $this->data = mysqli_fetch_assoc($result);
                         }
-                        function get_name() {return $this->data['f_name']." ".$this->data['l_name'];}
+                        function get_name() {return $this->data['full_name'];}
                         function get_id()  {return $this->data['id'];}
                         function get_gender(){return $this->data['gender'];}
                         function get_email(){return $this->data['email'];}
@@ -81,6 +81,32 @@
                             else echo 'This Google Account already associated!.';
                         }
                     }
+
+                    //CLASS >> CURRENT analyst DATA
+                    class analyst{
+
+                        private $data;
+                        function __construct($logID){
+                            //get user data from parameter (username or email)
+                            $connect = new connection;
+                            $result = $connect->conn->query("SELECT * FROM users WHERE id='$logID' or email='$logID' or phone_num='$logID'");
+                            $this->data = mysqli_fetch_assoc($result);
+                        }
+                        function get_name() {return $this->data['full_name'];}
+                        function get_id()  {return $this->data['id'];}
+                        function get_username(){return $this->data['username'];}
+
+
+                        function fetch_statistics()
+                        {
+                            $connect = new connection;
+                            $id = $this->get_id();
+                            $connect->conn->query("UPDATE users SET cover_pic='$link' WHERE id='$id'");
+                        }
+                    }
+
+
+
                     //CLASS >> FRIENDSHIP
                     class friendship{
                         static function isFriend($user_id,$target_id){

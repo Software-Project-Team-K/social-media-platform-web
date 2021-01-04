@@ -31,8 +31,19 @@
                                     <!--Navigation Bar-->
                                     <div id="nav">
                                        <a href="../"><img src="../assets/img/icn_logo.png" style="width: 30px;  margin: 5px 20px;"></a>
-                                       <input type="text" style="width:20%; position: relative; left:10px; bottom:15px; border-radius:10px;">
-                                           <div id="navbuttons">
+                                       
+                                       
+                                       <form>
+                                       <input type="text" id="searchbar">
+                                       </form><button type="submit"><img style="width:12px; padding:0; margin:0;" src="../assets/img/icn_search.png"></button>
+                                       <div id="searchbox">
+                                       <div class="searchUnit">
+                                       <samp>Search Results will be shown here!</samp>
+                                       </div>
+                                       </div>
+                                       
+                                       
+                                       <div id="navbuttons">
                                                    <button><a href="../'.$_SESSION["user"]->get_id().'"><img src="../'.$_SESSION["user"]->get_id()."/".$_SESSION["user"]->get_profile_pic().'"></a></button>
                                                    <button><img src="../assets/img/icn_msg.png"></button>
                                                    <button id="notiBtn"><img id="noti_img" src="../assets/img/icn_notification'.$_SESSION["user"]->get_noti_statues().'.png"></button>
@@ -75,6 +86,36 @@
                                            noti.style.display = "block";
                                        }
                                    }
+
+
+                                   /////////
+
+                                   var searchBar = document.getElementById("searchbar");
+                                   var searchBox = document.getElementById("searchbox");
+                                   searchBar.onfocus= function(){
+                                       searchBox.style.display = "block";
+                                   }
+                                   searchBar.onblur= function(){
+                                       myVar = setInterval(function () {
+                                           searchBox.style.display = "none";
+                                           clearInterval(myVar);
+                                       }, 100);
+                                   }
+   
+   
+                                   searchBar.oninput=function(){
+                                   var xhttp = new XMLHttpRequest();
+                                   xhttp.onreadystatechange = function() {
+                                     if (this.readyState == 4 && this.status == 200) {
+                                       searchBox.innerHTML = this.responseText;
+                                     }
+                                   };
+                                   xhttp.open("GET","../assets/operation/search.php?index=" + searchBar.value);
+                                   xhttp.send();
+                                   }
+
+
+
                                    </script>
    
    
@@ -111,7 +152,7 @@
 
 
         <!-- User Details-->
-        <div style="width:25%; margin: 20px 1%; height: 800px; display:inline-block; vertical-align:top;">
+        <div style="width:23%; margin: 20px 2%; height: 800px; display:inline-block; vertical-align:top;">
 
             <!-- user info section -->
             <div id="user_info" class="datablock">
@@ -158,13 +199,13 @@
                         </div>';
                     }
                 }
-                else echo '<p style="text-align:center; color:brown; font-weight:bolder; font-size:150%; margin: 30px;">No Friends To Show</p>'
+                else echo '<p style="text-align:center; color:gray; font-weight:bolder; font-size:150%; margin: 30px;">No Friends To Show</p>'
                 ?>
                 </div>
             </div>
 
             <!-- market section -->
-            <?php if($_SESSION['user']->get_market_statues()==1){
+            <?php if($_SESSION['target']->get_market_statues()==1){
             
             echo '
             
@@ -182,7 +223,7 @@
                     $targetMarket->show_some_products();
                 }
 
-                else echo '<p style="text-align:center; color:brown; font-weight:bolder; font-size:150%; margin: 30px;">No Products To Show</p>';
+                else echo '<p style="text-align:center; color:gray; font-weight:bolder; font-size:150%; margin: 30px;">No Products To Show</p>';
                 echo'
                 </div>
             </div>';}
@@ -195,7 +236,7 @@
   
 
         <!-- Posts Section-->
-        <div style="width:60%; margin: 20px 1%; height: 1000px; border: 2px black solid; display:inline-block;">
+        <div style="width:60%; margin: 20px 4%; height: 1000px; border: 2px black solid; display:inline-block;">
 
         </div>
 
@@ -261,34 +302,7 @@
 
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        <script>  //Cover and PP Buttons
-                var marketBox = document.getElementById("marketBox");
-                var marketBtn = document.getElementById("marketBtn");
-                var closeMarket = document.getElementsByClassName("close")[3];
-                marketBtn.onclick = function() {
-                marketBox.style.display = "block";
-                }
-                closeMarket.onclick = function() {
-                marketBox.style.display = "none";
-                }
-                //
-                function x(id){
-                    $.ajax({  
-                        type:"POST",  
-                        url:"../assets/operation/market.php",  
-                        data:"type=remove_product"+'&id='+id,
-                        success: location.reload()
-                    }); 
-                }
-                function y(name){
-                $.ajax({  
-                    type:"POST",  
-                    url:"../assets/operation/market.php",  
-                    data:"type=notify"+'&name='+name,
-                    success: location.reload(),
-                }); 
-                }
-                //
+        <script>  //Cover and PP Buttons and market
                 var ppBox = document.getElementById("uploadPPBox");
                 var ppBtn = document.getElementById("ppBtn");
                 var closePP = document.getElementsByClassName("close")[0];
@@ -318,6 +332,38 @@
                 closeBio.onclick = function() {
                 bioBox.style.display = "none";
                 }
+                </script>
+                
+                <!-- -->
+                
+                <script>
+                var marketBox = document.getElementById("marketBox");
+                var marketBtn = document.getElementById("marketBtn");
+                var closeMarket = document.getElementsByClassName("close")[3];
+                marketBtn.onclick = function() {
+                marketBox.style.display = "block";
+                }
+                closeMarket.onclick = function() {
+                marketBox.style.display = "none";
+                }
+                //
+                function x(id){
+                    $.ajax({  
+                        type:"POST",  
+                        url:"../assets/operation/market.php",  
+                        data:"type=remove_product"+'&id='+id,
+                        success: location.reload()
+                    }); 
+                }
+                function y(name){
+                $.ajax({  
+                    type:"POST",  
+                    url:"../assets/operation/market.php",  
+                    data:"type=notify"+'&name='+name,
+                    success: location.reload(),
+                }); 
+                }
+                //
         </script>
     </body>  
 </html>

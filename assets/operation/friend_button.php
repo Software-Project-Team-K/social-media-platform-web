@@ -37,6 +37,4 @@
 
                 header("location: ../../$target_id");
 
-
-
 ?>

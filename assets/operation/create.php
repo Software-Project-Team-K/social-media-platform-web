@@ -22,13 +22,14 @@
                     //CONNECT TO THE DATABASE
                     $conn = new mysqli($server, $user, $pass ,$dbname);
 
-                    //CREATE USER TABLE 
+                    //CREATE USERS TABLE 
                     $sql = "CREATE TABLE users(
                         id INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
                         password VARCHAR(20) NOT NULL,
                         email VARCHAR(30) NOT NULL,
                         f_name VARCHAR(20) NOT NULL,
                         l_name VARCHAR(20) NOT NULL,
+                        full_name VARCHAR(40) NOT NULL,
                         phone_num INT(20) UNSIGNED,
                         gender VARCHAR(10),
                         bio VARCHAR (50) DEFAULT 'Hey there! im a new Chatverse User!',
@@ -44,15 +45,25 @@
                         products_no INT(10) UNSIGNED DEFAULT 0,
                         enable_market INT(2) UNSIGNED DEFAULT 0
                     )";
-                    if ($conn->query($sql) === TRUE) echo "Table created successfully"."<br>";
+                    if ($conn->query($sql) === TRUE) echo "Table users created successfully"."<br>";
                     else echo "Error creating Table: " . $conn->error."<br>";
                     $sql = "ALTER TABLE users AUTO_INCREMENT=1001";
                     $conn->query($sql);
                     
+                   //CREATE ADMINS TABLE
+                   $sql = "CREATE TABLE admins(
+                        id INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                        username VARCHAR(20) NOT NULL,
+                        password VARCHAR(20) NOT NULL,
+                        f_name VARCHAR(20) NOT NULL,
+                        l_name VARCHAR(20) NOT NULL,
+                        full_name VARCHAR(40) NOT NULL,
+                        control_type VARCHAR(20) NOT NULL
+                    )";
+                    if ($conn->query($sql) === TRUE) echo "Table admins created successfully"."<br>";
+                    else echo "Error creating Table: " . $conn->error."<br>";
 
-
-
-                    //CREATE NOTIFICATIONS TABLES
+                    //CREATE NOTIFICATIONS TABLE
                     $sql = "CREATE TABLE notifications(
                         id INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
                         sender VARCHAR(20) NOT NULL,
@@ -60,10 +71,10 @@
                         body VARCHAR (50) NOT NULL,
                         at_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
                     )";
-                    if ($conn->query($sql) === TRUE) echo "Table created successfully"."<br>";
+                    if ($conn->query($sql) === TRUE) echo "Table notifications created successfully"."<br>";
                     else echo "Error creating Table: " . $conn->error."<br>";
 
-                    //CREATE NOTIFICATIONS TABLES
+                    //CREATE MARKETPLACE TABLE
                     $sql = "CREATE TABLE marketplace(
                         id INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
                         seller VARCHAR(25) NOT NULL,
@@ -71,8 +82,8 @@
                         product_desc VARCHAR (200) NOT NULL,
                         product_pic VARCHAR (100) NOT NULL
                     )";
-                    if ($conn->query($sql) === TRUE) echo "Table created successfully"."<br>";
-                     else echo "Error creating Table: " . $conn->error."<br>";
+                    if ($conn->query($sql) === TRUE) echo "Table marketplace created successfully"."<br>";
+                    else echo "Error creating Table: " . $conn->error."<br>";
 
 
 
