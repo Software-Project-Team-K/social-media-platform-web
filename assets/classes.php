@@ -514,7 +514,8 @@ class Post
                     <div class ='newsfeed'>
                     $comment_check_num comments &nbsp;&nbsp;&nbsp;
                     <iframe src='like.php?post_id=$id' scrolling ='no' frameborder='0'></iframe>
-                    
+                    &nbsp;&nbsp;&nbsp; 
+                    <input type='submit' name='share' method='POSt' value='share'>
                     </div>
                     </div>
                     <div class='post_comment' id='toggleComment$id' style='display:none;'>
@@ -552,7 +553,7 @@ class Post
                     <input type= 'hidden' class='nomoreposts' value='false'>";
              }
                     else
-                $str.="<input type='hidden' class='nomoreposts' value='true'><p style='text-align: centre;'> OOOPS! no more posts</p>";
+                $str.="<input type='hidden' class='nomoreposts' value='true'><p style='text-align: center; line-height: 15;'> OOOPS! no more posts</p>";
 
         }//end of if(mysqli_num_rows($data_query)) 
         echo $str;
