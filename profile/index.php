@@ -40,6 +40,8 @@
                         <html>
         
                             <head>
+                                    <link rel="stylesheet" type="text/css" href="../styling/style.css">
+                                    <link rel="stylesheet" type=text/css href="../styling/bootstrap.css">
                                     <link rel="stylesheet" href="../profile/main.css">
                                     <meta charset="utf-8">
                                     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -167,7 +169,8 @@
   
 
         <!-- Posts Section-->
-        <div style="width:60%; margin: 20px 1%; height: 1000px; border: 2px black solid; display:inline-block;">
+        <!--<div style="width:60%; margin: 20px 1%; height: 1000px; border: 2px black solid; display:inline-block;">-->
+        
         <div class="main_column column">
         <div class="posts_area"></div>
         <img id="loading" src="../assets/img/loading.gif">
@@ -238,7 +241,7 @@
 		});
 
 	</script>
-    </div>
+    
         
 
 
