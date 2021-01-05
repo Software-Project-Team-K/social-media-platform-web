@@ -159,6 +159,7 @@
                         private $error_1L = "The last name must contains only Alphabet letters!";
                         private $error_2L = "Please Enter a real last name!";
                         private $error_3 = "The email must be vaild!";
+                       // private $error_9 = "invalid format!";
                         private $error_4 = "Email is already used!";
                         private $error_5 = "The password [8-16 Digits] must contains at least one letter and number!";
                         private $error_6 = "The Password doesnt match the Re-Password!";
@@ -193,6 +194,13 @@
                                     $valid = (mysqli_num_rows($result) == 0)? TRUE:FALSE;
                                     if($valid) $this->remove_error($this->error_4);
                                     else $this->add_error($this->error_4);
+                                   /* //invalid format @gmail.com
+                                    if(filter_var($this->email_c, FILTER_VALIDATE_EMAIL)){
+                                        $this->email_c=filter_var($this->email_c, FILTER_VALIDATE_EMAIL);
+                                        $this->remove_error($this->error_9);
+                                    
+                                      }
+                                      else $this->add_error($this->error_9);*/
                                 break;
                                 case "password":
                                     $this->pw = $input;
@@ -490,12 +498,14 @@ class Post
                     // on click msh sh8ala enma ama b3mlha display block btzhr requested url not found
                     $str.="<div class='status_post' onClick='javascript:toggle$id()'>
                         <div class='post_profile_pic'>
-                        <img src='$profile_pic' width='50'>
+                        <img src='$profile_pic' width='50' style='border-radius:10px; '>
                         </div>
 
-                    <div class='posted_by' style='color:#ACACAC;'>
-                    <a href='$added_by'>$first_name $last_name</a> $user_to &nbsp;&nbsp;&nbsp;&nbsp;$time_message
+                    <div class='posted_by' style='color:#ACACAC; '>
+                    <a href='$added_by'>$first_name $last_name</a> $user_to &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     $delete_button
+                    <br>
+                    $time_message
                     </div>
                     <div id='post_body'>
                     $body
@@ -508,7 +518,7 @@ class Post
                     </div>
                     </div>
                     <div class='post_comment' id='toggleComment$id' style='display:none;'>
-                    <iframe src='comment_frame.php?post_id=$id' id='comment_iframe'frameborder='0' ></iframe>
+                    <iframe src='comment_frame.php?post_id=$id' id='comment_iframe' frameborder='0'></iframe>
                      </div>
                     <hr>";
             }
@@ -519,7 +529,7 @@ class Post
             $(document).ready(function(){
                 $('#post<?php echo $id; ?>').on('click',function(){
                     bootbox.confirm("Are you sure you want to delete this post?",function(result){
-                        $.post("includes/handlers/delete_post.php?post_id=<?php echo $id;?>",{result:result});
+                        $.post("../operation/delete_post.php?post_id=<?php echo $id;?>",{result:result});
                         if(result)
                         location.reload();
                        
@@ -712,7 +722,7 @@ class Post
                             $time_message=$interval->s ."seconds ago";
                         }
                     }
-                    // on click msh sh8ala enma ama b3mlha display block btzhr requested url not found
+                    // on click msh sh8ala enma ama b3mlha display block btzhr requested url not found *done et7lt elhamdullah
                     $str.="<div class='status_post' onClick='javascript:toggle$id()'>
                         <div class='post_profile_pic'>
                         <img src='$profile_pic' width='50'>
@@ -728,12 +738,12 @@ class Post
                     </div>
                     <div class ='newsfeed'>
                     $comment_check_num comments &nbsp;&nbsp;&nbsp;
-                    <iframe src='like.php?post_id=$id' scrolling ='no' frameborder='0'></iframe>
+                    <iframe src='../like.php?post_id=$id' scrolling ='no' frameborder='0'></iframe>
                     
                     </div>
                     </div>
                     <div class='post_comment' id='toggleComment$id' style='display:none;'>
-                    <iframe src='comment_frame.php?post_id=$id' id='comment_iframe'frameborder='0' ></iframe>
+                    <iframe src='../comment_frame.php?post_id=$id' id='comment_iframe'frameborder='0' ></iframe>
                      </div>
                     <hr>";
             
@@ -744,7 +754,7 @@ class Post
             $(document).ready(function(){
                 $('#post<?php echo $id; ?>').on('click',function(){
                     bootbox.confirm("Are you sure you want to delete this post?",function(result){
-                        $.post("includes/handlers/delete_post.php?post_id=<?php echo $id;?>",{result:result});
+                        $.post("../operation/delete_post.php?post_id=<?php echo $id;?>",{result:result});
                         if(result)
                         location.reload();
                        
