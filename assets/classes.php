@@ -740,7 +740,8 @@ class Post
                     <div class ='newsfeed'>
                     $comment_check_num comments &nbsp;&nbsp;&nbsp;
                     <iframe src='../like.php?post_id=$id' scrolling ='no' frameborder='0'></iframe>
-                    
+                    &nbsp;&nbsp;&nbsp;
+                    <input type='submit' name='share' method='POSt' value='share'>
                     </div>
                     </div>
                     <div class='post_comment' id='toggleComment$id' style='display:none;'>
