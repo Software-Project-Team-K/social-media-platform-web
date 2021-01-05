@@ -1,21 +1,37 @@
 <html>
     <head>
-    <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" type="text/css" href="styling/style.css">
     </head>
     <body>
-    <?php  
-        require 'config/config.php';
-        include("includes/classes/User.php");
-        include("includes/classes/Post.php");
+    <style type="text/css">
+        * {
+            font-family: Arial, Helvetica, Sans-serif;
+        }
+        body {
+            background-color: #fff;
+        }
 
-        if (isset($_SESSION['username'])) {
-            $userloggedin = $_SESSION['username'];
-            $user_details_query = mysqli_query($con, "SELECT * FROM users WHERE username='$userloggedin'");
+        form {
+            position: absolute;
+            top: 0;
+        }
+
+        </style>
+    <?php  
+        require 'assets/classes.php';
+        $connect =new connection ;
+        $con = $connect->conn; 
+        session_start();
+        if (isset($_SESSION['user'])) {
+            $userloggedin = $_SESSION['user']->get_id();
+             
+            $user_details_query = mysqli_query($con, "SELECT * FROM users WHERE id='$userloggedin'");
             $user = mysqli_fetch_array($user_details_query);
         }
-        else {
+       /* else {
             header("Location: register.php");
-        }
+        }*/
         if(isset($_GET['post_id'])) {
             $post_id = $_GET['post_id'];
         }
@@ -60,7 +76,7 @@
         {
             echo' <form action ="like.php?post_id='.$post_id.'" method="POST">
             <input type="submit" class="comment_like" name="unlike_button" value="unlike">
-            <div>
+            <div class="like_value">
             '.$total_likes.'likes
             </div>
             </form>
@@ -70,7 +86,7 @@
         {
             echo' <form action ="like.php?post_id='.$post_id.'" method="POST">
             <input type="submit" class="comment_like" name="like_button" value="like">
-            <div>
+            <div class="like_value">
             '.$total_likes.'likes
             </div>
             </form>
