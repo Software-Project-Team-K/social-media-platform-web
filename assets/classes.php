@@ -522,7 +522,7 @@ class Post
                     <iframe src='comment_frame.php?post_id=$id' id='comment_iframe' frameborder='0'></iframe>
                      </div>
                     <hr>";
-            }
+            }//end of if condition 
             }//end of while
         ?>
 
@@ -730,7 +730,7 @@ class Post
                         </div>
 
                     <div class='posted_by' style='color:#ACACAC;'>
-                    <a href='$added_by'>$first_name $last_name</a> $user_to &nbsp;&nbsp;&nbsp;&nbsp;$time_message
+                    <a href='$added_by'>$first_name $last_name</a>  &nbsp;&nbsp;&nbsp;&nbsp;$time_message
                     $delete_button
                     </div>
                     <div id='post_body'>

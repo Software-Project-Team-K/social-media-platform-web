@@ -50,6 +50,7 @@
                                     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
                                     <script src="../assets/js/bootstrap.js"></script>
                                     <script src="../assets/js/bootbox.min.js"></script>
+                                    <script src="../assets/js/demo.js"></script>
                                     <link rel="icon" href="../assets/img/icn_logo.png">
         
                                     <!--Navigation Bar-->
@@ -86,13 +87,13 @@
 
         <div id="NCP">  
                 <div id="cover">
-                    <?php if(!$isVisitor) echo '<button id="coverBtn"><img src="../assets/img/icn_upload.png"></button>'?>
+                    <?php if(!$isVisitor) echo '<button type="button" id="coverBtn" data-toggle="modal" data-target="#uploadCoverBox"><img src="../assets/img/icn_upload.png"></button>'?>
                     <img src=<?php echo "../".$target_id."/".$_SESSION['target']->get_cover_pic(); ?>>
                 </div>
                 <div id="PNB">
                     <div style="display: inline-block; margin: 0 5%;">
                         <img id="pp" src=<?php echo "../".$target_id."/".$_SESSION['target']->get_profile_pic(); ?>>
-                        <?php if(!$isVisitor) echo '<button id="ppBtn"><img src="../assets/img/icn_upload.png"></button>' ;?>
+                        <?php if(!$isVisitor) echo '<button type="button" id="ppBtn" data-toggle="modal" data-target="#uploadPPBox"><img src="../assets/img/icn_upload.png"></button>';?>
                         <p><?php echo $_SESSION['target']->get_name(); ?></p>
                     </div>
                     <form id="buttons" method="GET" action="../assets/operation/friend_button.php">
@@ -112,7 +113,6 @@
 
         <!-- User Details-->
         <div style="width:25%; margin: 20px 1%; height: 800px; display:inline-block; vertical-align:top;">
-
             <!-- user info section -->
                 <div id="user_info" class="datablock">
                     <p>User Info</p>
@@ -121,7 +121,7 @@
                         <p><samp>Bio: </samp>
                         <?php
                          echo $_SESSION['target']->get_bio();
-                         if(!$isVisitor) echo '<button id="bioBtn" style="float:right; background-color:transparent; border:0px;"><img style="width:15px; height:15px;; margin:0;" src="../assets/img/edit_txt_icon.png"></button>';
+                         if(!$isVisitor) echo '<button id="bioBtn" style="float:right; background-color:transparent; border:0px;" data-toggle="modal" data-target="#uploadBioBox"><img style="width:15px; height:15px;; margin:0;" src="../assets/img/edit_txt_icon.png"></button>';
                          ?></p>
                         <p><samp>Email: </samp><?php echo $_SESSION['target']->get_email()?> </p>
                         <p><samp>Phone: </samp><?php echo $_SESSION['target']->get_phone()?> </p>
@@ -168,14 +168,18 @@
          </div>
   
 
-        <!-- Posts Section-->
-        <!--<div style="width:60%; margin: 20px 1%; height: 1000px; border: 2px black solid; display:inline-block;">-->
+       <!-- End of user Section-->
+         
+         <!-- Posts Section-->
+        <div style="width:60%; margin: 20px 1%; height: 1000px; border: 2px black solid; display:inline-block;">
         
-        <div class="main_column column">
-        <div class="posts_area"></div>
-        <img id="loading" src="../assets/img/loading.gif">
-       <!-- <?php echo $target_id ?>-->
-        
+        <!--<div class="main_column column">-->
+            <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#post_form">Post Something</button>
+            <!-- Modal -->
+                <div class="posts_area"></div>
+                <img id="loading" src="../assets/img/loading.gif">
+                <!-- <?php echo $target_id ?>-->
+                
         
 
         </div>
@@ -248,74 +252,107 @@
 
 
 
+        <div class="modal fade" id="post_form"  role="dialog" aria-labelledby="postModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                        <h4 class="modal-title" id="postModalLabel">Post something</h4>
+                    </div>
 
+                    <div class="modal-body">
+                        <p>This will appear on the newsfeed for your friends to see. </p>
 
-        <div id="uploadPPBox" class="modal">
-            <div class="modal-content">
-            <span class="close">&times;</span>
-                <form action="../assets/operation/upload_pic.php" method="post" enctype="multipart/form-data">
-                    <input type="hidden" name="type" value="pp">
-                    <input style="background-color: gray; width:70%;" type="file" name="fileToUpload" id="fileToUpload"></br></br>
-                    <input style="background-color: silver; width:25%;" type="submit" name="submit" value="Upload" >
-                </form>
+                        <form class="profile_post" action="index.php" method="POST" enctype="multipart/form-data">
+                            <div class="form-group">
+                                <textarea class="form-control" name="post_body"></textarea>
+                                <input type="hidden" name="user_from" value="<?php echo $userloggedin; ?>">
+                                <input type="hidden" name="user_to" value="<?php echo $target_id; ?>">
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" name="post_button" id="submit_profile_post">Post</button>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div id="uploadCoverBox" class="modal">
-            <div class="modal-content">
-            <span class="close">&times;</span>
-                <form action="../assets/operation/upload_pic.php" method="post" enctype="multipart/form-data">
-                    <input type="hidden" name="type" value="cover">
-                    <input style="background-color: gray; width:70%;" type="file" name="fileToUpload" id="fileToUpload"></br></br>
-                    <input style="background-color: silver; width:25%;" type="submit" name="submit" value="Upload" >
-                </form>
-            </div>
-        </div>
-        <div id="uploadBioBox" class="modal">
-            <div class="modal-content">
-            <span class="close">&times;</span>
-                <form action="../assets/operation/update_bio.php" method="post">
-                    <input style="background-color: white; width:70%;" type="text" name="bio"></br></br>
-                    <input style="background-color: silver; width:25%;" type="submit" name="submit" value="Upload Bio" >
-                </form>
+        <div class="modal fade" id="uploadPPBox"  role="dialog" aria-labelledby="uploadPPBoxLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                        <h4 class="modal-title" id="postModalLabel">Upload you Profile Photo</h4>
+                    </div>
+
+                    <div class="modal-body">
+                        <p>This is your profile picture. </p>
+                        <form action="../assets/operation/upload_pic.php" method="post" enctype="multipart/form-data">
+                            <input type="hidden" name="type" value="pp">
+                            <input style="background-color: gray; width:70%;" type="file" name="fileToUpload" id="fileToUpload"></br></br>
+                            <input style="background-color: silver; width:25%;" type="submit" name="submit" value="Upload" >
+                        </form>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
             </div>
         </div>
 
+        <div class="modal fade" id="uploadCoverBox"  role="dialog" aria-labelledby="uploadCoverBoxLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                        <h4 class="modal-title" id="postModalLabel">Upload Your Cover Photo</h4>
+                    </div>
 
+                    <div class="modal-body">
+                        <p>You are going to upload your Cover Photo. </p>
+
+                        <form action="../assets/operation/upload_pic.php" method="post" enctype="multipart/form-data">
+                            <input type="hidden" name="type" value="cover">
+                            <input style="background-color: gray; width:70%;" type="file" name="fileToUpload" id="fileToUpload"></br></br>
+                            <input style="background-color: silver; width:25%;" type="submit" name="submit" value="Upload" >
+                        </form>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="uploadBioBox"  role="dialog" aria-labelledby="uploadBioBoxLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                        <h4 class="modal-title" id="postModalLabel">Update Your Bio</h4>
+                    </div>
+
+                    <div class="modal-body">
+                        <p>Your are going to update your Bioe. </p>
+
+                        <form action="../assets/operation/update_bio.php" method="post">
+                            <input style="background-color: white; width:70%;" type="text" name="bio"></br></br>
+                            <input style="background-color: silver; width:25%;" type="submit" name="submit" value="Upload Bio" >
+                        </form>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        <script>  //Cover and PP Buttons
-                var ppBox = document.getElementById("uploadPPBox");
-                var ppBtn = document.getElementById("ppBtn");
-                var closePP = document.getElementsByClassName("close")[0];
-                ppBtn.onclick = function() {
-                ppBox.style.display = "block";
-                }
-                closePP.onclick = function() {
-                ppBox.style.display = "none";
-                }
-                //
-                var coverBox = document.getElementById("uploadCoverBox");
-                var coverBtn = document.getElementById("coverBtn");
-                var closeCover = document.getElementsByClassName("close")[1];
-                coverBtn.onclick = function() {
-                coverBox.style.display = "block";
-                }
-                closeCover.onclick = function() {
-                coverBox.style.display = "none";
-                }
-                //
-                var bioBox = document.getElementById("uploadBioBox");
-                var bioBtn = document.getElementById("bioBtn");
-                var closeBio = document.getElementsByClassName("close")[2];
-                bioBtn.onclick = function() {
-                bioBox.style.display = "block";
-                }
-                closeBio.onclick = function() {
-                bioBox.style.display = "none";
-                }
-
-
-        </script>
-    </body>  
+        </body>  
 </html>
