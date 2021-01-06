@@ -9,7 +9,7 @@
 }
 .user_details
 {
-    width: 250px;
+    width: 300px;
     float: left;
     margin-bottom:20px ;
 
@@ -22,6 +22,7 @@
     width:  250px;
     display: inline-block;
     position: absolute;
+    margin-bottom: 20px;
 }
 .user_details img
 {

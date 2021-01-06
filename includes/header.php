@@ -21,6 +21,7 @@ else
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="assets/js/bootstrap.js"></script>
     <script src="assets/js/bootbox.min.js"></script>
+    <script src="assets/js/demo.js"></script>
 <!-- css-->
 <!-- font awesom for icons-->
     <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
@@ -45,9 +46,13 @@ else
             <a href="index.php">
             <i class="icon-camera-retro icon-large"></i> 
             </a> -->
-            <a href="#">
-            messages
-            </a>
+            <a href="javascript:void(0);" onclick="getDropdownData('<?php echo $userLoggedIn; ?>', 'message')">
+				<i class="fa fa-envelope fa-lg"></i>
+				<?php
+				if($num_messages > 0)
+				 echo '<span class="notification_badge" id="unread_message">' . $num_messages . '</span>';
+				?>
+			</a>
             <a href="#">
             users    
             </a>
