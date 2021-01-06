@@ -64,28 +64,29 @@
  
 <!-- home -->
             <!--<div style="width:60%; margin: 20px 20%;  border: #96979e 1px solid; display:inline-block; border-radius: 5px;">-->
-                <div class="wrapper">
-                <div class="user_details column">
-                <a href="profile.php"><img src="<?php echo $userloggedin."/".$user['profile_pic'];?>" >
-                </a>
-                <div class="user_details_left_right">
-                    <a href="<?php echo $userloggedin; ?>">	
-                        <?php
+    <div class="wrapper">
+        <div class="user_details column">
+            <a href="profile.php"><img src="<?php echo $userloggedin."/".$user['profile_pic'];?>" >
+            </a>
+            <div class="user_details_left_right">
+                <a href="<?php echo $userloggedin; ?>">	
+                    <?php
                         echo $user['f_name']." ".$user['l_name'] ."<br>"; 
                         ?>
-                    </a>
-                </div>
+                </a>
             </div>
-            <div class="main_column column">
-		<form action="index.php" class="post_form" style="width: 80%;height: 60px;border-radius: 5px;margin-right: 5px;border:1px solid rgb(224, 219, 219);font-size: 13px;" method="POST">
-			<textarea name="post_text" id ="post_text" placeholder="what's in your mind?"></textarea>
-			<br>
-			<input type="submit" name="post" id="post_button" value="post">
-			<hr>
-		</form>
-		
-		<div class="posts_area"> </div>
-		<img id="loading" src="assets/img/loading.gif">
+        </div>
+        <div class="main_column column">
+            <div id="postDiv" style="margin-bottom: 60px;">
+                <form action="index.php" class="post_form" style="width: 80%;height: 60px;border-radius: 5px;margin-right: 5px;border:1px solid rgb(224, 219, 219);font-size: 13px;" method="POST">
+                    <textarea name="post_text" id ="post_text" placeholder="what's in your mind?"></textarea>
+                    <br>
+                    <input type="submit" name="post" id="post_button" value="post">
+                    <hr>
+                </form>          
+            </div>
+            <div class="posts_area"> </div>
+		    <img id="loading" src="assets/img/loading.gif">
 
     	</div>
 
