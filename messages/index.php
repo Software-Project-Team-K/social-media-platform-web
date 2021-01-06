@@ -97,7 +97,7 @@
 				<?php echo $message_obj->getConvos(); ?>
 			</div>
 			<br>
-			<a href="index.php?u=new">New Message</a>
+			<!--<a href="index.php?u=new">New Message</a>-->
 	</div>
 	
 

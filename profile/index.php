@@ -175,6 +175,7 @@
         
         <!--<div class="main_column column">-->
             <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#post_form">Post Something</button>
+            <button type="button" class="btn btn-info btn-lg"><a href="../messages?u=<?php echo $_SESSION['target']->get_id()?>" >Message</a></button>
             <!-- Modal -->
                 <div class="posts_area"></div>
                 <img id="loading" src="../assets/img/loading.gif">
