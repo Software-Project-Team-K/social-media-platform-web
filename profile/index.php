@@ -59,7 +59,7 @@
                                        <input type="text" style="width:20%; position: relative; left:10px; bottom:15px; border-radius:10px;">
                                            <div id="navbuttons">
                                                    <button><a href="../'.$_SESSION["user"]->get_id().'"><img src="../'.$_SESSION["user"]->get_id()."/".$_SESSION["user"]->get_profile_pic().'"></a></button>
-                                                   <button><img src="../assets/img/icn_msg.png"></button>
+                                                   <button><a href="../messages" ><img src="../assets/img/icn_msg.png"></a></button>
                                                    <button><img src="../assets/img/icn_notification.png"></button>
                                                    <button id="arrow"><img src="../assets/img/icn_settings.png"></button>
                                                    <ul id="menu">

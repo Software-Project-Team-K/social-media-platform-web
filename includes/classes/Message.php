@@ -51,8 +51,8 @@ class Message {
 			$id = $row['id'];
 
 			$div_top = ($user_to == $userLoggedIn) ? "<div class='message' id='green'>" : "<div class='message' id='blue'>";
-			$button = "<span class='deleteButton' onclick='deleteMessage($id, this)'>X</span>";
-			$data = $data . $div_top . $button . $body . "</div><br><br>";
+			//$button = "<span class='deleteButton' onclick='deleteMessage($id, this)'>X</span>";
+			$data = $data . $div_top  . $body . "</div><br><br>";
 		}
 		return $data;
 	}
@@ -157,9 +157,9 @@ class Message {
 			$dots = (strlen($latest_message_details[1]) >= 12) ? "..." : "";
 			$split = str_split($latest_message_details[1], 12);
 			$split = $split[0] . $dots; 
-
-			$return_string .= "<a href='messages.php?u=$username'> <div class='user_found_messages'>
-								<img src='" . $user_found_obj->get_profile_pic() . "' style='border-radius: 5px; margin-right: 5px;'>
+			$pathtoProfile= '../' .$username . '/'. $user_found_obj->get_profile_pic();
+			$return_string .= "<a href='index.php?u=$username'> <div class='user_found_messages'>
+								<img src='" . $pathtoProfile . "' style='border-radius: 5px; margin-right: 5px;'>
 								" . $user_found_obj->get_name() . "
 								<span class='timestamp_smaller' id='grey'> " . $latest_message_details[2] . "</span>
 								<p id='grey' style='margin: 0;'>" . $latest_message_details[0] . $split . " </p>
