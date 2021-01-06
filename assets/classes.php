@@ -735,9 +735,10 @@ class Post
                         }
                     }
                     // on click msh sh8ala enma ama b3mlha display block btzhr requested url not found *done et7lt elhamdullah
+                    $post_owner_profile_url= '../'.$profile_pic;
                     $str.="<div class='status_post' onClick='javascript:toggle$id()'>
                         <div class='post_profile_pic'>
-                        <img src='$profile_pic' width='50'>
+                        <img src='$post_owner_profile_url' width='50'>
                         </div>
 
                     <div class='posted_by' style='color:#ACACAC;'>

@@ -175,9 +175,11 @@
 
 
                 $user_obj=new user($posted_by);
+                $post_owner_profile_url= $user_obj->get_id() .'/'.$user_obj->get_profile_pic();
+                
                 ?>
                      <div class="comment_section">
-                        <a href="<?php echo $posted_by?>" target="_parent"><img src="<?php echo $user_obj->get_profile_pic();?>" title="<?php $posted_by?>" style="float:left;" height="30"></a>
+                        <a href="<?php echo $posted_by?>" target="_parent"><img src="<?php echo $post_owner_profile_url;?>" title="<?php $posted_by?>" style="float:left;" height="30"></a>
                         <a href="<?php echo $posted_by?>" target="_parent"> <b> <?php echo $user_obj->get_name(); ?></b></a>
                         &nbsp;&nbsp;&nbsp;&nbsp; <?php echo $time_message ."<br>".$comment_body; ?>
                         <hr>
