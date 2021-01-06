@@ -378,7 +378,8 @@ class Post
                         }
                     if($userloggedin==$added_by)
                     {
-                        $delete_button="<button id='post$id'>delete</button>";
+                        $alert_fn= "delete_post_handler($id)";
+                        $delete_button="<button onclick=$alert_fn id='post$id'>delete</button>";
                     }
                     else
                     {
@@ -527,6 +528,16 @@ class Post
         ?>
 
             <script>
+            
+            function delete_post_handler(id){
+                bootbox.confirm("Are you sure you want to delete this post?",function(result){
+                        $.post("assets/operation/delete_post.php?post_id="+id,{result:result});
+                        if(result)
+                        location.reload();
+                       
+                    });
+            }
+            /*
             $(document).ready(function(){
                 $('#post<?php echo $id; ?>').on('click',function(){
                     bootbox.confirm("Are you sure you want to delete this post?",function(result){
@@ -538,7 +549,7 @@ class Post
 
                 });
 
-            });
+            });*/
             </script>
 
 
