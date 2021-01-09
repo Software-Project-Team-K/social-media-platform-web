@@ -48,8 +48,8 @@
                                     <a href="../"><img src="../assets/img/icn_logo.png" style="width: 30px;  margin: 5px 20px;"></a>
                                     <input type="text" style="width:20%; position: relative; left:10px; bottom:15px; border-radius:10px;">
                                         <div id="navbuttons">
-                                                <button><a href='.$_SESSION["user"]->get_id().'><img src="'.$_SESSION["user"]->get_id()."/".$_SESSION["user"]->get_profile_pic().'"></a></button>
-                                                <button><a href="../messages" ><img src="../assets/img/icn_msg.png"></a></button>
+                                        <button><a href="../'.$_SESSION["user"]->get_id().'"><img src="../'.$_SESSION["user"]->get_id()."/".$_SESSION["user"]->get_profile_pic().'"></a></button>
+                                        <button><a href="../messages" ><img src="../assets/img/icn_msg.png"></a></button>
                                                 <button><img src="../assets/img/icn_notification.png"></button>
                                                 <button id="arrow"><img src="../assets/img/icn_settings.png"></button>
                                                 <ul id="menu">
@@ -83,7 +83,7 @@
     ?>
 
 <div class="group_info">
-    <img src="../assets/img/group_image.jpg" alt="cover photo">
+    <img class = "cover_photo"src="../assets/img/group_image.jpg" alt="cover photo">
    <h2> Welcome <?php echo $group_name; ?></h2><br>
     <div class="wrapper">
         
@@ -99,19 +99,20 @@
                 ?>
                 <div id="postDiv" style="margin-bottom: 60px;">
                 <div class="posts_area"> </div>
-		        <img id="loading" src="assets/img/loading.gif"> 
+		        <img id="loading" src="../assets/img/loading.gif"> 
                 <div>       
-                    <script>/*
+                    <script>
                         var userloggedin ='<?php echo $userloggedin; ?>';
+                        var group_id = '<?php echo $group_id; ?>';
 
                         $(document).ready(function(){
 
                             $('#loading').show();
                             // ajax for loading posts 
                             $.ajax({
-                                url:"assets/operation/ajax_group.php",
+                                url:"../assets/operation/ajax_group.php",
                                 type:"POST",
-                                data:"page=1&userloggedin=" + userloggedin,
+                                data:"page=1&userloggedin=" + userloggedin+"&group_id="+group_id,
                                 cache:false,
 
                                 success:function(data)
@@ -134,7 +135,7 @@
                             $('#loading').show();
                             alert("hello");
                             var ajaxReq = $.ajax({
-                            url:"assets/operation/ajax_group.php",
+                            url:"../assets/operation/ajax_group.php",
                             type:"POST",
                             data:"page=" + page + "&userloggedin=" + userloggedin,
                             cache:false,
@@ -154,11 +155,11 @@
                         return false;
 
 
-                        });//end $(window).scroll(function(){*/
+                        });//end $(window).scroll(function(){
 
 
 
-                        });*/
+                        });
 
                     </script>
 

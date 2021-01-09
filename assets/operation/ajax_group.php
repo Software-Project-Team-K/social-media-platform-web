@@ -1,12 +1,14 @@
 <?php
 require '../classes.php';
+include '../../includes/classes/Group.php';
 $connect =new connection ;
 $con = $connect->conn; 
 
 $limit=50; //num of posts to be loaded
+$user_id= $_REQUEST['userloggedin'];
+$group_id= $_REQUEST['group_id'];
 
-$posts=new Post($con,$_REQUEST['userloggedin']);
-//$post= new Post($con,$userloggedin);
-$posts->loadgrouppost($_REQUEST, $limit);
+$group_obj = new Group($con, $user_id,$group_id);	
+$group_obj->loadgrouppost($_REQUEST, $limit);
 
 ?>

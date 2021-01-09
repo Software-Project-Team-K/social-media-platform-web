@@ -5,7 +5,6 @@ include '../../includes/classes/Group.php';
 $connect =new connection ;
 $con = $connect->conn;
 session_start();
-echo 'entered ';
 if(isset($_POST['group_id'])) {
 	$group_id = $_POST['group_id'];
 	$user_id  = $_SESSION['user']->get_id();

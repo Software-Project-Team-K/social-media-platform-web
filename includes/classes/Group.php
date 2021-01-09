@@ -34,12 +34,13 @@ class Group {
         $group_members = $group['group_members'] . $this->user_obj->get_id(). ",";
         $this->con->query("UPDATE groups SET group_members='$group_members' WHERE id='$this->group_id'");
     }
-    public function loadgrouppost($data, $limit)
+  
+	public function loadgrouppost($data, $limit)
     {
         //from ajax
         $page=$data['page'];
         $userloggedin=$this->user_obj->get_id();
-
+        $group_id=$this->group_id;
         if ($page==1)
         {
             $start=0;
@@ -50,7 +51,8 @@ class Group {
         }
         
         $str="";//string to return
-        $data_query=mysqli_query($this->con, "SELECT * FROM posts WHERE deleted='no' ORDER BY id DESC");
+        $data_query=mysqli_query($this->con, "SELECT * FROM posts WHERE deleted='no' AND group_id='$group_id'  ORDER BY id DESC");
+        echo mysqli_num_rows($data_query);
         if(mysqli_num_rows($data_query) > 0)
         {
             
@@ -109,7 +111,7 @@ class Group {
                     }
                     else
                     {
-                         $delete_button="";
+                            $delete_button="";
                     }
                     //user details
                     $user_details=mysqli_query($this->con, "SELECT f_name,l_name,profile_pic FROM users WHERE id='$added_by'");
@@ -119,23 +121,23 @@ class Group {
                     $profile_pic=$added_by."/".$user_row['profile_pic']; // to get profile
 
                     ?>
-					<script> 
-						function toggle<?php echo $id; ?>() {
+                    <script> 
+                        function toggle<?php echo $id; ?>() {
                             var target=$(event.target);
                             if(!target.is("a"))
                             {
- 							
-								var element = document.getElementById("toggleComment<?php echo $id; ?>");
+                                
+                                var element = document.getElementById("toggleComment<?php echo $id; ?>");
 
-								if(element.style.display == "block") 
-									element.style.display = "none";
-								else 
-									element.style.display = "block";
+                                if(element.style.display == "block") 
+                                    element.style.display = "none";
+                                else 
+                                    element.style.display = "block";
                             }	
-						}
+                        }
 
-					</script>
-					<?php
+                    </script>
+                    <?php
                     // check num of comments
                     $comment_check=mysqli_query($this->con, "SELECT * FROM comments WHERE post_id='$id'");
                     $comment_check_num=mysqli_num_rows($comment_check);
@@ -223,16 +225,18 @@ class Group {
                         }
                     }
                     // on click msh sh8ala enma ama b3mlha display block btzhr requested url not found
+                    $post_owner_profile_url= '../'.$profile_pic;
+
                     $str.="<div class='status_post' onClick='javascript:toggle$id()'>
                         <div class='post_profile_pic'>
-                        <img src='$profile_pic' width='50' style='border-radius:10px; '>
+                        <img src='$post_owner_profile_url' width='50' style='border-radius:10px; '>
                         </div>
 
                     <div class='posted_by' style='color:#ACACAC; '>
                     <a href='$added_by'>$first_name $last_name</a> $user_to &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     $delete_button
                     <br>
-                    $time_message
+                    $date_time
                     </div>
                     <div id='post_body'>
                     $body
@@ -240,14 +244,14 @@ class Group {
                     </div>
                     <div class ='newsfeed'>
                     $comment_check_num comments &nbsp;&nbsp;&nbsp;
-                    <iframe src='like.php?post_id=$id' scrolling ='no' frameborder='0'></iframe>
+                    <iframe src='../like.php?post_id=$id' scrolling ='no' frameborder='0'></iframe>
                     &nbsp;&nbsp;&nbsp; 
                     <input type='submit' name='share' method='POSt' value='share'>
                     </div>
                     </div>
                     <div class='post_comment' id='toggleComment$id' style='display:none;'>
-                    <iframe src='comment_frame.php?post_id=$id' id='comment_iframe' frameborder='0'></iframe>
-                     </div>
+                    <iframe src='../comment_frame.php?post_id=$id' id='comment_iframe' frameborder='0'></iframe>
+                        </div>
                     <hr>";
             }//end of if condition 
             }//end of while
@@ -260,7 +264,7 @@ class Group {
                         $.post("assets/operation/delete_post.php?post_id="+id,{result:result});
                         if(result)
                         location.reload();
-                       
+                        
                     });
             }
             /*
@@ -270,7 +274,7 @@ class Group {
                         $.post("../operation/delete_post.php?post_id=<?php echo $id;?>",{result:result});
                         if(result)
                         location.reload();
-                       
+                        
                     });
 
                 });
@@ -286,16 +290,16 @@ class Group {
 
         <?php
             if($count > $limit)
-             {   $str.="<input type ='hidden' class='nextpage' value=' ". ($page +1) ." '>
+                {   $str.="<input type ='hidden' class='nextpage' value=' ". ($page +1) ." '>
                     <input type= 'hidden' class='nomoreposts' value='false'>";
-             }
+                }
                     else
                 $str.="<input type='hidden' class='nomoreposts' value='true'><p style='text-align: center; line-height: 15;'> OOOPS! no more posts</p>";
 
         }//end of if(mysqli_num_rows($data_query)) 
         echo $str;
     }
-	
+                        
 
 }
 

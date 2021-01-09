@@ -559,7 +559,7 @@
                                         <a href='$added_by'>$first_name $last_name</a> $user_to &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                         $delete_button
                                         <br>
-                                        $time_message
+                                        $date_time
                                         </div>
                                         <div id='post_body'>
                                         $body
@@ -795,7 +795,7 @@
                                             </div>
                     
                                         <div class='posted_by' style='color:#ACACAC;'>
-                                        <a href='$added_by'>$first_name $last_name</a>  &nbsp;&nbsp;&nbsp;&nbsp;$time_message
+                                        <a href='$added_by'>$first_name $last_name</a>  &nbsp;&nbsp;&nbsp;&nbsp;$date_time
                                         $delete_button
                                         </div>
                                         <div id='post_body'>
