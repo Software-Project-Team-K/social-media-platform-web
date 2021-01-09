@@ -118,26 +118,42 @@
                 ?> 
             </from>
             <hr>
+            <h4>Groups</h4>
+
+            <div class="group_list">
+                <?php 
+                $query = mysqli_query($con, "SELECT * FROM groups ORDER BY id asc ");
+
+                foreach ($query as $row) {
+                    $group_name = $row['group_name'];
+                    $group_id= "groups?group_id=".$row ['id'];
+                    $element = '<a href="'. $group_id. '">'.$group_name .'</a>';
+                    echo "<div style='padding: 2px'>";
+                    echo $element;
+                    echo "</div>";
+                }
+                ?>
+            </div>
             <h4>Popular</h4>
 
-        <div class="trends">
-            <?php 
-            $query = mysqli_query($con, "SELECT * FROM trends ORDER BY hits DESC LIMIT 9");
+            <div class="trends">
+                <?php 
+                $query = mysqli_query($con, "SELECT * FROM trends ORDER BY hits DESC LIMIT 9");
 
-            foreach ($query as $row) {
-                
-                $word = $row['title'];
-                $word_dot = strlen($word) >= 14 ? "..." : "";
+                foreach ($query as $row) {
+                    
+                    $word = $row['title'];
+                    $word_dot = strlen($word) >= 14 ? "..." : "";
 
-                $trimmed_word = str_split($word, 14);
-                $trimmed_word = $trimmed_word[0];
+                    $trimmed_word = str_split($word, 14);
+                    $trimmed_word = $trimmed_word[0];
 
-                echo "<div style'padding: 1px'>";
-                echo $trimmed_word . $word_dot;
-                echo "<br></div><br>";
-            }
-            ?>
-        </div>
+                    echo "<div style'padding: 1px'>";
+                    echo $trimmed_word . $word_dot;
+                    echo "<br></div><br>";
+                }
+                ?>
+            </div>
     </div>
 
 	<script>

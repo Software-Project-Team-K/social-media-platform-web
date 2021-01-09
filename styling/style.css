@@ -251,3 +251,9 @@ textarea:focus
     height: 5%;
     width: 5%;
 }
+
+.group_list{
+  height: 110px;
+  overflow: scroll;
+  margin-bottom: 20px;
+}

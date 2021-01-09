@@ -8,7 +8,6 @@
             $connect =new connection ;
             $con = $connect->conn;   
             $userloggedin= $_SESSION['user']->get_id(); 
-            echo $userloggedin;
             $userloggedin_query=mysqli_query($con, "SELECT * FROM users WHERE id='$userloggedin' ");
             $user= mysqli_fetch_array($userloggedin_query);
              if(isset($_GET['group_id']))
@@ -46,11 +45,11 @@
             
                                  <!--Navigation Bar-->
                                  <div id="nav">
-                                    <a href=""><img src="../assets/img/icn_logo.png" style="width: 30px;  margin: 5px 20px;"></a>
+                                    <a href="../"><img src="../assets/img/icn_logo.png" style="width: 30px;  margin: 5px 20px;"></a>
                                     <input type="text" style="width:20%; position: relative; left:10px; bottom:15px; border-radius:10px;">
                                         <div id="navbuttons">
                                                 <button><a href='.$_SESSION["user"]->get_id().'><img src="'.$_SESSION["user"]->get_id()."/".$_SESSION["user"]->get_profile_pic().'"></a></button>
-                                                <button><a href="messages" ><img src="../assets/img/icn_msg.png"></a></button>
+                                                <button><a href="../messages" ><img src="../assets/img/icn_msg.png"></a></button>
                                                 <button><img src="../assets/img/icn_notification.png"></button>
                                                 <button id="arrow"><img src="../assets/img/icn_settings.png"></button>
                                                 <ul id="menu">
