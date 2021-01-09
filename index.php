@@ -1,5 +1,6 @@
 <?php 
             require 'assets/classes.php';
+           
             session_start();
             if(!isset($_SESSION['user']))header("location: hello/");
             $connect =new connection ;
@@ -7,7 +8,7 @@
             $userloggedin= $_SESSION['user']->get_id(); 
             $userloggedin_query=mysqli_query($con, "SELECT * FROM users WHERE id='$userloggedin' ");
              $user= mysqli_fetch_array($userloggedin_query);
-        
+           
             echo '
                  <!DOCTYPE html>
                     <html>
@@ -59,7 +60,20 @@
         //it takes body and user to fro now we make it none just in the start 
         $post->submitpost($_POST['post_text'],'none');
         header("Location:index.php");
-    }	
+    }
+    //create group	
+    if (isset($_POST['create_group'])) 
+    {
+            $error_array=array();
+            $group_name=strip_tags($_POST['group_name']);//remove any html tags 
+            $group_name=str_replace(' ','',$group_name);//replace any spce in the name with no space
+            $group_name=ucfirst(strtolower($group_name));//only the first letter will be uppercase       
+            
+            $sql = "INSERT INTO groups VALUES('','$group_name','','$userloggedin',',')";
+            $query=mysqli_query($con,$sql);
+            header("Location: index.php");
+            }
+    }
 ?>
  
 <!-- home -->
@@ -90,7 +104,12 @@
 
         </div>
 	<div class="user_details column">
-
+        <!--group part-->
+        <form method="POST">
+            <input type="text" name="group_name" placeholder="group name" required>
+            <input type="submit" name="create_group" value="create group!" method="POST"> 
+        </from>
+        <hr>
         <h4>Popular</h4>
 
         <div class="trends">
