@@ -17,7 +17,6 @@ class Post
         $body=str_replace('\r\n', '\n',$body);
         $body=nl2br($body);
         $chech_space=preg_replace('/\s+/','',$body);//erase any space
-        
        //check spaces
         if($chech_space !="")
         {
@@ -25,11 +24,6 @@ class Post
             $date_added=date("Y-m-d H:i:S");
             // added by 
             $added_by=$this->user_obj->getusername();
-            if($user_to== $group_id)
-            {
-                $user_to=$group_id;
-
-            }
             if($user_to ==$added_by)
             {
                 $user_to="none";
