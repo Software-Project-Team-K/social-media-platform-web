@@ -287,7 +287,7 @@
                                     $user_to="none";
                                 }
                                 //insert post into database
-                                $insert=mysqli_query($this->con,"INSERT INTO posts VALUES ('','$body','$added_by','$date_added','$user_to','no','0','no')");
+                                $insert=mysqli_query($this->con,"INSERT INTO posts VALUES ('','$body','$added_by','$date_added','$user_to','no','0','no','-1')");
                                // $database=mysqli_query($htis->con," INSERT INTO posts VALUES  ('','alaa','alaa','2020-6-12','alaa','no','no','0')");
                                 $returned_id=mysqli_insert_id($this->con);
                                 //insert notifiacations

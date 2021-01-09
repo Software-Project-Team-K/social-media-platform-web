@@ -82,12 +82,9 @@
 
     ?>
 
-<div class="group_info">
-    <img class = "cover_photo"src="../assets/img/group_image.jpg" alt="cover photo">
-   <h2> Welcome <?php echo $group_name; ?></h2><br>
-    <div class="wrapper">
-        
-            
+ 
+    <div class="wrapper">   
+            <h2> Welcome <?php echo $group_name; ?></h2><br>        
             <div class="main_column column">
                 <?php
                 $js_fn= "join_group_handler($group_id)";
@@ -180,7 +177,7 @@
                                 <div class="form-group">
                                 <textarea class="form-control" name="post_body"></textarea>
                                 <input type="hidden" name="user_from" value="<?php echo $userloggedin; ?>">
-                                <input type="hidden" name="user_to" value="<?php echo $group_id; ?>">
+                                <input type="hidden" name="group_id" value="<?php echo $group_id; ?>">
                                 </div>
                             </form>
                         </div>
@@ -191,11 +188,5 @@
   
             </div>
      </div>
-
-
-
-
-
-</div>
  </body>
 </html>
