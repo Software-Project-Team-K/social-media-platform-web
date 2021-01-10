@@ -15,7 +15,7 @@
                                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
                                 <title>Chatverse | Account Settings</title>
                                 <link rel="icon" href="../assets/img/icn_logo.png">
-            
+
                                 <!--Navigation Bar-->
                                 <div id="nav">
                                    <a href="../"><img src="../assets/img/icn_logo.png" style="width: 30px;  margin: 5px 20px;"></a>

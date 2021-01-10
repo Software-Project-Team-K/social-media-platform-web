@@ -1,0 +1,245 @@
+.wrapper {
+	margin: 0 auto;
+	top: 50px;
+	position: relative;
+	padding: 0 10px;
+	width: 75%;
+    min-width: 950px;
+    
+}
+.user_details
+{
+    width: 275px;
+    float: left;
+    margin-bottom:20px ;
+
+}
+.user_details_left_right 
+{
+    font-family: 'Bellota-BoldItalic.otf',sans-serif;
+    color: rgb(73, 94, 33);
+    font-size: 15px;
+    width:  250px;
+    display: inline-block;
+    position: absolute;
+    margin-bottom: 20px;
+}
+.user_details img
+{
+    border-radius: 5px;
+    height:125px;
+    margin-right: 10px;
+}
+.column
+{
+    background-color: #fff;
+    padding: 10px;
+    border:1px solid rgb(224, 219, 219) ;
+    border-radius: 5px;
+    box-shadow: 2px 2px 1px  rgb(224, 219, 219) ;
+    z-index: -1;
+
+}
+
+
+.main_column {
+	float:right;
+	width: 70%;
+	z-index: -1;
+	min-height: 170px;
+}
+.post_form
+{   
+    width: 100%;    
+}
+.post_form textarea
+{
+    width: 80%;
+    height: 60px;
+    border-radius: 5px;
+    margin-right: 5px;
+    border:1px solid rgb(224, 219, 219);
+    font-size: 13px;
+}
+textarea:focus
+{
+    outline:0 ;
+}
+.post_form input[type="submit"]
+{
+    width:10%;
+    height: 30px;
+    border-radius: 5px;
+    margin:5px 5px 5px 5px;
+    padding: 5px ;
+    font-size: 15px;
+    font-family:'Bellota-BoldItalic.otf' ,sans-serif;
+    background-color:rgb(182, 187, 182) ;
+    border: none;
+    position: absolute;
+    outline:0;
+}
+.post_form input[type="submit"]:active
+{
+    padding: 7px 5px 7px 5px;
+    color:#fff;
+}
+.status_post
+{
+    width: 96%;
+    font-size: 15px;
+    min-height: 75px;
+    padding: 0px 5px;
+
+
+}
+.post_profile_pic
+{
+    float: left;
+    margin-right:7px;
+
+
+}
+.post_profile_pic img
+{
+    border-radius: 10px;
+}
+
+#comment_iframe {
+	max-height: 250px;	
+	width: 100%;
+	margin-top: 5px;
+}
+
+.comment_section {
+	padding: 0 5px 5px 5px;
+}
+
+.comment_section img {
+	margin: 0 3px 3px 3px;
+	border-radius: 3px;
+}
+
+#comment_form textarea {
+	border-color: #D3D3D3;
+	width: 85%;
+	height: 35px;
+	border-radius: 5px;
+	color: #616060;
+	font-size: 14px;
+	margin: 3px 3px 3px 5px;
+}
+#comment_form input[type="submit"] {
+	border:none;
+	background-color: #b2b6b8;
+	color: #8a4cd1;
+	border-radius: 5px;
+	width: 13%;
+	height: 35px;
+	margin-top: 3px;
+	position: absolute;
+	font-family: 'Bellota-BoldItalic', sans-serif;
+	text-shadow: #6f7477 0.5px 0.5px 0px;
+}
+
+.newsfeed {
+	padding: 0px;
+	text-decoration: none;
+	color:#515658;
+    border:none;
+    background-color: #fff;
+}
+
+.newsfeed iframe {
+	border: 0px;
+	height: 15px;
+    width: 120px;
+    top:0;
+    background-color: #fff;
+}
+
+.comment_like {
+	background-color: transparent;
+	border: none;
+	font-size: 14px;
+	color: #686c6e;
+	padding: 0;
+	height: auto;
+	width: auto;
+    margin: 0;
+    top:0;
+    background-color: #fff;
+}
+
+.like_value {
+	display: inline;
+    font-size: 14px;
+    background-color: #fff;
+}
+
+#message_submit {
+	height: 41px;
+	width: 120px;
+	margin: 0;
+	position: absolute;
+	border:none;
+	background-color: #20AAE5;
+	color: #156588;
+	border-radius: 5px;
+	font-family: 'Bellota-BoldItalic', sans-serif;
+	text-shadow: #73B6E2 0.5px 0.5px 0px;
+}
+#message_textarea {
+	width: 80%;
+	margin-right: 8px;
+	border-radius: 5px;
+	border: 1px solid #D3D3D3;
+	font-size: 12px;
+}
+
+.loaded_messages {
+	height: 65%;
+	min-height: 300px;
+	max-height: 400px;
+	overflow: scroll;
+	margin-bottom: 10px;
+}
+
+.message {
+	border: 1px solid #000;
+	border-radius: 5px;
+	padding: 5px 10px;
+	display: inline-block;
+	color: #fff;
+}
+
+.message#blue {
+	background-color: #3498db;
+	border-color: #2980b9;
+	float: right;
+	margin-bottom: 5px;
+}
+.message#green {
+	background-color: #2ecc71;
+	border-color: #27ae60;
+	float: left;
+	margin-bottom: 5px;
+}
+.loaded_conversations {
+	max-height: 216px;
+	overflow: scroll;
+}
+
+.user_found_messages {
+	border-bottom: 1px solid #D3D3D3;
+	padding: 8px 8px 10px 8px;
+}
+
+.user_found_messages:hover {
+	background-color: #D3D3D3;
+}
+
+.user_found_messages img {
+	height: 35px;
+	float: left;
+}

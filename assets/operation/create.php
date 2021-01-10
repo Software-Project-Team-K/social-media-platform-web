@@ -22,7 +22,7 @@
                     //CONNECT TO THE DATABASE
                     $conn = new mysqli($server, $user, $pass ,$dbname);
 
-                    //CREATE USERS TABLE 
+
                     $sql = "CREATE TABLE users(
                         id INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
                         password VARCHAR(20) NOT NULL,
@@ -41,16 +41,13 @@
                         friends VARCHAR(300) NOT NULL DEFAULT '',
                         friends_no INT(10) UNSIGNED DEFAULT 0,
                         fr_requests VARCHAR(300) DEFAULT '',
-                        new_noti VARCHAR(5) DEFAULT '',
-                        products_no INT(10) UNSIGNED DEFAULT 0,
-                        enable_market INT(2) UNSIGNED DEFAULT 0
-
                     )";
                     if ($conn->query($sql) === TRUE) echo "Table users created successfully"."<br>";
                     else echo "Error creating Table: " . $conn->error."<br>";
                     $sql = "ALTER TABLE users AUTO_INCREMENT=1001";
                     $conn->query($sql);
                     
+
                    //CREATE ADMINS TABLE
                    $sql = "CREATE TABLE admins(
                         id INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -85,6 +82,7 @@
                     )";
                     if ($conn->query($sql) === TRUE) echo "Table marketplace created successfully"."<br>";
                     else echo "Error creating Table: " . $conn->error."<br>";
+
 
 
 
