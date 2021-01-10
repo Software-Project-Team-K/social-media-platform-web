@@ -1,33 +1,4 @@
-#nav{
-    border-bottom: purple 1px solid;
-    height: 40px;
-    width: 100%;
-    position: fixed;
-    z-index: 1;
-    background-color: indigo;
-}
-#navbuttons{
-float: right;
-}
-#navbuttons button{
-    border: 0px;
-    width:30px;
-    height:30px;
-    border-radius: 15px;
-    margin: 5px 15px;
-    padding: 0;
-    background-color: transparent;
-}
-#navbuttons a{
-    padding: 0;
-    border-radius: inherit;
-}
-#navbuttons img {
-    width: 100%;
-    height: 100%;
-    border-radius: inherit;
-}
-/************************************/
+@import "http://localhost/social-media-platform-web/assets/common.css";
 #NCP {
     height: 350px;
     background-color:transparent;
@@ -100,45 +71,88 @@ float: right;
     margin: 0 10% 0 40%; 
     vertical-align:bottom;
 }
+#buttons input{
+    border-radius: 10px;
+    color: white;
+    background-color:rgb(115, 0, 195);
+    border: 0;
+    padding: 3px 10px;
+    font-style: italic;
+    cursor:pointer;
+    margin-right: 10px;
+    font-weight: bolder;
+}
+#buttons input:focus{
+    outline: none;
+}
 /*haidi*/
-#friendsblock{
+.datablock{
     border: indigo 2px solid;
     width: 100%;
     border-radius: 10px;
-    background-image: linear-gradient(rgba(255, 255, 255, 0.6), rgba(76, 0, 130, 0.6));
+    background-color: white;
+    margin: 0 0 20px 0;;
 }
-#friendsblock > p{
+.datablock > img{
+ width: 10%;
+ height: 30px;
+ vertical-align: middle;
+ margin: 5px 0 0 10px;
+}
+.datablock > p{
     font-size: 18px;
     font-weight: bolder;
     font-family: serif;
-    color: blueviolet;
-    margin: 5px 15px 0px 15px;
+    color: grey;
+    margin: 0 10px;
+    position: relative;
+    top: 5px;
     display:inline-block;
 }
-#friendsblock > a{
+.datablock > button{
+    border: 0;
     float:right;
-    margin: 7px 15px 5px 15px;
-    color: blueviolet;
-    text-decoration-line:none;
+    margin: 15px 15px 5px 15px;
+    color: indigo;
+    background-color: transparent;
     font-weight: bold; 
     font-size: 15px;
 }
-.friendunit{
+.dataunit{
     display:inline-block;
     text-align:center;
     margin: 1% 1% 1% 1%;
     width: 30%;
 }
-.friendunit > img{
+.dataunit > img{
     width: 100%;
     height: 120px;
     border: 2px white solid;
     border-radius: 20px;
 }
-.friendunit > a{
-    color:white;
+.dataunit > a{
+    color:black;
+    font-weight: bold;
     font-style: italic;
     text-decoration-line: none;
+}
+#user_info div > p{
+ font-weight: bolder;
+ color: black;
+ font-size: 14px;
+}
+#user_info samp{
+    color:indigo;
+    font-weight: bolder;
+    font-size: 115%;
+    font-style: italic;
+}
+#market{
+    width: 40%;
+    text-align: center;
+}
+#market img{
+    width: 90%;
 }
 /* The Modal (background) */
 .modal {
@@ -151,55 +165,82 @@ float: right;
     height: 100%; /* Full height */
     background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
   }
-  
-  /* Modal Content/Box */
-  .modal-content {
-    background-color: snow;
+/* Modal Content/Box */
+.modal-content {
+    background-color: white;
     margin: 15% auto; /* 15% from the top and centered */
     padding: 15px;
-    border: 2px solid orange;
+    border: 5px solid indigo;
     width: 30%; /* Could be more or less, depending on screen size */
     height:100px;
     text-align: center;
     border-radius: 10px;
-  }
-  
-  /* The Close Button */
-  .close {
-    color: darkred;
+}
+.modal-mp-content {
+    background-color: white;
+    margin: 50px 10px 0 10%; /* 15% from the top and centered */
+    padding: 5px;
+    border: 4px solid indigo;
+    width: 50%; /* Could be more or less, depending on screen size */
+    height:90%;
+    border-radius: 10px;
+    display: inline-block;
+    vertical-align: top;
+    overflow-y: scroll;
+}
+.modal-mp-content > div {
+    width: 45%;
+    margin: 5px;
+    padding: 10px;
+    height: 210px;
+    border: 3px indigo solid;
+    border-radius: 20px;
+    display: inline-block;
+    vertical-align: top;
+    
+}
+.modal-mp-content > div img {
+    width: 40%;
+    height: 130px;
+    vertical-align: top;
+    display: inline-block;
+}
+
+.modal-mp-content  .body{
+    width: 60%;
+    height: 130px;
+    padding: 10px;
+    border-left: indigo 1px solid;
+    overflow-x: hidden;
+    word-wrap: break-word;
+    display: inline-block;
+}
+
+
+.modal-ma-content {
+    background-color: white;
+    margin: 5% 10px; /* 15% from the top and centered */
+    padding: 5px;
+    border: 3px solid yellow;
+    width: 20%; /* Could be more or less, depending on screen size */
+    height:60%;
+    text-align: center;
+    border-radius: 10px;
+    display: inline-block;
+    vertical-align: top;
+}
+/* The Close Button */
+.close {
+    color: red;
     float: right;
     position: relative;
     bottom: 15px;
-    left: 10px;
-    font-size: 32px;
+    left: 0px;
+    font-size: 40px;
     font-weight: bold;
-  }
-  
-  .close:hover, .close:focus {
+}
+.close:hover, .close:focus {
     color: black;
     text-decoration: none;
     cursor: pointer;
-  }
-/************************************/
-button:hover{
-    cursor: pointer;
-}
-button:focus{
-    outline: 0;
-}
-body::before{
-    content: "";
-    width: 100%;
-    height: 100%;
-    position: fixed;
-    z-index: -2;
-    background-image: url(../assets/img/background.jpg);
-    background-repeat: no-repeat;
-    background-size: cover;
-}
-body{
-    margin: 0;
-}
-*{
-    box-sizing: border-box;
 }
