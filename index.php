@@ -1,4 +1,4 @@
-<?php 
+    <?php 
             require 'assets/classes.php';
             session_start();
             if(!isset($_SESSION['user']))header("location: hello/");
@@ -19,6 +19,7 @@
             
                                  <!--Navigation Bar-->
                                  <div id="nav">
+
                                     <a href=""><img src="assets/img/icn_logo.png" style="width: 30px;  margin: 5px 20px;"></a>
 
                                     <form>
@@ -45,6 +46,7 @@
                                                         <li><a href="settings">Settings</li>
                                                         <li><a href="assets/operation/logout.php">Logout</a></li>
                                                 </ul>
+
                                             </div> 
                                         </div>
                                 <div style="height:40px; background-color: white;"></div>
@@ -108,6 +110,7 @@
                             </head>
                         <body>'
 ?>
+
 
 
 

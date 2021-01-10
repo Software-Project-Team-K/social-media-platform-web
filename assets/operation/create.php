@@ -44,6 +44,7 @@
                         new_noti VARCHAR(5) DEFAULT '',
                         products_no INT(10) UNSIGNED DEFAULT 0,
                         enable_market INT(2) UNSIGNED DEFAULT 0
+
                     )";
                     if ($conn->query($sql) === TRUE) echo "Table users created successfully"."<br>";
                     else echo "Error creating Table: " . $conn->error."<br>";
