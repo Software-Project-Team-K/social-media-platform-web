@@ -1,5 +1,22 @@
 <?php
 
+            
+                    //CLASS >> CONNECTION TO DATABASE
+                    class connection{
+                        private  $_server = "localhost";
+                        private  $_user = "root";
+                        private  $_pass = "";
+                        private  $_dbname = "chatverse";
+                        public   $conn;
+                    
+                        function __construct(){
+                        $this->conn = new mysqli($this->_server, $this->_user, $this->_pass ,$this->_dbname) or die("Connection failed: " . $this->conn->connect_error);
+                        }
+                        function __destruct(){
+                        $this->conn->close();
+                         }
+                    }
+
                     //CLASS >> CURRENT USER DATA
                     class user{
 
@@ -12,7 +29,7 @@
                             $this->data = mysqli_fetch_assoc($result);
                         }
 
-                        function get_name() {return $this->data['f_name']." ".$this->data['l_name'];}
+                        function get_name() {return $this->data['full_name'];}
                         function get_id()  {return $this->data['id'];}
                         function get_gender(){return $this->data['gender'];}
                         function get_email(){return $this->data['email'];}
@@ -24,6 +41,10 @@
                         function get_friends(){return $this->data['friends'];}
                         function get_friends_no(){return $this->data['friends_no'];}
                         function get_fr_requests(){return $this->data['fr_requests'];}
+
+                        function get_noti_statues(){return $this->data['new_noti']; }
+                        function get_market_statues(){return  $this->data['enable_market'];}
+                        function get_products_no(){return $this->data['products_no'];}
                         function getnumofposts()
                         {
                             $connect = new connection;
@@ -48,6 +69,7 @@
                                         return false;
                                     }
                                 }
+
                         function update_profile_pic($link)
                         {
                             $connect = new connection;
@@ -66,6 +88,16 @@
                             $id = $this->get_id();
                             $connect->conn->query("UPDATE users SET bio='$text' WHERE id='$id'");
                         }
+                        function enable_market($val){
+                            $connect = new connection;
+                            $id = $this->get_id();
+                            $connect->conn->query("UPDATE users SET enable_market='$val' WHERE id='$id'");
+                        }
+                        function open_noti(){
+                            $connect = new connection;
+                            $id = $this->get_id();
+                            $connect->conn->query("UPDATE users SET new_noti='' WHERE id='$id'");
+                        }
                         function link_google($google){
                             $connect = new connection;
                             $id = $this->get_id();
@@ -76,6 +108,31 @@
                             else echo 'This Google Account already associated!.';
                         }
                     }
+
+                    //CLASS >> CURRENT analyst DATA
+                    class analyst{
+
+                        private $data;
+                        function __construct($logID){
+                            //get user data from parameter (username or email)
+                            $connect = new connection;
+                            $result = $connect->conn->query("SELECT * FROM users WHERE id='$logID' or email='$logID' or phone_num='$logID'");
+                            $this->data = mysqli_fetch_assoc($result);
+                        }
+                        function get_name() {return $this->data['full_name'];}
+                        function get_id()  {return $this->data['id'];}
+                        function get_username(){return $this->data['username'];}
+
+
+                        function fetch_statistics()
+                        {
+                            $connect = new connection;
+                            $id = $this->get_id();
+                            $connect->conn->query("UPDATE users SET cover_pic='$link' WHERE id='$id'");
+                        }
+                    }
+
+
 
                     //CLASS >> FRIENDSHIP
                     class friendship{
@@ -127,22 +184,117 @@
                             $connect->conn->query("UPDATE users SET friends_no='$trg_friends_no' WHERE id='$target_id'");
                         } 
                     }
-                    //CLASS >> CONNECTION TO DATABASE
-                    class connection{
+                    class notification{
 
-                        private  $_server = "localhost";
-                        private  $_user = "root";
-                        private  $_pass = "";
-                        private  $_dbname = "chatverse";
-                        public   $conn;
+                        private $connect;
+                        private $con;
+                        private $user_id;
 
-                        function __construct(){
-                            $this->conn = new mysqli($this->_server, $this->_user, $this->_pass ,$this->_dbname) or die("Connection failed: " . $this->conn->connect_error);
+                        function __construct($user_id){
+                            $this->user_id = $user_id;
+                            $this->connect = new connection;
+                            $this->con = $this->connect->conn;
                         }
-                        function __destruct(){
-                            $this->conn->close();
+
+                        function get_noti(){
+                            $all_notifications = $this->con->query("SELECT * from notifications WHERE receiver='$this->user_id' order by at_time desc LIMIT 8");
+                            for($i = 0; $i < mysqli_num_rows($all_notifications);$i++){
+                            $notifications = mysqli_fetch_assoc($all_notifications);
+                            $sender = new user($notifications['sender']);
+                            $body = $notifications['body'];
+                            $time = $notifications['at_time'];
+                            echo '<div><a href="http://localhost/social-media-platform-web/'.$sender->get_id().'"><img src="http://localhost/social-media-platform-web/' .$sender->get_id().'/'.$sender->get_profile_pic().'"><a/><samp>'.$time.'</samp><p>'.$sender->get_name()." ".$body.'</p></div>';
+                            }
+                        }
+                        function add_noti($target_id,$body){
+                            $this->con->query("INSERT INTO notifications(sender,receiver,body) VALUES('$this->user_id','$target_id','$body')");
+                            $this->con->query("UPDATE users SET new_noti='+' WHERE id='$target_id'");
+                        }
+
+
+
+                    }
+                    class marketplace{
+                        
+                        private $seller_id;
+                        private $seller;
+                        private $products;
+                        private $products_no;
+
+                        function __construct($user_id){
+                            $this->seller_id =$user_id;
+                            $this->seller = new user($user_id);
+                            $connect = new connection;
+                            $this->products = $connect->conn->query("SELECT * FROM marketplace WHERE seller='$this->seller_id'");
+                            $this->products_no=mysqli_num_rows($this->products);
+                        }
+
+                        function add_product($name,$desc,$pic){
+                            $connect = new connection;
+                            $connect->conn->query("INSERT INTO marketplace(seller,product_name,product_desc,product_pic) VALUES('$this->seller_id','$name','$desc','$pic')");
+                            $this->products_no +=1;
+                            $number = $this->products_no;
+                            $connect->conn->query("UPDATE users SET products_no='$number' WHERE id='$this->seller_id'");
+                        }
+
+                        function remove_product($id){
+                            $connect = new connection;
+                            $connect->conn->query("DELETE FROM marketplace WHERE id='$id'");
+                            $this->products_no -=1;
+                            $number = $this->products_no;
+                            $connect->conn->query("UPDATE users SET products_no='$number' WHERE id='$this->seller_id'");
+                        }
+
+                        function show_some_products(){
+                            $limit = ($this->products_no <6)? $this->products_no:6;
+                            for($i=0;$i<$limit;$i++){
+                            $product=  mysqli_fetch_assoc($this->products);
+                            echo    '<div class="dataunit">
+                                        <img src="market/'. $product['product_pic'].'"><br>
+                                        <a>'. $product['product_name'] . '</a>
+                                    </div>';
+                            }
+                        }
+                        function show_all_products($target_id){
+                        if($this->seller_id == $target_id){
+                            for($i=0;$i<$this->products_no;$i++){
+                            $product=  mysqli_fetch_assoc($this->products);
+                            echo' 
+                             <div id="'.$product['id'].'">
+                            <h3 style="padding:0;margin:0 10%;">'.$product['product_name'].'</h3>
+                             <img src="market/'.$product['product_pic'].'"><div class="body"><p>'.$product['product_desc'].'</p></div>
+                             <br><button onclick="x('.$product['id'].')" style="clear:left; margin:10px 0 2px 10%;">Remove Product</button>
+                            </div>';
+                            }
+                        }
+                        else{
+                            for($i=0;$i<$this->products_no;$i++){
+                                $product=  mysqli_fetch_assoc($this->products);
+                                echo' 
+                                 <div id="'.$product['id'].'">
+                                <h3 style="padding:0;margin:0 10%;">'.$product['product_name'].'</h3>
+                                 <img src="market/'.$product['product_pic'].'"><div class="body"><p>'.$product['product_desc'].'</p></div>
+                                 <br><button name = '.$product['product_name'].' onclick="y(this.name)" style="clear:left; margin:10px 0 2px 10%;">Request Order</button>
+                                </div>';
+                                }
                         }
                     }
+                }
+
+                    
+
+                    
+
+
+
+
+
+
+
+
+
+
+
                     //CLASS >> DYNAMIC VALIDATE THE INPUT 
                     class dynamic_validation{
 

@@ -56,27 +56,93 @@
                                     <!--Navigation Bar-->
                                     <div id="nav">
                                        <a href="../"><img src="../assets/img/icn_logo.png" style="width: 30px;  margin: 5px 20px;"></a>
-                                       <input type="text" style="width:20%; position: relative; left:10px; bottom:15px; border-radius:10px;">
-                                           <div id="navbuttons">
+                                       
+                                       
+                                       <form>
+                                       <input type="text" id="searchbar">
+                                       </form><button type="submit"><img style="width:12px; padding:0; margin:0;" src="../assets/img/icn_search.png"></button>
+                                       <div id="searchbox">
+                                       <div class="searchUnit">
+                                       <samp>Search Results will be shown here!</samp>
+                                       </div>
+                                       </div>
+                                       
+                                       
+                                       <div id="navbuttons">
                                                    <button><a href="../'.$_SESSION["user"]->get_id().'"><img src="../'.$_SESSION["user"]->get_id()."/".$_SESSION["user"]->get_profile_pic().'"></a></button>
-                                                   <button><a href="../messages" ><img src="../assets/img/icn_msg.png"></a></button>
-                                                   <button><img src="../assets/img/icn_notification.png"></button>
+                                                   <button><img src="../assets/img/icn_msg.png"></button>
+                                                   <button id="notiBtn"><img id="noti_img" src="../assets/img/icn_notification'.$_SESSION["user"]->get_noti_statues().'.png"></button>
+
                                                    <button id="arrow"><img src="../assets/img/icn_settings.png"></button>
+                                                   <div id="noti">';
+                                                   $noti = new notification($_SESSION['user']->get_id());
+                                                   $noti->get_noti(); 
+                                                   echo '</div>
+                                                   
                                                    <ul id="menu">
-                                                           <li><a href="../settings">Account Settings</li>
+                                                           <li><a href="../settings">Settings</li>
                                                            <li><a href="../assets/operation/logout.php">Logout</a></li>
                                                    </ul>
                                                </div> 
                                            </div>
                                    <div style="height:40px; background-color: white;"></div>
    
+             
                                    <script>
                                    var arrow = document.getElementById("arrow");
+                                   var notiBtn = document.getElementById("notiBtn");
+   
                                    var menu = document.getElementById("menu");  
+                                   var noti = document.getElementById("noti");
                                    arrow.onclick = function() {
                                        if(menu.style.display == "block")menu.style.display = "none"
                                        else menu.style.display = "block";}
-                                    </script>
+                                   notiBtn.onclick = function() {
+                                       if(noti.style.display == "block")noti.style.display = "none"
+                                       else {
+   
+                                           var xhttp = new XMLHttpRequest();
+                                           xhttp.onreadystatechange = function() {
+                                             if (this.readyState == 4 && this.status == 200) {
+                                              document.getElementById("noti_img").src = "../assets/img/icn_notification.png";
+                                             }
+                                           };
+                                           xhttp.open("GET","../assets/operation/db_update.php");
+                                           xhttp.send();
+                                           noti.style.display = "block";
+                                       }
+                                   }
+
+
+                                   /////////
+
+                                   var searchBar = document.getElementById("searchbar");
+                                   var searchBox = document.getElementById("searchbox");
+                                   searchBar.onfocus= function(){
+                                       searchBox.style.display = "block";
+                                   }
+                                   searchBar.onblur= function(){
+                                       myVar = setInterval(function () {
+                                           searchBox.style.display = "none";
+                                           clearInterval(myVar);
+                                       }, 100);
+                                   }
+   
+   
+                                   searchBar.oninput=function(){
+                                   var xhttp = new XMLHttpRequest();
+                                   xhttp.onreadystatechange = function() {
+                                     if (this.readyState == 4 && this.status == 200) {
+                                       searchBox.innerHTML = this.responseText;
+                                     }
+                                   };
+                                   xhttp.open("GET","../assets/operation/search.php?index=" + searchBar.value);
+                                   xhttp.send();
+                                   }
+
+
+
+                                   </script>
    
    
                                </head>
@@ -112,10 +178,11 @@
 
 
         <!-- User Details-->
-        <div style="width:25%; margin: 20px 1%; height: 800px; display:inline-block; vertical-align:top;">
+        <div style="width:23%; margin: 20px 2%; height: 800px; display:inline-block; vertical-align:top;">
+
             <!-- user info section -->
-                <div id="user_info" class="datablock">
-                    <p>User Info</p>
+            <div id="user_info" class="datablock">
+            <img src="../assets/img/user_info.png"><p>User Info</p>
                     <hr>
                     <div style="padding:0 10px;"> 
                         <p><samp>Bio: </samp>
@@ -136,8 +203,8 @@
 
             <!-- friends section -->
             <div id="friendsblock" class="datablock">
-                <p>Friends  (<?php echo $_SESSION['target']->get_friends_no();?>)</p>
-                <a href="">See More</a>
+            <img src="../assets/img/friends.png"><p>Friends  (<?php echo $_SESSION['target']->get_friends_no();?>)</p>
+                <button id="friendsBtn">See More</button>
                 <hr>
                 <!-- friends units -->
                 <div style="margin: 0 0 0 2%"> 
@@ -152,36 +219,51 @@
                     $friend = new user(substr($friends,$start,$end - $start));
                     $start = $end + 1;
                     echo'
-                        <div class="friendunit">
+                        <div class="dataunit">
                             <img src="../'. $friend->get_id()."/". $friend->get_profile_pic().'"><br>
                             <a href="../'.$friend->get_id().'">' . $friend->get_name() . '</a>
                         </div>';
                     }
                 }
-                else echo '<p style="text-align:center; font-size:150%; margin: 30px;">No Friends To Show</p>'
+                else echo '<p style="text-align:center; color:gray; font-weight:bolder; font-size:150%; margin: 30px;">No Friends To Show</p>'
                 ?>
                 </div>
-                <!-- any other section -->
-
             </div>
+
+            <!-- market section -->
+            <?php if($_SESSION['target']->get_market_statues()==1){
+            
+            echo '
+            
+            <div id="marketblock" class="datablock">
+            <img src="../assets/img/market.png"><p>Marketplace  ('.$_SESSION['target']->get_products_no().')</p>
+                <button id="marketBtn">Open</button>
+                <hr>
+
+                <!-- products units -->
+                <div style="margin: 0 0 0 2%">';
+                
+
+                if($_SESSION['target']->get_products_no()!=0){
+                    $targetMarket = new marketplace($_SESSION['target']->get_id());
+                    $targetMarket->show_some_products();
+                }
+
+                else echo '<p style="text-align:center; color:gray; font-weight:bolder; font-size:150%; margin: 30px;">No Products To Show</p>';
+                echo'
+                </div>
+            </div>';}
+
+            ?>
+
+             <!-- any other section -->
 
          </div>
   
 
-       <!-- End of user Section-->
-         
-         <!-- Posts Section-->
-        <div style="width:60%; margin: 20px 1%; height: 1000px; border: 2px black solid; display:inline-block;">
-        
-        <!--<div class="main_column column">-->
-            <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#post_form">Post Something</button>
-            <button type="button" class="btn btn-info btn-lg"><a href="../messages?u=<?php echo $_SESSION['target']->get_id()?>" >Message</a></button>
-            <!-- Modal -->
-                <div class="posts_area"></div>
-                <img id="loading" src="../assets/img/loading.gif">
-                <!-- <?php echo $target_id ?>-->
-                
-        
+        <!-- Posts Section-->
+        <div style="width:60%; margin: 20px 4%; height: 1000px; border: 2px black solid; display:inline-block;">
+
 
         </div>
 
@@ -330,30 +412,97 @@
             </div>
         </div>
 
-        <div class="modal fade" id="uploadBioBox"  role="dialog" aria-labelledby="uploadBioBoxLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                        <h4 class="modal-title" id="postModalLabel">Update Your Bio</h4>
-                    </div>
+        <div id="marketBox" class="modal">
+            <div class="modal-mp-content">
+            <span class="close">&times;</span>
+
+            <?php 
+            $targetMarket = new marketplace($_SESSION['target']->get_id());
+            $targetMarket->show_all_products($_SESSION['user']->get_id());
+            ?>
+
+            </div>
+            <?php if(!$isVisitor){
+            echo '<div class="modal-ma-content">
+                    <form action="../assets/operation/market.php" method="post" enctype="multipart/form-data">
+                            <input type="hidden" name="type" value="add_product">
+                            <p>Product name:</p><input type="text" name="product_name">
+                            <p>Product description:</p><textarea rows="8" type="textbox" name="product_desc"></textarea>
+                            <p>Product image:</p><input style="background-color: gray; width:60%;" type="file" name="fileToUpload"><br></br>
+                            <input type="submit" name="submit" value="Add Product" >
+                    </form>
+            </div>';} ?>
+        </div>
+
+
 
                     <div class="modal-body">
                         <p>Your are going to update your Bioe. </p>
 
-                        <form action="../assets/operation/update_bio.php" method="post">
-                            <input style="background-color: white; width:70%;" type="text" name="bio"></br></br>
-                            <input style="background-color: silver; width:25%;" type="submit" name="submit" value="Upload Bio" >
-                        </form>
-                    </div>
-
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        </body>  
+        <script>  //Cover and PP Buttons and market
+                var ppBox = document.getElementById("uploadPPBox");
+                var ppBtn = document.getElementById("ppBtn");
+                var closePP = document.getElementsByClassName("close")[0];
+                ppBtn.onclick = function() {
+                ppBox.style.display = "block";
+                }
+                closePP.onclick = function() {
+                ppBox.style.display = "none";
+                }
+                //
+                var coverBox = document.getElementById("uploadCoverBox");
+                var coverBtn = document.getElementById("coverBtn");
+                var closeCover = document.getElementsByClassName("close")[1];
+                coverBtn.onclick = function() {
+                coverBox.style.display = "block";
+                }
+                closeCover.onclick = function() {
+                coverBox.style.display = "none";
+                }
+                //
+                var bioBox = document.getElementById("uploadBioBox");
+                var bioBtn = document.getElementById("bioBtn");
+                var closeBio = document.getElementsByClassName("close")[2];
+                bioBtn.onclick = function() {
+                bioBox.style.display = "block";
+                }
+                closeBio.onclick = function() {
+                bioBox.style.display = "none";
+                }
+                </script>
+                
+                <!-- -->
+                
+                <script>
+                var marketBox = document.getElementById("marketBox");
+                var marketBtn = document.getElementById("marketBtn");
+                var closeMarket = document.getElementsByClassName("close")[3];
+                marketBtn.onclick = function() {
+                marketBox.style.display = "block";
+                }
+                closeMarket.onclick = function() {
+                marketBox.style.display = "none";
+                }
+                //
+                function x(id){
+                    $.ajax({  
+                        type:"POST",  
+                        url:"../assets/operation/market.php",  
+                        data:"type=remove_product"+'&id='+id,
+                        success: location.reload()
+                    }); 
+                }
+                function y(name){
+                $.ajax({  
+                    type:"POST",  
+                    url:"../assets/operation/market.php",  
+                    data:"type=notify"+'&name='+name,
+                    success: location.reload(),
+                }); 
+                }
+                //
+        </script>
+    </body>  
+
 </html>

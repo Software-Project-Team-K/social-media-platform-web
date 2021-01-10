@@ -132,10 +132,6 @@ if(!isset($_SESSION['access_token']))
 
 
 
-
-
-
-
         setInterval(function () {
             enableLog();
             enableReg();
