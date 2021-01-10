@@ -44,6 +44,8 @@
 
                         function get_noti_statues(){return $this->data['new_noti']; }
                         function get_market_statues(){return  $this->data['enable_market'];}
+                        function get_show_details_statues(){return  $this->data['show_user_details'];}
+                        function get_show_friends_statues(){return  $this->data['show_friends'];}
                         function get_products_no(){return $this->data['products_no'];}
                         function getnumofposts()
                         {

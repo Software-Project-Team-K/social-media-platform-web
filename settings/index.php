@@ -137,27 +137,121 @@ if(!isset($_SESSION['access_token']))
 }
 ?>
 
-<?php 
-if($_SESSION['user']->get_market_statues() == '0'){
-echo'
-    <form  method="POST" action="../assets/operation/db_update.php">
-    <input type="submit" name="submit" value="Enable Market"> 
-    </form>';
-}
-else
-{
-    echo'
-    <form  method="POST" action="../assets/operation/db_update.php">
-    <input type="submit" name="submit" value="Disable Market"> 
-    </form>';
-}
+<body>
 
 
+    <div class="wrapper">
 
-?>
+        <h4 class="header">
+            General Settings
+        </h4>
 
+                            <div class="column">
+                                <form id="change" method="POST" action="../assets/operation/change_settings.php">
+                                    <div class="form-group">
+                                        <label class="form-label">First Name</label>
+                                        <input type="text" name="first_name" class="form-control" value="">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Last Name</label>
+                                        <input type="text" name="last_name" class="form-control" value="">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">E-mail</label>
+                                        <input type="text" name="email" class="form-control mb-1" value="">
+                                    </div>
+                                    <input type="hidden" name="operation" value="email">
+                                    <input type="submit" name="update_details" value="Save Changes"class="submission">
+                                </form>
+                            </div>
+                            <h4 class="header">
+					            Password Change
+					        </h4>
+                        <div class="tab-pane fade" id="account-change-password">
+                            <div>
+                                <form class="column" id="change2" method="POST" action="../assets/operation/change_settings.php">
+                                    <div class="form-group">
+                                        <label class="form-label">Current password</label>
+                                        <input type="password" name="current_pass" class="form-control">
+                                    </div>
 
+                                    <div class="form-group">
+                                        <label class="form-label">New password</label>
+                                        <input type="password" name="new_pass" class="form-control">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="form-label">Repeat new password</label>
+                                        <input type="password" name="new_pass2" class="form-control">
+                                    </div>
+                                    <input type="hidden" name="operation" value="pass">
+                                    <input type="submit" name="update_password" value="Save Changes"class="submission">
+                                </form>
+                                <h4 class="header">
+						            Change Phone Number
+						        </h4>
+                            <div class="column">
+                                <form id="change" method="POST" action="../assets/operation/change_settings.php">
+                                    <div class="form-group">
+                                        <label class="form-label">New Number</label>
+                                        <input type="text" name="new_number" class="form-control" value="">
+                                    </div>
+                                    <input type="hidden" name="operation" value="phone_number">
+                                    <input type="submit" name="update_phone" value="Save Changes"class="submission">
+                                </form>
+                            </div>
+                                <h4 class="header">
+					          	  Privacy Settings
+					       		</h4>
+                                <form class="column" id="change3" method="POST" action="../assets/operation/change_settings.php">
+                                    <div class="form-group">
+                                        <label class="form-label">Show Friends</label>
+                                        <?php 
+											if($_SESSION['user']->get_show_friends_statues() == '0'){
+												echo'<input type="checkbox" name="check0" value="1">';
+											}
+											else
+											{
+											    echo'<input type="checkbox" checked name="check0" value="1">';
+											}
+										?>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label class="form-label">Show User Details</label>
+                                        <?php 
+											if($_SESSION['user']->get_show_details_statues() == '0'){
+												echo'<input type="checkbox" name="check1" value="1">';
+											}
+											else
+											{
+											    echo'<input type="checkbox" checked name="check1" value="1">';
+											}
+										?>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label class="form-label">Enable Market</label>
+                                        <?php 
+											if($_SESSION['user']->get_market_statues() == '0'){
+												echo'<input type="checkbox" name="check2" value="1">';
+											}
+											else
+											{
+											    echo'<input type="checkbox" checked name="check2" value="1">';
+											}
+										?>
+                                    </div>
+
+                                    <input type="hidden" name="operation" value="check">
+                                    <input type="submit" name="checkboxes" value="Save Changes"class="submission">
+                                </form> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     </body>  
 </html>
-            
 
