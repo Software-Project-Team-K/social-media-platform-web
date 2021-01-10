@@ -12,12 +12,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
 		$email = $_POST['email'];
 		$email_check = $connect->conn->query("SELECT * FROM users WHERE email='$email'");
 		$row = mysqli_fetch_assoc($email_check);
-		$matched_user = $row['id'];
+
+		$matched_user = $row['username'];
 		$userLoggedIn = $_SESSION['user']->get_id();
 		if ($matched_user==""||$matched_user=="$userLoggedIn")
 		{
 			echo "Details Updated<br><br>";
-			$query = $connect->conn->query("UPDATE users SET f_name='$first_name',l_name='$last_name',email='$email' WHERE id = '$userLoggedIn'");
+			$query = $connect->conn->query("UPDATE users SET f_name='$first_name',l_name='$last_name',email='$email' WHERE username = '$userLoggedIn'");
+
 		}
 		else
 		{
@@ -30,12 +32,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
 		$new_pass = $_POST['new_pass'];
 		$new_pass2 = $_POST['new_pass2'];
 		$userLoggedIn = $_SESSION['user']->get_id();
-		$pass_check = $connect->conn->query("SELECT * FROM users WHERE id='$userLoggedIn'");
-		$row = mysqli_fetch_assoc($pass_check);
-		$user_pass = $row['password'];
+		$user_pass = $_SESSION['user']->get_password();
 		if ($old_pass == $user_pass) {
 			if ($new_pass==$new_pass2) {
-					$query = $connect->conn->query("UPDATE users SET password='$new_pass' WHERE id = '$userLoggedIn'");
+					$query = $connect->conn->query("UPDATE users SET password='$new_pass' WHERE username = '$userLoggedIn'");
+
 					echo "Password Changed Successfully";
 			}
 			else{
@@ -96,5 +97,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
 		}
 
 	}
+
 }
 ?>

@@ -23,7 +23,7 @@ class Google_Service_Compute_AllocationSpecificSKUAllocationReservedInstanceProp
   protected $localSsdsType = 'Google_Service_Compute_AllocationSpecificSKUAllocationAllocatedInstancePropertiesReservedDisk';
   protected $localSsdsDataType = 'array';
   public $machineType;
-  public $minCpuPlatform;
+  public $miuPlatform;
 
   /**
    * @param Google_Service_Compute_AcceleratorConfig[]

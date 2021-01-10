@@ -72,10 +72,12 @@
     vertical-align:bottom;
 }
 #buttons input{
-
     border-radius: 10px;
-    color: indigo;
-    background-color: rgba(255, 255, 255, 0.5);
+    color: white;
+    background-color:rgb(115, 0, 195);
+    border: 0;
+    padding: 3px 10px;
+    font-style: italic;
     cursor:pointer;
     margin-right: 10px;
     font-weight: bolder;
@@ -88,11 +90,12 @@
     border: indigo 2px solid;
     width: 100%;
     border-radius: 10px;
-    background-color: rgba(95, 0, 163, 0.5);
+    background-color: white;
     margin: 0 0 20px 0;;
 }
 .datablock > img{
  width: 10%;
+ height: 30px;
  vertical-align: middle;
  margin: 5px 0 0 10px;
 }
@@ -100,7 +103,7 @@
     font-size: 18px;
     font-weight: bolder;
     font-family: serif;
-    color: whitesmoke;
+    color: grey;
     margin: 0 10px;
     position: relative;
     top: 5px;
@@ -141,7 +144,7 @@
 #user_info samp{
     color:indigo;
     font-weight: bolder;
-    font-size: 110%;
+    font-size: 115%;
     font-style: italic;
 }
 #market{
@@ -164,20 +167,20 @@
   }
 /* Modal Content/Box */
 .modal-content {
-    background-color: rgba(76, 0, 130, 0.5);
+    background-color: white;
     margin: 15% auto; /* 15% from the top and centered */
     padding: 15px;
-    border: 3px solid black;
+    border: 5px solid indigo;
     width: 30%; /* Could be more or less, depending on screen size */
     height:100px;
     text-align: center;
     border-radius: 10px;
 }
 .modal-mp-content {
-    background-color: rgba(76, 0, 130, 0.8);
+    background-color: white;
     margin: 50px 10px 0 10%; /* 15% from the top and centered */
     padding: 5px;
-    border: 4px solid black;
+    border: 4px solid indigo;
     width: 50%; /* Could be more or less, depending on screen size */
     height:90%;
     border-radius: 10px;
@@ -191,7 +194,6 @@
     padding: 10px;
     height: 210px;
     border: 3px indigo solid;
-    background-color: rgba(255, 255, 255, 0.6);
     border-radius: 20px;
     display: inline-block;
     vertical-align: top;
@@ -208,7 +210,7 @@
     width: 60%;
     height: 130px;
     padding: 10px;
-    border: indigo 1px solid;
+    border-left: indigo 1px solid;
     overflow-x: hidden;
     word-wrap: break-word;
     display: inline-block;
@@ -219,18 +221,17 @@
     background-color: white;
     margin: 5% 10px; /* 15% from the top and centered */
     padding: 5px;
-    border: 3px solid black;
+    border: 3px solid yellow;
     width: 20%; /* Could be more or less, depending on screen size */
     height:60%;
     text-align: center;
     border-radius: 10px;
     display: inline-block;
     vertical-align: top;
-    background-color: rgba(0, 0, 0, 0.2)
 }
 /* The Close Button */
 .close {
-    color: white;
+    color: red;
     float: right;
     position: relative;
     bottom: 15px;
