@@ -111,6 +111,54 @@
         <!-- LETS GO BABY -->
 
             <div id="groups_pages">
+                <div id="groups" style="height: 40%; border:0;">
+                    <h3 style="color:indigo; text-decoration:underline; margin:5px;">Groups (<?php echo $_SESSION['user']->get_groups_no(); ?>)</h3>
+                    <div id="show" style="height: 80%; border:0; text-align:left; padding: 10px 20px; overflow-y:auto;">
+                    <?php
+                    $groups = $_SESSION['user']->get_groups();
+                    $groups_no = $_SESSION['user']->get_groups_no();
+                    if($groups_no!=0){
+                        $start = 0;
+                        for($i=0; $i<$groups_no; $i++){
+                        $end = strpos($groups,",",$start + 1);
+                        $group = new group($_SESSION['user']->get_id(),substr($groups,$start,$end - $start));
+                        $start = $end + 1;
+                        echo'<a> - '.$group->get_name().'</a><br>';
+                        }
+                    }
+                    else echo '<p style="text-align:center; color:gray; font-weight:bolder; font-size:130%; margin: 30px;">No Groups To Show</p>';
+                    ?>
+                    </div>
+                </div>
+                <div id="pages" style="height: 40%;">
+                    <h3 style="color:indigo; text-decoration:underline; margin:5px;">Pages (<?php echo $_SESSION['user']->get_pages_no(); ?>)</h3>
+                    <div id="show" style="height: 80%; border:0; text-align:left; padding: 10px 20px; overflow-y:auto;">
+                    <?php
+                    $pages = $_SESSION['user']->get_pages();
+                    $pages_no = $_SESSION['user']->get_pages_no();
+                    if($pages_no!=0){
+                        $start = 0;
+                        for($i=0; $i<$pages_no; $i++){
+                        $end = strpos($pages,",",$start + 1);
+                        $page = new page($_SESSION['user']->get_id(),substr($pages,$start,$end - $start));
+                        $start = $end + 1;
+                        echo'<a> - '.$page->get_name().'</a><br>';
+                        }
+                    }
+                    else echo '<p style="text-align:center; color:gray; font-weight:bolder; font-size:130%; margin: 30px;">No Pages To Show</p>';
+                    ?>
+                    </div>
+                </div>
+                <div id="create" style="height: 20%;">
+                <h3 style="color:indigo; text-decoration:underline; margin:5px;">Create</h3>
+                <form method="POST" action="http://localhost/social-media-platform-web/assets/operation/db_update.php">
+                    <p>Name:</p><input style="width:60%" name="name" type="text"><br>
+                    <p>Type:</p>
+                    <input type="radio" id="male" name="type" value="Page" checked="checked"><samp> Page &emsp;</samp>
+                    <input type="radio" id="female" name="type" value="Group"><samp> Group</samp><br>
+                    <input type="submit" name="submit" style="margin:5px 35%;" value="Create"> 
+                </form>
+                </div>
             </div>
 
             <div id="newsfeed">

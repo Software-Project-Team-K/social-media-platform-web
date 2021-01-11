@@ -43,6 +43,10 @@
                         function get_noti_statues(){return $this->data['new_noti']; }
                         function get_market_statues(){return  $this->data['enable_market'];}
                         function get_products_no(){return $this->data['products_no'];}
+                        function get_groups(){return $this->data['groups'];}
+                        function get_groups_no(){return $this->data['groups_no'];}
+                        function get_pages(){return $this->data['pages'];}
+                        function get_pages_no(){return $this->data['pages_no'];}
                         function update_profile_pic($link)
                         {
                             $connect = new connection;
@@ -462,6 +466,61 @@
                             }
                         }
                     }
+                    class group{
+                        private $user_id;
+                        private $user;
+                        private $group_id;
+                        private $data;
+
+                        function __construct($user_id,$group_id){
+                            $this->user_id = $user_id;
+                            $this->user = new user($user_id);
+                            $this->group_id = $group_id;
+                            $connect = new connection;
+                            $result = $connect->conn->query("SELECT * FROM groups WHERE id='$group_id'");
+                            $this->data = mysqli_fetch_assoc($result);
+                        }
+                        function get_name(){return $this->data['group_name'];}
+                        static function create($name,$user_id){
+                            $connect = new connection;
+                            $connect->conn->query("INSERT INTO groups(group_name,group_owner) VALUES('$name','$user_id')");
+                            $last_id = $connect->conn->insert_id;
+                            $result = $connect->conn->query("SELECT groups,groups_no FROM users WHERE id='$user_id'");
+                            $result = mysqli_fetch_assoc($result);
+                            $groups = $result['groups'].$last_id.",";
+                            $num = $result['groups_no'] + 1;
+                            $connect->conn->query("UPDATE users SET groups='$groups' WHERE id='$user_id'");
+                            $connect->conn->query("UPDATE users SET groups_no='$num' WHERE id='$user_id'");
+                        }
+                        
+                    }
+                    class page{
+                        private $user_id;
+                        private $user;
+                        private $page_id;
+                        private $data;
+
+                        function __construct($user_id,$page_id){
+                            $this->user_id = $user_id;
+                            $this->user = new user($user_id);
+                            $this->page_id = $page_id;
+                            $connect = new connection;
+                            $result = $connect->conn->query("SELECT * FROM pages WHERE id='$page_id'");
+                            $this->data = mysqli_fetch_assoc($result);
+                        }
+                        function get_name(){return $this->data['page_name'];}
+                        static function create($name,$user_id){
+                            $connect = new connection;
+                            $connect->conn->query("INSERT INTO pages(page_name,page_owner) VALUES('$name','$user_id')");
+                            $last_id = $connect->conn->insert_id;
+                            $result = $connect->conn->query("SELECT pages,pages_no FROM users WHERE id='$user_id'");
+                            $result = mysqli_fetch_assoc($result);
+                            $pages = $result['pages'].$last_id.",";
+                            $num = $result['pages_no'] + 1;
+                            $connect->conn->query("UPDATE users SET pages='$pages' WHERE id='$user_id'");
+                            $connect->conn->query("UPDATE users SET pages_no='$num' WHERE id='$user_id'");
+                        }
+                    }
 
                     class dynamic_validation{
 
@@ -559,15 +618,13 @@
                         }
                     }
 
-
+                    //Some Functions
                     function test_input($data) {
                         $data = trim($data);
                         $data = stripslashes($data);
                         $data = htmlspecialchars($data);
                         return $data;
                     }
-
-
                     function date_optimize($input) {
 
                         $date = date_create($input);

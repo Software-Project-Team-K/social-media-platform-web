@@ -41,6 +41,10 @@
                         friends VARCHAR(300) NOT NULL DEFAULT '',
                         friends_no INT(10) UNSIGNED DEFAULT 0,
                         fr_requests VARCHAR(300) DEFAULT '',
+                        groups TEXT NOT NULL DEFAULT '',
+                        groups_no INT(10) UNSIGNED DEFAULT 0,
+                        pages TEXT NOT NULL DEFAULT '',
+                        pages_no INT(10) UNSIGNED DEFAULT 0,
                         new_noti VARCHAR(5) DEFAULT '',
                         products_no INT(10) UNSIGNED DEFAULT 0,
                         enable_market INT(2) UNSIGNED DEFAULT 0,
@@ -109,6 +113,28 @@
                         date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
                     )";
                     if ($conn->query($sql) === TRUE) echo "Table comments created successfully"."<br>";
+                    else echo "Error creating Table: " . $conn->error."<br>";
+
+                    //CREATE GROUPS TABLE
+                     $sql = "CREATE TABLE groups(
+                        id INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                        group_name VARCHAR(30) NOT NULL,
+                        group_owner VARCHAR(30) NOT NULL,
+                        requests TEXT NOT NULL,     
+                        members TEXT NOT NULL
+                    )";
+                    if ($conn->query($sql) === TRUE) echo "Table groups created successfully"."<br>";
+                    else echo "Error creating Table: " . $conn->error."<br>";
+
+                    //CREATE PAGES TABLE
+                     $sql = "CREATE TABLE pages(
+                        id INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                        page_name VARCHAR(30) NOT NULL,
+                        page_owner VARCHAR(30) NOT NULL,
+                        admins TEXT NOT NULL,     
+                        followers TEXT NOT NULL
+                    )";
+                    if ($conn->query($sql) === TRUE) echo "Table pages created successfully"."<br>";
                     else echo "Error creating Table: " . $conn->error."<br>";
 
 
