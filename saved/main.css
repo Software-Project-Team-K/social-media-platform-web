@@ -6,38 +6,11 @@ body{
 
 #newsfeed{
     width: 40%;
-    margin: 20px 30%;
-}
-#writepost{
-    margin: 10px auto;
-    width: 90%;
-    border: 3px indigo solid;
-    border-radius: 20px;
-    background-color: white;
-    background-image: url("assets/img/post_bg.jpg");
-    background-size: cover;
-}
-#writepost > img{
-    width: 8%;
-    margin: 10px;
-    border-radius: 30px;
+    margin: 0 30%;
     display: inline-block;
-    vertical-align: top;
-}
-#writepostform{
-    margin: 20px 0;
-    width: 85%;
-    height: 180px;
-    display: inline-block;
-}
-#writepostform > textarea{
-    padding: 20px;
-    font-size: 140%;
-    width: 98%;
-    border-radius: 10px;
 }
 .post{
-    margin: 30px auto;
+    margin: 15px auto;
     width: 90%;
     border: 3px rgb(85, 10, 155) solid;
     border-radius: 20px;
@@ -116,15 +89,6 @@ body{
 }
 
 /**/
-#groups_pages{
-    /*border: 3px green solid;*/
-    width: 25%;
-    height: 90%;
-    position: fixed;
-    left: 20px;
-    top: 60px;
-    display: inline-block;
-}
 #comments{
     border: 3px indigo solid;
     border-radius: 10px;
