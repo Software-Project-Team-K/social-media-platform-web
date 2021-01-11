@@ -22,70 +22,110 @@
                     //CONNECT TO THE DATABASE
                     $conn = new mysqli($server, $user, $pass ,$dbname);
 
-                    //CREATE TABLES for users
+                    //CREATE USERS TABLE 
                     $sql = "CREATE TABLE users(
                         id INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
                         password VARCHAR(20) NOT NULL,
                         email VARCHAR(30) NOT NULL,
                         f_name VARCHAR(20) NOT NULL,
                         l_name VARCHAR(20) NOT NULL,
+                        full_name VARCHAR(40) NOT NULL,
                         phone_num INT(20) UNSIGNED,
                         gender VARCHAR(10),
                         bio VARCHAR (50) DEFAULT 'Hey there! im a new Chatverse User!',
                         google_id VARCHAR(25) DEFAULT 'X',
-                        reg_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                        reg_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                         birth_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                         profile_pic VARCHAR(60) NOT NULL DEFAULT '../assets/img/default_pp.jpg',
                         cover_pic VARCHAR(60) NOT NULL DEFAULT '../assets/img/default_cover.jpg',
                         friends VARCHAR(300) NOT NULL DEFAULT '',
                         friends_no INT(10) UNSIGNED DEFAULT 0,
                         fr_requests VARCHAR(300) DEFAULT '',
-                        no_post INT,
-                        no_likes INT,
-                        user_closed VARCHAR (3) default'no'
+                        new_noti VARCHAR(5) DEFAULT '',
+                        products_no INT(10) UNSIGNED DEFAULT 0,
+                        enable_market INT(2) UNSIGNED DEFAULT 0,
+                        saved_posts TEXT
                     )";
-                    if ($conn->query($sql) === TRUE) echo "Table created successfully"."<br>";
+                    if ($conn->query($sql) === TRUE) echo "Table users created successfully"."<br>";
                     else echo "Error creating Table: " . $conn->error."<br>";
                     $sql = "ALTER TABLE users AUTO_INCREMENT=1001";
                     $conn->query($sql);
                     
-                     //CREATE TABLES for posts
+                   /*//CREATE ADMINS TABLE
+                   $sql = "CREATE TABLE admins(
+                        id INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                        username VARCHAR(20) NOT NULL,
+                        password VARCHAR(20) NOT NULL,
+                        f_name VARCHAR(20) NOT NULL,
+                        l_name VARCHAR(20) NOT NULL,
+                        full_name VARCHAR(40) NOT NULL,
+                        control_type VARCHAR(20) NOT NULL
+                    )";
+                    if ($conn->query($sql) === TRUE) echo "Table admins created successfully"."<br>";
+                    else echo "Error creating Table: " . $conn->error."<br>";*/
+
+                    //CREATE NOTIFICATIONS TABLE
+                    $sql = "CREATE TABLE notifications(
+                        id INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                        sender VARCHAR(20) NOT NULL,
+                        receiver VARCHAR(20) NOT NULL,
+                        body VARCHAR (50) NOT NULL,
+                        at_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+                    )";
+                    if ($conn->query($sql) === TRUE) echo "Table notifications created successfully"."<br>";
+                    else echo "Error creating Table: " . $conn->error."<br>";
+
+                    //CREATE MARKETPLACE TABLE
+                    $sql = "CREATE TABLE marketplace(
+                        id INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                        seller VARCHAR(25) NOT NULL,
+                        product_name VARCHAR(30) NOT NULL,
+                        product_desc VARCHAR (200) NOT NULL,
+                        product_pic VARCHAR (100) NOT NULL
+                    )";
+                    if ($conn->query($sql) === TRUE) echo "Table marketplace created successfully"."<br>";
+                    else echo "Error creating Table: " . $conn->error."<br>";
+
+                     //CREATE POSTS TABLE
                      $sql = "CREATE TABLE posts(
                         id INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-                        body TEXT,
-                        added_by VARCHAR(75),
-                        date_added datetime,
-                        user_to VARCHAR(75),
-                        user_closed VARCHAR(3),
-                        likes INT,
-                        deleted VARCHAR(3) 
+                        post_from VARCHAR(30) NOT NULL,
+                        post_to VARCHAR (30) NOT NULL,
+                        body TEXT NOT NULL,
+                        date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                        likes VARCHAR(200),
+                        shared TEXT NOT NULL,
+                        saved TEXT NOT NULL
                     )";
-                    if ($conn->query($sql) === TRUE) echo "Table created successfully"."<br>";
+                    if ($conn->query($sql) === TRUE) echo "Table posts created successfully"."<br>";
                     else echo "Error creating Table: " . $conn->error."<br>";
-                   
 
-                    //CREATE TABLES for likes
-                    $sql = "CREATE TABLE likes(
+                     //CREATE COMMENTS TABLE
+                     $sql = "CREATE TABLE comments(
                         id INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-                       username INT,
-                       post_id INT
+                        post_id INT(10) NOT NULL,
+                        comment_from VARCHAR(30) NOT NULL,
+                        body TEXT NOT NULL,     
+                        date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
                     )";
-                    if ($conn->query($sql) === TRUE) echo "Table created successfully"."<br>";
+                    if ($conn->query($sql) === TRUE) echo "Table comments created successfully"."<br>";
                     else echo "Error creating Table: " . $conn->error."<br>";
-                   
-                    //CREATE TABLES for comments
-                   $sql = "CREATE TABLE comments(
-                    id INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-                   post_body text,
-                   posted_by varchar(75),
-                   posted_to varchar(75),
-                   date_added datetime,
-                   deleted varchar(3),
-                   post_id INT
-                )";
-                if ($conn->query($sql) === TRUE) echo "Table created successfully"."<br>";
-                else echo "Error creating Table: " . $conn->error."<br>";
-               
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                     //CLOSE THE CONNECTION
                     $conn->close();
 ?>

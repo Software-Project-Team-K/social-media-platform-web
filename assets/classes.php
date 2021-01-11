@@ -1,5 +1,22 @@
 <?php
 
+            
+                    //CLASS >> CONNECTION TO DATABASE
+                    class connection{
+                        private  $_server = "localhost";
+                        private  $_user = "root";
+                        private  $_pass = "";
+                        private  $_dbname = "chatverse";
+                        public   $conn;
+                    
+                        function __construct(){
+                        $this->conn = new mysqli($this->_server, $this->_user, $this->_pass ,$this->_dbname) or die("Connection failed: " . $this->conn->connect_error);
+                        }
+                        function __destruct(){
+                        $this->conn->close();
+                         }
+                    }
+
                     //CLASS >> CURRENT USER DATA
                     class user{
 
@@ -11,8 +28,7 @@
                             $result = $connect->conn->query("SELECT * FROM users WHERE id='$logID' or email='$logID' or phone_num='$logID'");
                             $this->data = mysqli_fetch_assoc($result);
                         }
-
-                        function get_name() {return $this->data['f_name']." ".$this->data['l_name'];}
+                        function get_name() {return $this->data['full_name'];}
                         function get_id()  {return $this->data['id'];}
                         function get_gender(){return $this->data['gender'];}
                         function get_email(){return $this->data['email'];}
@@ -24,30 +40,9 @@
                         function get_friends(){return $this->data['friends'];}
                         function get_friends_no(){return $this->data['friends_no'];}
                         function get_fr_requests(){return $this->data['fr_requests'];}
-                        function getnumofposts()
-                        {
-                            $connect = new connection;
-                            $id=$this->get_id();
-                            $query=mysqli_query($connect->conn,"SELECT no_post FROM users WHERE id='$id'");
-                            $row=mysqli_fetch_array($query);
-                            return $row['no_post'];
-                    
-                        }
-                        function isclosed()
-                                {
-                                    $connect = new connection;
-                                    $id=$this->get_id();
-                                    $query=mysqli_query($connect->conn,"SELECT user_closed FROM users WHERE id='$id'");
-                                    $row=mysqli_fetch_array($query);
-                                    if($row['user_closed']=='yes')
-                                    {
-                                        return true;
-                                    }
-                                    else
-                                    {
-                                        return false;
-                                    }
-                                }
+                        function get_noti_statues(){return $this->data['new_noti']; }
+                        function get_market_statues(){return  $this->data['enable_market'];}
+                        function get_products_no(){return $this->data['products_no'];}
                         function update_profile_pic($link)
                         {
                             $connect = new connection;
@@ -66,6 +61,16 @@
                             $id = $this->get_id();
                             $connect->conn->query("UPDATE users SET bio='$text' WHERE id='$id'");
                         }
+                        function enable_market($val){
+                            $connect = new connection;
+                            $id = $this->get_id();
+                            $connect->conn->query("UPDATE users SET enable_market='$val' WHERE id='$id'");
+                        }
+                        function open_noti(){
+                            $connect = new connection;
+                            $id = $this->get_id();
+                            $connect->conn->query("UPDATE users SET new_noti='' WHERE id='$id'");
+                        }
                         function link_google($google){
                             $connect = new connection;
                             $id = $this->get_id();
@@ -77,7 +82,31 @@
                         }
                     }
 
-                    //CLASS >> FRIENDSHIP
+                    //CLASS >> CURRENT analyst DATA
+                    /*class analyst{
+
+                        private $data;
+                        function __construct($logID){
+                            //get user data from parameter (username or email)
+                            $connect = new connection;
+                            $result = $connect->conn->query("SELECT * FROM users WHERE id='$logID' or email='$logID' or phone_num='$logID'");
+                            $this->data = mysqli_fetch_assoc($result);
+                        }
+                        function get_name() {return $this->data['full_name'];}
+                        function get_id()  {return $this->data['id'];}
+                        function get_username(){return $this->data['username'];}
+
+
+                        function fetch_statistics()
+                        {
+                            $connect = new connection;
+                            $id = $this->get_id();
+                            $connect->conn->query("UPDATE users SET cover_pic='$link' WHERE id='$id'");
+                        }
+                    }*/
+
+
+
                     class friendship{
                         static function isFriend($user_id,$target_id){
                             $user = new user($user_id);
@@ -127,23 +156,313 @@
                             $connect->conn->query("UPDATE users SET friends_no='$trg_friends_no' WHERE id='$target_id'");
                         } 
                     }
-                    //CLASS >> CONNECTION TO DATABASE
-                    class connection{
+                    class notification{
 
-                        private  $_server = "localhost";
-                        private  $_user = "root";
-                        private  $_pass = "";
-                        private  $_dbname = "chatverse";
-                        public   $conn;
+                        private $connect;
+                        private $con;
+                        private $user_id;
 
-                        function __construct(){
-                            $this->conn = new mysqli($this->_server, $this->_user, $this->_pass ,$this->_dbname) or die("Connection failed: " . $this->conn->connect_error);
+                        function __construct($user_id){
+                            $this->user_id = $user_id;
+                            $this->connect = new connection;
+                            $this->con = $this->connect->conn;
                         }
-                        function __destruct(){
-                            $this->conn->close();
+
+                        function get_noti(){
+                            $all_notifications = $this->con->query("SELECT * from notifications WHERE receiver='$this->user_id' order by at_time desc LIMIT 8");
+                            for($i = 0; $i < mysqli_num_rows($all_notifications);$i++){
+                            $notifications = mysqli_fetch_assoc($all_notifications);
+                            $sender = new user($notifications['sender']);
+                            $body = $notifications['body'];
+                            $time = $notifications['at_time'];
+                            echo '<div><a href="http://localhost/social-media-platform-web/'.$sender->get_id().'"><img src="http://localhost/social-media-platform-web/' .$sender->get_id().'/'.$sender->get_profile_pic().'"><a/><samp>'.date_optimize($time).'</samp><p>'.$sender->get_name()." ".$body.'</p></div>';
+                            }
+                        }
+                        function add_noti($target_id,$body){
+                            $this->con->query("INSERT INTO notifications(sender,receiver,body) VALUES('$this->user_id','$target_id','$body')");
+                            $this->con->query("UPDATE users SET new_noti='+' WHERE id='$target_id'");
+                        }
+
+
+
+                    }
+                    class marketplace{
+                        
+                        private $seller_id;
+                        private $seller;
+                        private $products;
+                        private $products_no;
+
+                        function __construct($user_id){
+                            $this->seller_id =$user_id;
+                            $this->seller = new user($user_id);
+                            $connect = new connection;
+                            $this->products = $connect->conn->query("SELECT * FROM marketplace WHERE seller='$this->seller_id'");
+                            $this->products_no=mysqli_num_rows($this->products);
+                        }
+
+                        function add_product($name,$desc,$pic){
+                            $connect = new connection;
+                            $connect->conn->query("INSERT INTO marketplace(seller,product_name,product_desc,product_pic) VALUES('$this->seller_id','$name','$desc','$pic')");
+                            $this->products_no +=1;
+                            $number = $this->products_no;
+                            $connect->conn->query("UPDATE users SET products_no='$number' WHERE id='$this->seller_id'");
+                        }
+
+                        function remove_product($id){
+                            $connect = new connection;
+                            $connect->conn->query("DELETE FROM marketplace WHERE id='$id'");
+                            $this->products_no -=1;
+                            $number = $this->products_no;
+                            $connect->conn->query("UPDATE users SET products_no='$number' WHERE id='$this->seller_id'");
+                        }
+
+                        function show_some_products(){
+                            $limit = ($this->products_no <6)? $this->products_no:6;
+                            for($i=0;$i<$limit;$i++){
+                            $product=  mysqli_fetch_assoc($this->products);
+                            echo    '<div class="dataunit">
+                                        <img src="market/'. $product['product_pic'].'"><br>
+                                        <a>'. $product['product_name'] . '</a>
+                                    </div>';
+                            }
+                        }
+                        function show_all_products($target_id){
+                        if($this->seller_id == $target_id){
+                            for($i=0;$i<$this->products_no;$i++){
+                            $product=  mysqli_fetch_assoc($this->products);
+                            echo' 
+                             <div id="'.$product['id'].'">
+                            <h3 style="padding:0;margin:0 10%;">'.$product['product_name'].'</h3>
+                             <img src="market/'.$product['product_pic'].'"><div class="body"><p>'.$product['product_desc'].'</p></div>
+                             <br><button onclick="x('.$product['id'].')" style="clear:left; margin:10px 0 2px 10%;">Remove Product</button>
+                            </div>';
+                            }
+                        }
+                        else{
+                            for($i=0;$i<$this->products_no;$i++){
+                                $product=  mysqli_fetch_assoc($this->products);
+                                echo' 
+                                 <div id="'.$product['id'].'">
+                                <h3 style="padding:0;margin:0 10%;">'.$product['product_name'].'</h3>
+                                 <img src="market/'.$product['product_pic'].'"><div class="body"><p>'.$product['product_desc'].'</p></div>
+                                 <br><button name = '.$product['product_name'].' onclick="y(this.name)" style="clear:left; margin:10px 0 2px 10%;">Request Order</button>
+                                </div>';
+                                }
+                            }
                         }
                     }
-                    //CLASS >> DYNAMIC VALIDATE THE INPUT 
+                    class post{
+                        private $user_id;
+                        function __construct($user_id){
+                            $this->user_id =$user_id;
+                        }
+                        function write_post($body,$post_to){
+                            $connect = new connection;
+                            $connect->conn->query("INSERT INTO posts(post_from,post_to,body) VALUES('$this->user_id','$post_to','$body')");
+                        }
+                        function load_timeline_posts($offset){
+                            $connect = new connection;
+                            $user = new user($this->user_id);
+                            $friends = $this->user_id.','.$user->get_friends();
+                            $posts = $connect->conn->query("SELECT * FROM posts WHERE '$friends' LIKE CONCAT('%', post_from, '%') AND post_to='' order by date DESC LIMIT 5 OFFSET $offset");
+                            
+                            if(mysqli_num_rows($posts) == 0){
+                                echo'
+                                <div class="post" style="text-align:center; background-color:transparent; width:60%;">
+                                <p style="font-weight:bolder; color:indigo; ">Hurray! No More News.</p>
+                                </div>';
+                                $_SESSION['offset']=-1;
+                            }
+
+                            else{
+                                for($i=0;$i<mysqli_num_rows($posts);$i++){
+                                    $post = mysqli_fetch_assoc($posts);
+                                    $writer = new user($post['post_from']);
+                                    echo' 
+                                    <div class="post">
+                                    <img src="http://localhost/social-media-platform-web/'.$writer->get_id().'/'.$writer->get_profile_pic().'">
+                                    <p>'.$writer->get_name().'</p>
+                                    <samp>'.date_optimize($post['date']).'</samp>
+                                    <hr>
+                                    <textarea readonly class="body">'.$post['body'].'</textarea>
+                                    <div class="toolbar">';
+                                    
+                                    if(!(strstr($post['likes'],$this->user_id))) echo '<button style="margin-top: 0px;" name="'.$post['id'].'" onclick="love(this.name)"><img id="love'.$post['id'].'" src="http://localhost/social-media-platform-web/assets/img/post_love1.png"></button>';
+                                    else  echo '<button style="margin-top: 0px;" name="'.$post['id'].'" onclick="love(this.name)"><img id="love'.$post['id'].'" src="http://localhost/social-media-platform-web/assets/img/post_love2.png"></button>';
+                                    echo'
+                                    <p id="l'.$post['id'].'">'.substr_count($post['likes'],",").'</p>
+                                    <button  name="'.$post['id'].'" onclick="comment(this.name)" ><img src="http://localhost/social-media-platform-web/assets/img/post_comment.png"></button>
+                                    <p>';
+                                    $id = $post['id'];
+                                    $comments = $connect->conn->query("SELECT * FROM comments WHERE post_id='$id'");
+                                    echo mysqli_num_rows($comments);
+                                    echo'</p>
+                                    <button name="'.$post['id'].'" onclick="share(this.name)" ><img src="http://localhost/social-media-platform-web/assets/img/post_share.png"></button>
+                                    <p id="s'.$post['id'].'">'.substr_count($post['shared'],",").'</p>';
+
+                                    if(!(strstr($post['saved'],$this->user_id))) echo '<button name="'.$post['id'].'" onclick="save(this.name)" ><img id="save'.$post['id'].'" src="http://localhost/social-media-platform-web/assets/img/post_save1.png"></button>';
+                                    else echo '<button name="'.$post['id'].'" onclick="save(this.name)" ><img id="save'.$post['id'].'" src="http://localhost/social-media-platform-web/assets/img/post_save2.png"></button>';  
+                                    echo '</div>
+                                    </div>';
+                                }
+                                $_SESSION['offset'] = $_SESSION['offset'] + mysqli_num_rows($posts); 
+                            }
+                        }
+                        function load_profile_posts($offset){
+                            $connect = new connection;
+                            $user = new user($this->user_id);
+                            $posts = $connect->conn->query("SELECT * FROM posts WHERE (post_from='$this->user_id' and post_to='') or post_to='$this->user_id' or shared LIKE CONCAT('%', '$this->user_id', '%') order by date DESC LIMIT 5 OFFSET $offset");
+                            
+                            if(mysqli_num_rows($posts) == 0){
+                                echo'
+                                <div class="post" style="text-align:center; background-color:transparent; width:60%;">
+                                <p style="font-weight:bolder; color:indigo; ">No More Posts.</p>
+                                </div>';
+                                $_SESSION['offset']=-1;
+                            }
+
+                            else{
+                                for($i=0;$i<mysqli_num_rows($posts);$i++){
+                                    $post = mysqli_fetch_assoc($posts);
+                                    $writer = new user($post['post_from']);
+                                    echo' 
+                                    <div class="post">
+                                    <img src="http://localhost/social-media-platform-web/'.$writer->get_id().'/'.$writer->get_profile_pic().'">
+                                    <p>'.$writer->get_name();
+                                    if(strstr($post['shared'],$this->user_id)) echo '<samp style="color:rgb(0,255,0); font-size:80%;"> (Shared By '.$user->get_name().')</samp>'; 
+                                    echo '</p>
+                                    <samp>'.date_optimize($post['date']).'</samp>
+                                    <hr>
+                                    <textarea readonly class="body">'.$post['body'].'</textarea>
+                                    <div class="toolbar">';
+                                    
+                                    if(!(strstr($post['likes'],$this->user_id))) echo '<button style="margin-top: 0px;" name="'.$post['id'].'" onclick="love(this.name)"><img id="love'.$post['id'].'" src="http://localhost/social-media-platform-web/assets/img/post_love1.png"></button>';
+                                    else  echo '<button style="margin-top: 0px;" name="'.$post['id'].'" onclick="love(this.name)"><img id="love'.$post['id'].'" src="http://localhost/social-media-platform-web/assets/img/post_love2.png"></button>';
+                                    echo'
+                                    <p id="l'.$post['id'].'">'.substr_count($post['likes'],",").'</p>
+                                    <button  name="'.$post['id'].'" onclick="comment(this.name)" ><img src="http://localhost/social-media-platform-web/assets/img/post_comment.png"></button>
+                                    <p>';
+                                    $id = $post['id'];
+                                    $comments = $connect->conn->query("SELECT * FROM comments WHERE post_id='$id'");
+                                    echo mysqli_num_rows($comments);
+                                    echo'</p>
+                                    <button name="'.$post['id'].'" onclick="share(this.name)" ><img src="http://localhost/social-media-platform-web/assets/img/post_share.png"></button>
+                                    <p id="s'.$post['id'].'">'.substr_count($post['shared'],",").'</p>';
+
+                                    if(!(strstr($post['saved'],$this->user_id))) echo '<button name="'.$post['id'].'" onclick="save(this.name)" ><img id="save'.$post['id'].'" src="http://localhost/social-media-platform-web/assets/img/post_save1.png"></button>';
+                                    else echo '<button name="'.$post['id'].'" onclick="save(this.name)" ><img id="save'.$post['id'].'" src="http://localhost/social-media-platform-web/assets/img/post_save2.png"></button>';  
+                                    echo '</div>
+                                    </div>';
+                                }
+                                $_SESSION['offset'] = $_SESSION['offset'] + mysqli_num_rows($posts); 
+                            }
+                        }
+
+                        function load_saved_posts($offset){
+                            $connect = new connection;
+                            $user = new user($this->user_id);
+                            $posts = $connect->conn->query("SELECT * FROM posts WHERE saved LIKE CONCAT('%', $this->user_id, '%') AND post_to='' order by date DESC LIMIT 5 OFFSET $offset");
+                            
+                            if(mysqli_num_rows($posts) == 0){
+                                echo'
+                                <div class="post" style="text-align:center; background-color:transparent; width:60%;">
+                                <p style="font-weight:bolder; color:indigo; ">No More Saved Posts.</p>
+                                </div>';
+                                $_SESSION['offset']=-1;
+                            }
+
+                            else{
+                                for($i=0;$i<mysqli_num_rows($posts);$i++){
+                                    $post = mysqli_fetch_assoc($posts);
+                                    $writer = new user($post['post_from']);
+                                    echo' 
+                                    <div class="post">
+                                    <img src="http://localhost/social-media-platform-web/'.$writer->get_id().'/'.$writer->get_profile_pic().'">
+                                    <p>'.$writer->get_name().'</p>
+                                    <samp>'.date_optimize($post['date']).'</samp>
+                                    <hr>
+                                    <textarea readonly class="body">'.$post['body'].'</textarea>
+                                    <div class="toolbar">';
+                                    
+                                    if(!(strstr($post['likes'],$this->user_id))) echo '<button style="margin-top: 0px;" name="'.$post['id'].'" onclick="love(this.name)"><img id="love'.$post['id'].'" src="http://localhost/social-media-platform-web/assets/img/post_love1.png"></button>';
+                                    else  echo '<button style="margin-top: 0px;" name="'.$post['id'].'" onclick="love(this.name)"><img id="love'.$post['id'].'" src="http://localhost/social-media-platform-web/assets/img/post_love2.png"></button>';
+                                    echo'
+                                    <p id="l'.$post['id'].'">'.substr_count($post['likes'],",").'</p>
+                                    <button  name="'.$post['id'].'" onclick="comment(this.name)" ><img src="http://localhost/social-media-platform-web/assets/img/post_comment.png"></button>
+                                    <p>';
+                                    $id = $post['id'];
+                                    $comments = $connect->conn->query("SELECT * FROM comments WHERE post_id='$id'");
+                                    echo mysqli_num_rows($comments);
+                                    echo'</p>
+                                    <button name="'.$post['id'].'" onclick="share(this.name)" ><img  src="http://localhost/social-media-platform-web/assets/img/post_share.png"></button>
+                                    <p id="s'.$post['id'].'">'.substr_count($post['shared'],",").'</p>';
+
+                                    if(!(strstr($post['saved'],$this->user_id))) echo '<button name="'.$post['id'].'" onclick="save(this.name)" ><img id="save'.$post['id'].'" src="http://localhost/social-media-platform-web/assets/img/post_save1.png"></button>';
+                                    else echo '<button name="'.$post['id'].'" onclick="save(this.name)" ><img id="save'.$post['id'].'" src="http://localhost/social-media-platform-web/assets/img/post_save2.png"></button>';  
+                                    echo '</div>
+                                    </div>';
+                                }
+                                $_SESSION['offset'] = $_SESSION['offset'] + mysqli_num_rows($posts); 
+                            }
+                        }
+
+
+                        function love_post($post_id){
+                            $connect = new connection;
+                            $likes = $connect->conn->query("SELECT likes FROM posts WHERE id='$post_id'");
+                            $likes = mysqli_fetch_assoc($likes);
+                            $likes = $likes['likes'];
+                            if(!(strstr($likes,$this->user_id)))$likes = $likes.$this->user_id.",";
+                            else $likes =  str_replace($this->user_id.",","",$likes);
+                            $connect->conn->query("UPDATE posts SET likes='$likes' WHERE id='$post_id'");
+                        }
+                        function share_post($post_id){
+                            $stat = 0;
+                            $connect = new connection;
+                            $shares = $connect->conn->query("SELECT shared FROM posts WHERE id='$post_id'");
+                            $shares = mysqli_fetch_assoc($shares);
+                            $shares = $shares['shared'];
+                            if(!(strstr($shares,$this->user_id)))
+                            {
+                                $shares = $shares.$this->user_id.",";
+                                $stat = 1;
+                            }
+                            $connect->conn->query("UPDATE posts SET shared='$shares' WHERE id='$post_id'");
+                            return $stat;
+                        }
+                        function save_post($post_id){
+                            $connect = new connection;
+                            $saves = $connect->conn->query("SELECT saved FROM posts WHERE id='$post_id'");
+                            $saves = mysqli_fetch_assoc($saves);
+                            $saves = $saves['saved'];
+                            if(!(strstr($saves,$this->user_id)))$saves = $saves.$this->user_id.",";
+                            else $saves =  str_replace($this->user_id.",","",$saves);
+                            $connect->conn->query("UPDATE posts SET saved='$saves' WHERE id='$post_id'");
+                        }
+                        function write_comment($post_id,$body){
+                            $connect = new connection;
+                            $connect->conn->query("INSERT INTO comments(post_id,comment_from,body) VALUES('$post_id','$this->user_id','$body')");
+                        }
+                        function load_comments($post_id){
+                            $connect = new connection;
+                            $comments = $connect->conn->query("SELECT * FROM comments WHERE post_id='$post_id'");
+                            
+                            for($i=0;$i<mysqli_num_rows($comments);$i++){
+                            $comment = mysqli_fetch_assoc($comments);
+                            $user = new user($comment['comment_from']);
+                            echo' <div class="comment">
+                            <div class="who">
+                                <img src="http://localhost/social-media-platform-web/'.$user->get_id()."/".$user->get_profile_pic().'">
+                                <p>'.$user->get_name().'</p>
+                                <p>'.date_optimize($comment['date']).'</p>
+                            </div>
+                            <textarea readonly>'.$comment['body'].'</textarea>
+                            </div>';
+                            }
+                        }
+                    }
+
                     class dynamic_validation{
 
                         private $errors = array("</br>");
@@ -159,7 +478,6 @@
                         private $error_1L = "The last name must contains only Alphabet letters!";
                         private $error_2L = "Please Enter a real last name!";
                         private $error_3 = "The email must be vaild!";
-                       // private $error_9 = "invalid format!";
                         private $error_4 = "Email is already used!";
                         private $error_5 = "The password [8-16 Digits] must contains at least one letter and number!";
                         private $error_6 = "The Password doesnt match the Re-Password!";
@@ -194,13 +512,6 @@
                                     $valid = (mysqli_num_rows($result) == 0)? TRUE:FALSE;
                                     if($valid) $this->remove_error($this->error_4);
                                     else $this->add_error($this->error_4);
-                                   /* //invalid format @gmail.com
-                                    if(filter_var($this->email_c, FILTER_VALIDATE_EMAIL)){
-                                        $this->email_c=filter_var($this->email_c, FILTER_VALIDATE_EMAIL);
-                                        $this->remove_error($this->error_9);
-                                    
-                                      }
-                                      else $this->add_error($this->error_9);*/
                                 break;
                                 case "password":
                                     $this->pw = $input;
@@ -247,7 +558,8 @@
                             return $this->errors;
                         }
                     }
-                    //FUNCTION >> CLEAR THE INPUT 
+
+
                     function test_input($data) {
                         $data = trim($data);
                         $data = stripslashes($data);
@@ -256,618 +568,18 @@
                     }
 
 
-                    
-?>
+                    function date_optimize($input) {
 
-<?php
-// 
-class Post
-{
-    private $user_obj;
-    //$connect 
-    private $con;
-    public function __construct($con,$user)
-    {
-        //connect to the data base
-        $this->con=$con;
-        $this->user_obj=new user($user);
-    }
-    //get fpost
-    public function submitpost($body, $user_to)
-    {
-        $body=strip_tags($body);//strip html tags
-        $body=mysqli_real_escape_string($this->con,$body);//escape the quotes ti ignore mi$smatch
-        $body=str_replace('\r\n', '\n',$body);
-        $body=nl2br($body);
-        $chech_space=preg_replace('/\s+/','',$body);//erase any space
-       //check spaces
-        if($chech_space !="")
-        {
-            //current date and time 
-            $date_added=date("Y-m-d H:i:S");
-            // added by 
-            $added_by=$this->user_obj->get_id();
-            if($user_to ==$added_by)
-            {
-                $user_to="none";
-            }
-            //insert post into database
-            $insert=mysqli_query($this->con,"INSERT INTO posts VALUES ('','$body','$added_by','$date_added','$user_to','no','0','no')");
-           // $database=mysqli_query($htis->con," INSERT INTO posts VALUES  ('','alaa','alaa','2020-6-12','alaa','no','no','0')");
-            $returned_id=mysqli_insert_id($this->con);
-            //insert notifiacations
-            //update post count for user
-            $no_post=$this->user_obj->getnumofposts();
-            $no_post++;
-            $update_query=mysqli_query($this->con,"UPDATE users SET no_post='$no_post' WHERE id='$added_by' ");
+                        $date = date_create($input);
+                        $current = date_create();
+                        date_add($current,date_interval_create_from_date_string("1 hour"));
+                        $interval = date_diff($current,$date);
 
-            $stopWords = "a about above across after again against all almost alone along already
-			 also although always among am an and another any anybody anyone anything anywhere are 
-			 area areas around as ask asked asking asks at away b back backed backing backs be became
-			 because become becomes been before began behind being beings best better between big 
-			 both but by c came can cannot case cases certain certainly clear clearly come could
-			 d did differ different differently do does done down down downed downing downs during
-			 e each early either end ended ending ends enough even evenly ever every everybody
-			 everyone everything everywhere f face faces fact facts far felt few find finds first
-			 for four from full fully further furthered furthering furthers g gave general generally
-			 get gets give given gives go going good goods got great greater greatest group grouped
-			 grouping groups h had has have having he her here herself high high high higher
-		     highest him himself his how however i im if important in interest interested interesting
-			 interests into is it its itself j just k keep keeps kind knew know known knows
-			 large largely last later latest least less let lets like likely long longer
-			 longest m made make making man many may me member members men might more most
-			 mostly mr mrs much must my myself n necessary need needed needing needs never
-			 new new newer newest next no nobody non noone not nothing now nowhere number
-			 numbers o of off often old older oldest on once one only open opened opening
-			 opens or order ordered ordering orders other others our out over p part parted
-			 parting parts per perhaps place places point pointed pointing points possible
-			 present presented presenting presents problem problems put puts q quite r
-			 rather really right right room rooms s said same saw say says second seconds
-			 see seem seemed seeming seems sees several shall she should show showed
-			 showing shows side sides since small smaller smallest so some somebody
-			 someone something somewhere state states still still such sure t take
-			 taken than that the their them then there therefore these they thing
-			 things think thinks this those though thought thoughts three through
-	         thus to today together too took toward turn turned turning turns two
-			 u under until up upon us use used uses v very w want wanted wanting
-			 wants was way ways we well wells went were what when where whether
-			 which while who whole whose why will with within without work
-			 worked working works would x y year years yet you young younger
-			 youngest your yours z lol haha omg hey ill iframe wonder else like 
-             hate sleepy reason for some little yes bye choose";
-
-             //Convert stop words into array - split at white space
-			$stopWords = preg_split("/[\s,]+/", $stopWords);
-
-			//Remove all punctionation
-			$no_punctuation = preg_replace("/[^a-zA-Z 0-9]+/", "", $body);
-
-			//Predict whether user is posting a url. If so, do not check for trending words
-			if(strpos($no_punctuation, "height") === false && strpos($no_punctuation, "width") === false
-				&& strpos($no_punctuation, "http") === false && strpos($no_punctuation, "youtube") === false){
-				//Convert users post (with punctuation removed) into array - split at white space
-				$keywords = preg_split("/[\s,]+/", $no_punctuation);
-
-				foreach($stopWords as $value) {
-					foreach($keywords as $key => $value2){
-						if(strtolower($value) == strtolower($value2))
-							$keywords[$key] = "";
-					}
-				}
-
-				foreach ($keywords as $value) {
-				    $this->calculateTrend(ucfirst($value));
-				}
-
-             }
-
-
-
-        }
-    }
-    // load post function 
-    public function loadpostfriends($data, $limit)
-    {
-        //from ajax
-        $page=$data['page'];
-        $userloggedin=$this->user_obj->get_id();
-
-        if ($page==1)
-        {
-            $start=0;
-        }
-        else
-        {
-        $start=($page - 1) * $limit;
-        }
-        
-        $str="";//string to return
-        $data_query=mysqli_query($this->con, "SELECT * FROM posts WHERE deleted='no' ORDER BY id DESC");
-        if(mysqli_num_rows($data_query) > 0)
-        {
-            
-            $num_iterations=0; // number of posts checked 
-            $count=1;
-
-            //fetch data
-            while($row=mysqli_fetch_array($data_query))
-            {
-                
-                $body=$row['body'];
-                $id=$row['id'];
-                $added_by=$row['added_by'];
-                $date_time=$row['date_added'];
-                
-                //if user to is none 
-                if($row['user_to']=="none")
-                {
-                    $user_to="";
-                }   
-                else
-                {
-                    $user_to_obj=new user($row['user_to']);
-                    $user_to_name=$user_to_obj->get_name();
-                    $user_to="to <a href='".$row['user_to'] ."'>".$user_to_name."</a>";
-                }    
-                //if the user closed 
-                $added_by_obj=new user($added_by);
-                if($added_by_obj->isclosed())
-                {
-                    continue;
-                }  //User
-                //check if the user friend
-                
-                $user_logged_obj= new user($userloggedin);
-                if(friendship::isFriend($userloggedin,$added_by) || $added_by==$userloggedin){
-                
-                
-                    if($num_iterations ++ < $start)
-                    {
-                        continue;
+                        if($interval->format('%m') !=0) return $interval->format('%m months ago.');
+                        else if($interval->format('%d') !=0) return $interval->format('%d days ago.');
+                        else if($interval->format('%h') !=0) return $interval->format('%hh, %im ago.');
+                        else if($interval->format('%i') !=0) return $interval->format('%i minutes ago.');
+                        else return 'few seconds ago.';
                     }
-                    //once 10 posts have been loaded break
-                        if($count > $limit)
-                        {
-                            break;
-                        }
-                        else
-                        {
-                            $count++;
-                        }
-                    if($userloggedin==$added_by)
-                    {
-                        $alert_fn= "delete_post_handler($id)";
-                        $delete_button="<button onclick=$alert_fn id='post$id'>delete</button>";
-                    }
-                    else
-                    {
-                         $delete_button="";
-                    }
-                    //user details
-                    $user_details=mysqli_query($this->con, "SELECT f_name,l_name,profile_pic FROM users WHERE id='$added_by'");
-                    $user_row=mysqli_fetch_array($user_details);
-                    $first_name=$user_row['f_name'];
-                    $last_name=$user_row['l_name'];
-                    $profile_pic=$added_by."/".$user_row['profile_pic']; // to get profile
-
-                    ?>
-					<script> 
-						function toggle<?php echo $id; ?>() {
-                            var target=$(event.target);
-                            if(!target.is("a"))
-                            {
- 							
-								var element = document.getElementById("toggleComment<?php echo $id; ?>");
-
-								if(element.style.display == "block") 
-									element.style.display = "none";
-								else 
-									element.style.display = "block";
-                            }	
-						}
-
-					</script>
-					<?php
-                    // check num of comments
-                    $comment_check=mysqli_query($this->con, "SELECT * FROM comments WHERE post_id='$id'");
-                    $comment_check_num=mysqli_num_rows($comment_check);
-                    //time frame
-                    $date_time_now=date("Y-m-d H:i:s");//teh current date
-                    $start_date=new DateTime($date_time);//time of post
-                    $end_date=new DateTime($date_time_now);// current time 
-                    $interval=$start_date->diff($end_date);//time difference 
-                    if($interval->y >=1)
-                    {
-                        if($interval==1)
-                        {
-                            $time_message=$interval->y . "year ago";    //1 year ago
-                        }
-                        else
-                        {
-                            $time_message=$interval->y . "years ago";    //1 year ago
-                        }
-                    }
-                else if($interval->m >=1)
-                    {
-                        if($interval->d ==0)
-                        {
-                            $days="ago";
-                        }
-                        else if($interval->d ==1)
-                        {
-                            $days=$interval->d ."day ago";
-                        }
-                        else
-                        {
-                            $days=$interval->d ."days ago";
-                        }
-                        //if m =1
-                        if($interval->m==1){
-                            $time_message= $interval->m ."month". $days;
-                        }
-                        else{
-                            $time_message=$interval->m ."months".$days;
-                        }
-                    }
-                    // for days only i.e 12 days ago 
-                else if($interval->d >=1)
-                    {
-                        if($interval->d ==1)
-                        {
-                            $days="yesterday";
-                        }
-                        else
-                        {
-                            $days=$interval->d ."days ago";
-                        }
-                    }
-                    else if($interval->h >=1)
-                    {   
-                        if($interval->h ==1)
-                        {
-                            $time_message=$interval->h ."hour ago";
-                        }
-                        else
-                        {
-                            $time_message=$interval->h ."hours ago";
-                        }
-                    }
-                    else if($interval->i >=1)
-                    {   
-                        if($interval->i ==1)
-                        {
-                            $time_message=$interval->i ."minute ago";
-                        }
-                        else
-                        {
-                            $time_message=$interval->i ."minutes ago";
-                        }
-                    }
-                    else
-                    {
-                        if($interval->s <30)
-                        {   
-                            $time_message="just now";
-                        }        
-                        else
-                        {
-                            $time_message=$interval->s ."seconds ago";
-                        }
-                    }
-                    // on click msh sh8ala enma ama b3mlha display block btzhr requested url not found
-                    $str.="<div class='status_post' onClick='javascript:toggle$id()'>
-                        <div class='post_profile_pic'>
-                        <img src='$profile_pic' width='50' style='border-radius:10px; '>
-                        </div>
-
-                    <div class='posted_by' style='color:#ACACAC; '>
-                    <a href='$added_by'>$first_name $last_name</a> $user_to &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    $delete_button
-                    <br>
-                    $time_message
-                    </div>
-                    <div id='post_body'>
-                    $body
-                    <br>
-                    </div>
-                    <div class ='newsfeed'>
-                    $comment_check_num comments &nbsp;&nbsp;&nbsp;
-                    <iframe src='like.php?post_id=$id' scrolling ='no' frameborder='0'></iframe>
-                    &nbsp;&nbsp;&nbsp; 
-                    <input type='submit' name='share' method='POSt' value='share'>
-                    </div>
-                    </div>
-                    <div class='post_comment' id='toggleComment$id' style='display:none;'>
-                    <iframe src='comment_frame.php?post_id=$id' id='comment_iframe' frameborder='0'></iframe>
-                     </div>
-                    <hr>";
-            }//end of if condition 
-            }//end of while
-        ?>
-
-            <script>
-            
-            function delete_post_handler(id){
-                bootbox.confirm("Are you sure you want to delete this post?",function(result){
-                        $.post("assets/operation/delete_post.php?post_id="+id,{result:result});
-                        if(result)
-                        location.reload();
-                       
-                    });
-            }
-            /*
-            $(document).ready(function(){
-                $('#post<?php echo $id; ?>').on('click',function(){
-                    bootbox.confirm("Are you sure you want to delete this post?",function(result){
-                        $.post("../operation/delete_post.php?post_id=<?php echo $id;?>",{result:result});
-                        if(result)
-                        location.reload();
-                       
-                    });
-
-                });
-
-            });*/
-            </script>
-
-
-
-
-
-
-
-        <?php
-            if($count > $limit)
-             {   $str.="<input type ='hidden' class='nextpage' value=' ". ($page +1) ." '>
-                    <input type= 'hidden' class='nomoreposts' value='false'>";
-             }
-                    else
-                $str.="<input type='hidden' class='nomoreposts' value='true'><p style='text-align: center; line-height: 15;'> OOOPS! no more posts</p>";
-
-        }//end of if(mysqli_num_rows($data_query)) 
-        echo $str;
-    }
-    //loadprofileposts
-    public function loadporfilepost($data, $limit)
-    {
-        //from ajax
-        $page=$data['page'];
-        $userloggedin=$this->user_obj->get_id();
-        $profileUser=$data['profileusername'];
-
-        if ($page==1)
-        {
-            $start=0;
-        }
-        else
-        {
-        $start=($page - 1) * $limit;
-        }
-
-        $str="";//string to return
-        $data_query=mysqli_query($this->con, "SELECT * FROM posts WHERE deleted='no' AND ((added_by='$profileUser' AND user_to='none ')OR user_to='$profileUser')ORDER BY id DESC");
-        if(mysqli_num_rows($data_query) > 0)
-        {
-            $num_iterations=0; // number of posts checked 
-            $count=1;
-
-            //fetch data
-            while($row=mysqli_fetch_array($data_query))
-            {
-                $body=$row['body'];
-                $id=$row['id'];
-                $added_by=$row['added_by'];
-                $date_time=$row['date_added'];
-            
-                
-                    if($num_iterations ++ < $start)
-                    {
-                        continue;
-                    }
-                    //once 10 posts have been loaded break
-                        if($count > $limit)
-                        {
-                            break;
-                        }
-                        else
-                        {
-                            $count++;
-                        }
-                    if($userloggedin==$added_by)
-                    {
-                        $delete_button="<button id='post$id'>delete</button>";
-                    }
-                    else
-                    {
-                         $delete_button="";
-                    }
-                    //user details
-                    $user_details=mysqli_query($this->con, "SELECT f_name,l_name,profile_pic FROM users WHERE id='$added_by'");
-                    $user_row=mysqli_fetch_array($user_details);
-                    $first_name=$user_row['f_name'];
-                    $last_name=$user_row['l_name'];
-                    $profile_pic=$added_by."/".$user_row['profile_pic']; ;
-
-                    ?>
-					<script> 
-						function toggle<?php echo $id; ?>() {
-                            var target=$(event.target);
-                            if(!target.is("a"))
-                            {
- 							
-								var element = document.getElementById("toggleComment<?php echo $id; ?>");
-
-								if(element.style.display == "block") 
-									element.style.display = "none";
-								else 
-									element.style.display = "block";
-                            }	
-						}
-
-					</script>
-					<?php
-                    // check num of comments
-                    $comment_check=mysqli_query($this->con, "SELECT * FROM comments WHERE post_id='$id'");
-                    $comment_check_num=mysqli_num_rows($comment_check);
-                    //time frame
-                    $date_time_now=date("Y-m-d H:i:s");//teh current date
-                    $start_date=new DateTime($date_time);//time of post
-                    $end_date=new DateTime($date_time_now);// current time 
-                    $interval=$start_date->diff($end_date);//time difference 
-                    if($interval->y >=1)
-                    {
-                        if($interval==1)
-                        {
-                            $time_message=$interval->y . "year ago";    //1 year ago
-                        }
-                        else
-                        {
-                            $time_message=$interval->y . "years ago";    //1 year ago
-                        }
-                    }
-                else if($interval->m >=1)
-                    {
-                        if($interval->d ==0)
-                        {
-                            $days="ago";
-                        }
-                        else if($interval->d ==1)
-                        {
-                            $days=$interval->d ."day ago";
-                        }
-                        else
-                        {
-                            $days=$interval->d ."days ago";
-                        }
-                        //if m =1
-                        if($interval->m==1){
-                            $time_message= $interval->m ."month". $days;
-                        }
-                        else{
-                            $time_message=$interval->m ."months".$days;
-                        }
-                    }
-                    // for days only i.e 12 days ago 
-                else if($interval->d >=1)
-                    {
-                        if($interval->d ==1)
-                        {
-                            $days="yesterday";
-                        }
-                        else
-                        {
-                            $days=$interval->d ."days ago";
-                        }
-                    }
-                    else if($interval->h >=1)
-                    {   
-                        if($interval->h ==1)
-                        {
-                            $time_message=$interval->h ."hour ago";
-                        }
-                        else
-                        {
-                            $time_message=$interval->h ."hours ago";
-                        }
-                    }
-                    else if($interval->i >=1)
-                    {   
-                        if($interval->i ==1)
-                        {
-                            $time_message=$interval->i ."minute ago";
-                        }
-                        else
-                        {
-                            $time_message=$interval->i ."minutes ago";
-                        }
-                    }
-                    else
-                    {
-                        if($interval->s <30)
-                        {   
-                            $time_message="just now";
-                        }        
-                        else
-                        {
-                            $time_message=$interval->s ."seconds ago";
-                        }
-                    }
-                    // on click msh sh8ala enma ama b3mlha display block btzhr requested url not found *done et7lt elhamdullah
-                    $post_owner_profile_url= '../'.$profile_pic;
-                    $str.="<div class='status_post' onClick='javascript:toggle$id()'>
-                        <div class='post_profile_pic'>
-                        <img src='$post_owner_profile_url' width='50'>
-                        </div>
-
-                    <div class='posted_by' style='color:#ACACAC;'>
-                    <a href='$added_by'>$first_name $last_name</a>  &nbsp;&nbsp;&nbsp;&nbsp;$time_message
-                    $delete_button
-                    </div>
-                    <div id='post_body'>
-                    $body
-                    <br>
-                    </div>
-                    <div class ='newsfeed'>
-                    $comment_check_num comments &nbsp;&nbsp;&nbsp;
-                    <iframe src='../like.php?post_id=$id' scrolling ='no' frameborder='0'></iframe>
-                    &nbsp;&nbsp;&nbsp;
-                    <input type='submit' name='share' method='POSt' value='share'>
-                    </div>
-                    </div>
-                    <div class='post_comment' id='toggleComment$id' style='display:none;'>
-                    <iframe src='../comment_frame.php?post_id=$id' id='comment_iframe'frameborder='0' ></iframe>
-                     </div>
-                    <hr>";
-            
-            }//end of while
-        ?>
-
-            <script>
-            $(document).ready(function(){
-                $('#post<?php echo $id; ?>').on('click',function(){
-                    bootbox.confirm("Are you sure you want to delete this post?",function(result){
-                        $.post("../operation/delete_post.php?post_id=<?php echo $id;?>",{result:result});
-                        if(result)
-                        location.reload();
-                       
-                    });
-
-                });
-
-            });
-            </script>
-
-
-
-
-
-
-
-        <?php
-            if($count > $limit)
-             {   $str.="<input type ='hidden' class='nextpage' value=' ". ($page +1) ." '>
-                    <input type= 'hidden' class='nomoreposts' value='false'>";
-             }
-                    else
-                $str.="<input type='hidden' class='nomoreposts' value='true'><p style='text-align: centre;'> OOOPS! no more posts</p>";
-
-        }//end of if(mysqli_num_rows($data_query)) 
-        echo $str;
-    }
-
-    public function calculateTrend($term) {
-
-		if($term != '') {
-			$query = mysqli_query($this->con, "SELECT * FROM trends WHERE title='$term'");
-
-			if(mysqli_num_rows($query) == 0)
-				$insert_query = mysqli_query($this->con, "INSERT INTO trends(title,hits) VALUES('$term','1')");
-			else 
-				$insert_query = mysqli_query($this->con, "UPDATE trends SET hits=hits+1 WHERE title='$term'");
-		}
-
-	}
-
-}
 
 ?>

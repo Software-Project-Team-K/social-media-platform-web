@@ -1,11 +1,79 @@
 #nav{
-    border-bottom: black 1px solid;
     height: 40px;
     width: 100%;
     position: fixed;
     z-index: 1;
     background-image: linear-gradient(rgb(93, 0, 160),indigo);
 }
+#nav form{
+    display: inline-block;
+    width: 15%;
+    position: relative; 
+    left:15px; 
+    bottom:15px;
+    border-radius: 10px 0 0 10px;
+}
+#nav form :focus{
+    outline: none;
+}
+#nav form input{
+    border-radius: inherit;
+    width: 100%;
+    border: whitesmoke 2px solid;
+}
+#nav > button{
+    width: 30px;
+    position: relative; 
+    left:15px; 
+    bottom:15px;
+    margin: 0;
+    border-radius: 0 10px 10px 0;
+    border: whitesmoke  2px solid;
+}
+#searchbox{
+    position: absolute;
+    left: 80px;
+    width: 18%;
+    border: indigo 3px solid;
+    border-radius: 10px;
+    display: none;
+    background-color: white;
+    padding: 0 1px;
+}
+.searchUnit{
+    width: 100%;
+    height: 50px;
+    padding: 2px 0;
+    border-top: 1px indigo solid;
+}
+.searchUnit img{
+    width: 15%;
+    height: 85%;
+    margin: 3px 20px 2px 8px;
+    float: left;
+    position: relative;
+    border: 1px black solid;
+    border-radius: 20px;
+}
+.searchUnit > p{
+    display: inline-block;
+    color: darkblue;
+    font-size: 90%;
+    margin: 15px 0px 0 0;
+    text-decoration: none;
+    font-weight: bolder;
+    font-style: italic;
+}
+.searchUnit samp{
+    font-weight: bolder;
+    display: inline-block;
+    color: indigo;
+    font-size: 105%;
+    padding: 10px 0;
+}
+
+
+
 #navbuttons{
 float: right;
 }
@@ -36,18 +104,66 @@ float: right;
     text-align: right;
     width: fit-content;
     position: absolute;
-    right: 0;
+    right: 3px;
 }
 #navbuttons li{
     text-align: center;
     margin: 5px 0;
     padding: 0 5px;
-    border: rgb(95, 0, 160) 2px solid;
-    border-radius: 10px;
+    border: indigo 2px solid;
+    color: black;
+    border-radius: 5px;
     font-family: monospace;
     font-weight: bolder;
     font-style: italic;
     background-color: whitesmoke;
+}
+#noti{
+    display: none;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    right: 5%;
+    top: 45px;
+    border: 3px indigo solid;
+    border-radius: 10px;
+    width: 22%;
+    height: 405px;
+    background-color: whitesmoke;
+    background-size: cover;
+}
+#noti > div{
+    padding: 5px;
+    margin: 0;
+    border-bottom: 2px indigo solid;
+    width: 100%;
+    height: 50px;
+}
+#noti > div img{
+    border-radius: 5px;
+    width: 38px;
+    height: 38px;
+    display: inline-block;
+    vertical-align: bottom;
+}
+#noti > div p{
+    display: inline-block;
+    margin: 0 0 0 10px;
+    padding: 5px 0;
+    font-size: 13px;
+    font-family: san-serif;
+    font-style: italic;
+    color: black;
+    font-weight: bolder;
+}
+#noti > div samp{
+    position: absolute;
+    right: 15px;
+    margin: 0px 5px;
+    font-size: 12px;
+    font-family: serif;
+    color: blue;
+    font-weight: bolder;
 }
 button:hover{
     cursor: pointer;
