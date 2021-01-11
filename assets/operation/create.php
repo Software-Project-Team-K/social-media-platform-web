@@ -22,7 +22,7 @@
                     //CONNECT TO THE DATABASE
                     $conn = new mysqli($server, $user, $pass ,$dbname);
 
-
+                    //CREATE USERS TABLE 
                     $sql = "CREATE TABLE users(
                         id INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
                         password VARCHAR(20) NOT NULL,
@@ -34,7 +34,7 @@
                         gender VARCHAR(10),
                         bio VARCHAR (50) DEFAULT 'Hey there! im a new Chatverse User!',
                         google_id VARCHAR(25) DEFAULT 'X',
-                        reg_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                        reg_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                         birth_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                         profile_pic VARCHAR(60) NOT NULL DEFAULT '../assets/img/default_pp.jpg',
                         cover_pic VARCHAR(60) NOT NULL DEFAULT '../assets/img/default_cover.jpg',
@@ -44,17 +44,14 @@
                         new_noti VARCHAR(5) DEFAULT '',
                         products_no INT(10) UNSIGNED DEFAULT 0,
                         enable_market INT(2) UNSIGNED DEFAULT 0,
-                        show_friends INT(2) UNSIGNED DEFAULT 0,
-                        show_user_details INT(2) UNSIGNED DEFAULT 0
-
+                        saved_posts TEXT
                     )";
                     if ($conn->query($sql) === TRUE) echo "Table users created successfully"."<br>";
                     else echo "Error creating Table: " . $conn->error."<br>";
                     $sql = "ALTER TABLE users AUTO_INCREMENT=1001";
                     $conn->query($sql);
                     
-
-                   //CREATE ADMINS TABLE
+                   /*//CREATE ADMINS TABLE
                    $sql = "CREATE TABLE admins(
                         id INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
                         username VARCHAR(20) NOT NULL,
@@ -65,7 +62,7 @@
                         control_type VARCHAR(20) NOT NULL
                     )";
                     if ($conn->query($sql) === TRUE) echo "Table admins created successfully"."<br>";
-                    else echo "Error creating Table: " . $conn->error."<br>";
+                    else echo "Error creating Table: " . $conn->error."<br>";*/
 
                     //CREATE NOTIFICATIONS TABLE
                     $sql = "CREATE TABLE notifications(
@@ -88,6 +85,35 @@
                     )";
                     if ($conn->query($sql) === TRUE) echo "Table marketplace created successfully"."<br>";
                     else echo "Error creating Table: " . $conn->error."<br>";
+
+                     //CREATE POSTS TABLE
+                     $sql = "CREATE TABLE posts(
+                        id INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                        post_from VARCHAR(30) NOT NULL,
+                        post_to VARCHAR (30) NOT NULL,
+                        body TEXT NOT NULL,
+                        date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                        likes VARCHAR(200),
+                        shared TEXT NOT NULL,
+                        saved TEXT NOT NULL
+                    )";
+                    if ($conn->query($sql) === TRUE) echo "Table posts created successfully"."<br>";
+                    else echo "Error creating Table: " . $conn->error."<br>";
+
+                     //CREATE COMMENTS TABLE
+                     $sql = "CREATE TABLE comments(
+                        id INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                        post_id INT(10) NOT NULL,
+                        comment_from VARCHAR(30) NOT NULL,
+                        body TEXT NOT NULL,     
+                        date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                    )";
+                    if ($conn->query($sql) === TRUE) echo "Table comments created successfully"."<br>";
+                    else echo "Error creating Table: " . $conn->error."<br>";
+
+
+
+
 
 
 
