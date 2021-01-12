@@ -2,8 +2,12 @@
             require '../assets/classes.php';
             session_start();
             if(!isset($_SESSION['user']))header("location: ../");
-            $_SESSION['user']=new user($_SESSION['user']->get_id());
-        
+            
+            //refetch the data
+            $_SESSION['user'] = new user($_SESSION['user']->get_id());
+            if(isset($_SESSION['user']) && strlen($_SESSION['user']->get_id())==0) header("location: ../assets/operation/logout.php");
+
+
             echo '
                  <!DOCTYPE html>
                     <html>
