@@ -134,31 +134,184 @@ if(isset($_GET["code"]))
   }
  }
 }   
-//This is for check user has login into system by using Google account, if User not login into system then it will execute if block of code and make code for display Login link for Login using Google account.
-if(!isset($_SESSION['access_token']))
-{
- echo $login_button = '<a style="position:relative; left:10%; top:100px;" href="'.$google_client2->createAuthUrl().'"><img style="width:100px; border-radius:10px;" src="http://localhost/social-media-platform-web/assets/img/google.png" /></a>';
-}
 ?>
+<div style="width:15%; display:inline-block; border-right:2px solid indigo; border-bottom:2px solid indigo; padding:0 30px 30px 30px; border-radius:0 0 50px 0; vertical-align:top; text-align:center;">
+<h3 style="color:royalblue;">Account Settings</h3>
+<img style="width:100%;" src="../assets/img/acc_settings.png">
+</div>
+<div class="wrapper">
 
-<?php 
-if($_SESSION['user']->get_market_statues() == '0'){
-echo'
-    <form  method="POST" action="../assets/operation/db_update.php">
-    <input type="submit" name="submit" value="Enable Market"> 
-    </form>';
-}
-else
-{
-    echo'
-    <form  method="POST" action="../assets/operation/db_update.php">
-    <input type="submit" name="submit" value="Disable Market"> 
-    </form>';
-}
+                    <h4 class="header">
+                        General Settings
+                    </h4>
+                                <form id="change0" class="column" method="POST" action="../assets/operation/change_settings.php">
+                                    <div class="form-group">
+                                        <label class="form-label">First Name:</label>
+                                        <input type="text" name="first_name" class="form-control" placeholder="<?php echo $_SESSION["user"]->get_f_name();?>">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Last Name:</label>
+                                        <input type="text" name="last_name" class="form-control" placeholder="<?php echo $_SESSION["user"]->get_l_name();?>">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">E-mail:</label>
+                                        <input type="text" name="email" class="form-control mb-1" placeholder="<?php echo $_SESSION["user"]->get_email();?>">
+                                    </div>
+                                    <input type="hidden" name="operation" value="email">
+                                    <input type="submit" name="update_details" value="Save Changes"class="submission">
+                                </form>
+                    <h4 class="header">
+					    Password Change
+					</h4>
+                                <form class="column" id="change1" method="POST" action="../assets/operation/change_settings.php">
+                                    <div class="form-group">
+                                        <label class="form-label">Current password:</label>
+                                        <input type="password" name="current_pass" class="form-control">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="form-label">New password:</label>
+                                        <input type="password" name="new_pass" class="form-control">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="form-label">Repeat new password:</label>
+                                        <input type="password" name="new_pass2" class="form-control">
+                                    </div>
+                                    <input type="hidden" name="operation" value="pass">
+                                    <input type="submit" name="update_password" value="Save Changes"class="submission">
+                                </form>
+                        <h4 class="header">
+						    Change Phone Number
+						</h4>
+                                <form class="column" id="change2" method="POST" action="../assets/operation/change_settings.php">
+                                    <div class="form-group">
+                                        <label class="form-label">New Number:</label>
+                                        <input type="text" name="new_number" class="form-control" value="">
+                                    </div>
+                                    <input type="hidden" name="operation" value="phone_number">
+                                    <input type="submit" name="update_phone" value="Save Changes"class="submission">
+                                </form>
+                        <h4 class="header">
+					        Privacy Settings
+                        </h4>
+                                <form class="column" id="change3" method="POST" action="../assets/operation/change_settings.php">     
+                                    <div class="form-group">
+                                        <label class="form-label">Enable Market ?</label>
+                                        <?php 
+											if($_SESSION['user']->get_market_statues() == '0'){
+												echo'<input type="checkbox" name="check2" value="1">';
+											}
+											else
+											{
+											    echo'<input type="checkbox" checked name="check2" value="1">';
+											}
+										?>
+                                    </div>
+                                    <input type="hidden" name="operation" value="check">
+                                    <input type="submit" name="checkboxes" value="Save Changes"class="submission">
+                                </form> 
+                        <h4 class="header">
+					        Associate Google Credentials
+                        </h4>
+                                <div class="column" style="width:25%;">     
+                                        <?php /////GOOOOOOOOOOOOGLEEEEEEE 
+                                        //This is for check user has login into system by using Google account, if User not login into system then it will execute if block of code and make code for display Login link for Login using Google account.
+                                        if(!isset($_SESSION['access_token']))
+                                        {
+                                        echo $login_button = '<a style="margin: auto 0;" href="'.$google_client2->createAuthUrl().'"><img style="width:80px; border-radius:10px;" src="http://localhost/social-media-platform-web/assets/img/google.png" /></a>';
+                                        }
+                                        ?>
+                                </div>
+   
+    </div>
 
 
 
-?>
+
+
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+        <script type="text/javascript">
+        
+        var frm0 = $('#change0');
+        frm0.submit(function (e) {
+
+            e.preventDefault();
+
+            $.ajax({
+                type: frm0.attr('method'),
+                url: frm0.attr('action'),
+                data: frm0.serialize(),
+                success: function (data) {
+                    console.log('Submission was successful.');
+                    alert(data);
+                },
+                error: function (data) {
+                    console.log('An error occurred.');
+                    alert(data);
+                },
+            });
+        });
+        var frm1 = $('#change1');
+        frm1.submit(function (e) {
+
+            e.preventDefault();
+
+            $.ajax({
+                type: frm1.attr('method'),
+                url: frm1.attr('action'),
+                data: frm1.serialize(),
+                success: function (data) {
+                    console.log('Submission was successful.');
+                    alert(data);
+                },
+                error: function (data) {
+                    console.log('An error occurred.');
+                    alert(data);
+                },
+            });
+        });
+        var frm2 = $('#change2');
+        frm2.submit(function (e) {
+
+            e.preventDefault();
+
+            $.ajax({
+                type: frm2.attr('method'),
+                url: frm2.attr('action'),
+                data: frm2.serialize(),
+                success: function (data) {
+                    console.log('Submission was successful.');
+                    alert(data);
+                },
+                error: function (data) {
+                    console.log('An error occurred.');
+                    alert(data);
+                },
+            });
+        });
+        var frm3 = $('#change3');
+        frm3.submit(function (e) {
+
+            e.preventDefault();
+
+            $.ajax({
+                type: frm3.attr('method'),
+                url: frm3.attr('action'),
+                data: frm3.serialize(),
+                success: function (data) {
+                    console.log('Submission was successful.');
+                    alert(data);
+                },
+                error: function (data) {
+                    console.log('An error occurred.');
+                    alert(data);
+                },
+            });
+        });
+
+        </script>
 
 
     </body>  
