@@ -117,8 +117,9 @@
         <!-- LETS GO BABY -->
 
             <div id="groups_pages">
-                <div id="groups" style="height: 40%; border:0;">
-                    <h3 style="color:white; background-color:indigo; width:50%; margin:5px auto; border-radius:10px;">Groups (<?php echo $_SESSION['user']->get_groups_no(); ?>)</h3>
+                <div id="groups" style="height: 45%; border:0;">
+                    <img style="width:15%; margin:10px 5px 10px 25px; vertical-align:top; display:inline-block;" src="assets/img/group_icon.jpg">
+                    <p style="color:white; display:inline-block; text-align:center; font-size:105%; font-weight:bolder; background-color:indigo; width:45%; margin:10px auto; border-radius:10px;">Groups (<?php echo $_SESSION['user']->get_groups_no(); ?>)</p>
                     <div id="show" style="height: 80%; border:0; text-align:left; padding: 10px 20px; overflow-y:auto;">
                     <?php
                     $groups = $_SESSION['user']->get_groups();
@@ -129,16 +130,16 @@
                         $end = strpos($groups,",",$start + 1);
                         $group = new group($_SESSION['user']->get_id(),substr($groups,$start,$end - $start));
                         $start = $end + 1;
-                        echo' - <a href="group.php?group='.$group->get_id().'"> '.$group->get_name().'</a><br>';
+                        echo'- <a href="group.php?group='.$group->get_id().'"> '.$group->get_name().'</a><br>';
                         }
                     }
                     else echo '<p style="text-align:center; color:gray; font-weight:bolder; font-size:130%; margin: 30px;">No Groups To Show</p>';
                     ?>
                     </div>
                 </div>
-                <div id="pages" style="height: 40%;">
-                    <h3 style="color:white; background-color:indigo; width:50%; margin:5px auto; border-radius:10px;">Pages (<?php echo $_SESSION['user']->get_pages_no(); ?>)</h3>
-                    <div id="show" style="height: 80%; border:0; text-align:left; padding: 10px 20px; overflow-y:auto;">
+                <div id="pages" style="height: 45%;">
+                    <img style="width:10%; margin:10px 5px 10px 25px; vertical-align:top; display:inline-block;" src="assets/img/page_icon.png">
+                    <p style="color:white; display:inline-block; font-size:105%; text-align:center; font-weight:bolder; background-color:indigo; width:45%; margin:10px auto; border-radius:10px;">Pages (<?php echo $_SESSION['user']->get_groups_no(); ?>)</p>                    <div id="show" style="height: 80%; border:0; text-align:left; padding: 10px 20px; overflow-y:auto;">
                     <?php
                     $pages = $_SESSION['user']->get_pages();
                     $pages_no = $_SESSION['user']->get_pages_no();
@@ -148,23 +149,26 @@
                         $end = strpos($pages,",",$start + 1);
                         $page = new page($_SESSION['user']->get_id(),substr($pages,$start,$end - $start));
                         $start = $end + 1;
-                        echo' - <a href="page.php?page='.$page->get_id().'"> '.$page->get_name().'</a><br>';
+                        echo'- <a href="page.php?page='.$page->get_id().'"> '.$page->get_name().'</a><br>';
                         }
                     }
                     else echo '<p style="text-align:center; color:gray; font-weight:bolder; font-size:130%; margin: 30px;">No Pages To Show</p>';
                     ?>
                     </div>
                 </div>
-                <div id="create" style="height: 20%;">
-                <h3 style="color:rgb(0,255,0); background-color:indigo; width:50%; margin:5px auto; border-radius:10px;">Create</h3>
+                <hr>
+                <button onclick="create()"; style="color:royalblue; background-color:whitesmoke; width:90%; font-weight:bold; margin:5px 5px 0 5px; border-radius:8px;">Create a new Page/Group</button>
+
+                <div id="create" style="height: 15%; display:none; border: 2px darkblue  solid; border-radius:10px; position: absolute; bottom: 0%; left:110%;">
                 <form method="POST" action="http://localhost/social-media-platform-web/assets/operation/db_update.php">
                     <p>Name:</p><input style="width:60%" name="name" type="text"><br>
-                    <p>Type:</p>
                     <input type="radio" id="male" name="type" value="Page" checked="checked"><samp> Page &emsp;</samp>
                     <input type="radio" id="female" name="type" value="Group"><samp> Group</samp><br>
-                    <input type="submit" name="submit" style="margin:5px 35%;" value="Create"> 
+                    <input type="submit" name="submit" style="margin:5px 10px 5px 20%; border-radius:5px; color:green;" value="Create"> <input type="button" style="width:25%; text-align:center; color:red; border-radius:5px;" onclick="create()" value="Close">
                 </form>
+                
                 </div>
+
             </div>
 
             <div id="newsfeed">
@@ -304,6 +308,12 @@
                                         };
                                         xhttp.open("GET","http://localhost/social-media-platform-web/assets/operation/post.php?op=save&id=" + post_id );
                                         xhttp.send();
+                                }
+
+                                function create(){
+                                    var but = document.getElementById("create");
+                                    if(but.style.display =="block")but.style.display ="none"
+                                    else but.style.display ="block";
                                 }
 
             </script>
