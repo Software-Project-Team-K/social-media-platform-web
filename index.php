@@ -117,9 +117,9 @@
         <!-- LETS GO BABY -->
 
             <div id="groups_pages">
-                <div id="groups" style="height: 45%; border:0;">
-                    <img style="width:15%; margin:10px 5px 10px 25px; vertical-align:top; display:inline-block;" src="assets/img/group_icon.jpg">
-                    <p style="color:white; display:inline-block; text-align:center; font-size:105%; font-weight:bolder; background-color:indigo; width:45%; margin:10px auto; border-radius:10px;">Groups (<?php echo $_SESSION['user']->get_groups_no(); ?>)</p>
+                <div id="groups" style="height: 46%; border:0; padding:10px 0px;">
+                    <img style="width:15%; margin:7px 5px 10px 25px; vertical-align:top; display:inline-block;" src="assets/img/group_icon.png">
+                    <p style="color:indigo; display:inline-block; font-size:105%; text-align:center; border:2px gray solid; box-shadow: 1px 3px 5px indigo; font-weight:bolder; background-color:white; width:45%; margin:5px auto; border-radius:5px;">Groups (<?php echo $_SESSION['user']->get_groups_no(); ?>)</p>
                     <div id="show" style="height: 80%; border:0; text-align:left; padding: 10px 20px; overflow-y:auto;">
                     <?php
                     $groups = $_SESSION['user']->get_groups();
@@ -137,9 +137,9 @@
                     ?>
                     </div>
                 </div>
-                <div id="pages" style="height: 45%;">
-                    <img style="width:10%; margin:10px 5px 10px 25px; vertical-align:top; display:inline-block;" src="assets/img/page_icon.png">
-                    <p style="color:white; display:inline-block; font-size:105%; text-align:center; font-weight:bolder; background-color:indigo; width:45%; margin:10px auto; border-radius:10px;">Pages (<?php echo $_SESSION['user']->get_groups_no(); ?>)</p>                    <div id="show" style="height: 80%; border:0; text-align:left; padding: 10px 20px; overflow-y:auto;">
+                <div id="pages" style="height: 46%; padding:10px 0px;">
+                    <img style="width:12%; margin:5px 5px 10px 25px; vertical-align:top; display:inline-block;" src="assets/img/page_icon.png">
+                    <p style="color:indigo; display:inline-block; font-size:105%; text-align:center; border:2px gray solid; box-shadow: 1px 3px 5px indigo; font-weight:bolder; background-color:white; width:45%; margin:5px auto; padding:0; border-radius:5px;">Pages (<?php echo $_SESSION['user']->get_groups_no(); ?>)</p>                    <div id="show" style="height: 80%; border:0; text-align:left; padding: 10px 20px; overflow-y:auto;">
                     <?php
                     $pages = $_SESSION['user']->get_pages();
                     $pages_no = $_SESSION['user']->get_pages_no();
@@ -157,7 +157,7 @@
                     </div>
                 </div>
                 <hr>
-                <button onclick="create()"; style="color:royalblue; background-color:whitesmoke; width:90%; font-weight:bold; margin:5px 5px 0 5px; border-radius:8px;">Create a new Page/Group</button>
+                <button onclick="create()"; style="color:white; background-color:indigo; width:50%; font-weight:bold; margin: 0 25%; border-radius:8px;">Create a new</button>
 
                 <div id="create" style="height: 15%; display:none; border: 2px darkblue  solid; border-radius:10px; position: absolute; bottom: 0%; left:110%;">
                 <form method="POST" action="http://localhost/social-media-platform-web/assets/operation/db_update.php">
@@ -175,15 +175,15 @@
                 <div id="writepost">
                     <img src="<?php echo $_SESSION['user']->get_id()."/".$_SESSION['user']->get_profile_pic()  ?>">
                     <form id="writepostform" method="POST" action="http://localhost/social-media-platform-web/assets/operation/post.php">
-                        <textarea rows="5" placeholder="Whats in your mind ?.." id="postbody" type="textbox" name="body"></textarea>
-                        <input type="hidden" placeholder="Write the Post To..." style="width:30%; float:left; margin:10px 0;" name="post_to" value="H"> <input style="width:18%; float:right; margin:10px; border-radius:5px; background-color:indigo; color:white;" name="submit" type="submit" value="Post">
+                        <textarea rows="5" placeholder="Write a Timeline Post" id="postbody" type="textbox" name="body"></textarea>
+                        <input type="hidden" placeholder="Write the Post To..." style="width:30%; float:left; margin:0;" name="post_to" value="H"> <input style="width:18%; float:right; margin: 2px 0; border-radius:5px; border:gray 2px solid; background-color:indigo; color:white;" name="submit" type="submit" value="Post">
                     </form>
                 </div>
                 <!-- Load Posts -->
             </div>
             
             <div id="comments">
-                <samp style="font-size:150%; color:royalblue; font-weight:bolder; text-decoration:underline;">Comments</samp>
+                <samp style="font-size:150%; color:indigo; font-weight:bolder; text-decoration:underline;">Comments</samp>
                 <samp style="font-size:150%; color:red; font-weight:bolder; float:right; cursor:pointer;" onclick="closecomment()">X</samp>
                 <hr style="margin-top:5px 0; padding:0;">
                 <!-- Load Comments -->

@@ -11,8 +11,8 @@ body{
 #writepost{
     margin: 10px auto;
     width: 90%;
-    border: 3px indigo solid;
-    border-radius: 20px;
+    border: 2px indigo solid;
+    border-radius: 15px;
     background-color: white;
     background-image: url("assets/img/post_bg.jpg");
     background-size: cover;
@@ -22,46 +22,63 @@ body{
     height: 40px;
     margin: 10px;
     border-radius: 30px;
+    border: black 2px solid;
     display: inline-block;
     vertical-align: top;
 }
 #writepostform{
     margin: 20px 0;
-    width: 85%;
-    height: 180px;
+    width: 80%;
+    height: 170px;
     display: inline-block;
 }
 #writepostform > textarea{
     padding: 20px;
     font-size: 140%;
     width: 98%;
-    border-radius: 10px;
+    border-radius: 5px;
+    background-color: rgba(0, 0, 0, 0.3);
+    border:rgb(145, 145, 145) 3px solid;
+    color: white;
+}
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color:indigo;
+    text-shadow: 1px 1px 6px white,-1px -1px 6px white;
+    font-weight: bolder;
+    opacity: 1; /* Firefox */
 }
 .post{
     margin: 30px auto;
     width: 90%;
     border: 3px rgb(85, 10, 155) solid;
     border-radius: 20px;
-    background-color:rgba(85, 0, 150, 0.85) ;
+    background-color:rgb(85, 0, 150) ;
 }
 .post > img{
-    width: 8%;
-    height: 40px;
-    margin: 2px 10px;
+    width: 7%;
+    height: 35px;
+    margin: 4px 10px;
     border-radius: 30px;
     display: inline-block;
     vertical-align: middle;
+    border: 2px solid whitesmoke;
 }
 .post > p{
-    margin: 15px 0;
+    margin: 10px 0;
     display: inline-block;
     color: whitesmoke;
     font-weight: bold;
 }
 .post > samp{
     float: right;
-    margin: 15px 10px;
-    color: rgb(80, 185, 255);
+    margin: 10px 10px 0 10px;
+    padding:2px 0;
+    text-align: center;
+    width: 24%;
+    color: rgb(95, 95, 255);
+    background-color: rgba(255, 255, 255, 0.9);
+    border:1px solid black;
+    border-radius: 20px 0px 20px 0px;
     font-weight: bolder;
 }
 .post > hr{
@@ -120,7 +137,7 @@ body{
 #comments{
     border: 3px indigo solid;
     border-radius: 10px;
-    width: 25%;
+    width: 22%;
     height: 75%;
     position: fixed;
     right: 20px;
@@ -129,15 +146,18 @@ body{
     padding: 10px;
     overflow-y: auto;
     display: none;
-    background-color: white;
+    background-image: url(assets/img/comments.jpg);
+    background-size: cover;
 }
 .comment{
     width: 100%;
     height: 95px;
-    border-bottom: 2px darkblue solid;
+    box-shadow: 2px 2px 2px black;
+    border: 2px rgb(100, 100, 100) solid;
     text-align: left;
-    background-color: rgba(128, 128, 128, 0.2);
+    background-color: rgba(190, 190, 190, 0.5);
     border-radius: 10px;
+    margin-bottom: 10px;
 }
 .comment > .who{
     width: 30%;
@@ -163,8 +183,8 @@ body{
     width: 60%;
     padding: 5px;
     vertical-align: top;
-    background-color: whitesmoke;
-    border: 2px indigo solid;
+    background-color: rgba(255, 255, 255, 0.7);
+    border: 2px rgb(120, 0, 200) solid;
     border-radius: 5px;
 }
 /**/
@@ -172,17 +192,17 @@ body{
 position: fixed;
 bottom: 20px;
 right: 20px;
-width: 25%;
+width: 22%;
 height: 13%;
 padding: 5px;
 border: 3px indigo solid;
 border-radius: 10px;
 text-align: left;
-background-color: rgb(80, 50, 130);
+background-color: rgb(119, 87, 172);
 }
 #writecomment img{
     width: 14%;
-    height: 50px;
+    height: 40px;
     display: inline-block;
     vertical-align: top;
     margin-top: 10px;
@@ -208,15 +228,16 @@ background-color: rgb(80, 50, 130);
     left: 0px;
     top: 80px;
     display: inline-block;
-    background-color: rgb(240, 240, 240);
+    background-image: url(http://localhost/social-media-platform-web/assets/img/section.jpg);
+    background-size: contain;
 }
 #groups_pages > div{
-    border-top: 2px black solid;
+    border-top: 3px rgb(70, 70, 70) solid;
     width: 100%;
     text-align: left;
 }
 #groups_pages > div a{
-    color: purple;
+    color: rgb(50, 50, 50);
     text-decoration: none;
     font-size: 100%;
     font-weight: bolder;

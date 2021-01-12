@@ -127,8 +127,8 @@
         <!-- LETS GO BABY -->
 
         <div id="groups_pages" style="text-align:center; height:82%;">
-        <img src="assets/img/group_icon.jpg" style="width:60%; margin: 10px auto; border-radius:inherit;" >
-        <h3 style="margin:0 0 10px 0; color:green; font-style:italic;"> <?php echo $_SESSION['group']->get_name(); ?> </h3>
+        <img src="assets/img/group_icon.png" style="width:60%; margin: 10px auto; border-radius:inherit;" >
+        <h3 style="margin:0 0 10px 0; color:royalblue; font-style:italic;"> <?php echo $_SESSION['group']->get_name(); ?> </h3>
 
         <button id="g_button" style="border-radius:5px; color:indigo; font-weight:bolder;" onclick="group_button()"><?php
         if($_SESSION['type']=="admin")echo 'Delete Group';
@@ -184,8 +184,8 @@
                 <div id="writepost">
                     <img src="<?php echo $_SESSION['user']->get_id()."/".$_SESSION['user']->get_profile_pic()  ?>">
                     <form id="writepostform" method="POST" action="http://localhost/social-media-platform-web/assets/operation/post.php">
-                        <textarea rows="5" placeholder="Whats in your mind ?.." id="postbody" type="textbox" name="body"></textarea>
-                        <input type="hidden" placeholder="Write the Post To..." style="width:30%; float:left; margin:10px 0;" name="post_to" value="G<?php echo $_SESSION['group']->get_id(); ?>"> <input style="width:18%; float:right; margin:10px; border-radius:5px; background-color:indigo; color:white;" name="submit" type="submit" value="Post">
+                        <textarea rows="5" placeholder="Share news with the group." id="postbody" type="textbox" name="body"></textarea>
+                        <input type="hidden" placeholder="Write the Post To..." style="width:30%; float:left; margin:10px 0;" name="post_to" value="G<?php echo $_SESSION['group']->get_id(); ?>"> <input style="width:18%; float:right; margin: 2px 0; border-radius:5px; border:gray 2px solid; background-color:indigo; color:white;" name="submit" type="submit" value="Post">
                     </form>
                 </div>
                 <!-- Load Posts -->

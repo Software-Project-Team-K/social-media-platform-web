@@ -249,7 +249,7 @@
 
 
         <div id="comments">
-                <samp style="font-size:150%; color:royalblue; font-weight:bolder; text-decoration:underline;">Comments</samp>
+                <samp style="font-size:150%; color:indigo; font-weight:bolder; text-decoration:underline;">Comments</samp>
                 <samp style="font-size:150%; color:red; font-weight:bolder; float:right; cursor:pointer;" onclick="closecomment()">X</samp>
                 <hr style="margin-top:5px 0; padding:0;">
                 <!-- Load Comments -->

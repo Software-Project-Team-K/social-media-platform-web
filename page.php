@@ -128,7 +128,7 @@
 
         <div id="groups_pages" style="text-align:center; height:82%;">
         <img src="assets/img/page_icon.png" style="width:50%; margin: 5px auto; border-radius:inherit;" >
-        <h3 style="margin:0 0 10px 0; color:green; font-style:italic;"> <?php echo $_SESSION['page']->get_name(); ?> </h3>
+        <h3 style="margin:0 0 10px 0; color:royalblue; font-style:italic;"> <?php echo $_SESSION['page']->get_name(); ?> </h3>
 
         <button id="p_button" style="border-radius:5px; color:indigo; font-weight:bolder;" onclick="page_button()"><?php
         if($_SESSION['type']=="owner")echo 'Delete Page';
@@ -182,7 +182,7 @@
                     <img src="http://localhost/social-media-platform-web/assets/img/page_icon.png">
                     <form id="writepostform" method="POST" action="http://localhost/social-media-platform-web/assets/operation/post.php">
                         <textarea rows="5" placeholder="Whats in your mind ?.." id="postbody" type="textbox" name="body"></textarea>
-                        <input type="hidden" placeholder="Write the Post To..." style="width:30%; float:left; margin:10px 0;" name="post_to" value="P<?php echo $_SESSION['page']->get_id(); ?>"> <input style="width:18%; float:right; margin:10px; border-radius:5px; background-color:indigo; color:white;" name="submit" type="submit" value="Post">
+                        <input type="hidden" placeholder="Write the Post To..." style="width:30%; float:left; margin:10px 0;" name="post_to" value="P<?php echo $_SESSION['page']->get_id(); ?>"><input style="width:18%; float:right; margin: 2px 0; border-radius:5px; border:gray 2px solid; background-color:indigo; color:white;" name="submit" type="submit" value="Post">
                     </form>
                 </div>
                 <!-- Load Posts -->
