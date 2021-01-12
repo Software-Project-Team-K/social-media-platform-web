@@ -145,7 +145,7 @@
                         $end = strpos($pages,",",$start + 1);
                         $page = new page($_SESSION['user']->get_id(),substr($pages,$start,$end - $start));
                         $start = $end + 1;
-                        echo'<a> - '.$page->get_name().'</a><br>';
+                        echo' - <a href="page.php?page='.$page->get_id().'"> '.$page->get_name().'</a><br>';
                         }
                     }
                     else echo '<p style="text-align:center; color:gray; font-weight:bolder; font-size:130%; margin: 30px;">No Pages To Show</p>';
