@@ -264,6 +264,7 @@ body{
 }
 .post > img{
     width: 8%;
+    height: 40px;
     margin: 2px 10px;
     border-radius: 30px;
     display: inline-block;
