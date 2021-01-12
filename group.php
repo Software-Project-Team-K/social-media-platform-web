@@ -124,8 +124,8 @@
 ?>
         <!-- LETS GO BABY -->
 
-        <div id="groups_pages" style="text-align:center;">
-        <img src="assets/img/group_icon.jpg" style="width:70%; margin: 10px auto; border-radius:inherit;" >
+        <div id="groups_pages" style="text-align:center; height:82%;">
+        <img src="assets/img/group_icon.jpg" style="width:60%; margin: 10px auto; border-radius:inherit;" >
         <h3 style="margin:0 0 10px 0; color:green; font-style:italic;"> <?php echo $_SESSION['group']->get_name(); ?> </h3>
 
         <button id="g_button" style="border-radius:5px; color:indigo; font-weight:bolder;" onclick="group_button()"><?php
@@ -138,7 +138,7 @@
        
        ?></button>
         <hr>
-        <p style="margin:5px auto; width:80%; font-size:130%; color:white; border:2px solid black; border-radius:5px; background-color:indigo; font-weight:bolder; <?php if($_SESSION['type']=="guest") echo 'display:none;' ?>"> Members (<?php echo $_SESSION['group']->get_members_no();?>) </p>
+        <p style="margin:5px auto; width:75%; font-size:120%; color:white; border:2px solid black; border-radius:6px; background-color:indigo; font-weight:bolder; <?php if($_SESSION['type']=="guest") echo 'display:none;' ?>"> Members (<?php echo $_SESSION['group']->get_members_no();?>) </p>
         <div style="width:100%; text-align:left; padding:20px; height:30%; border:2px solid gray; border-radius:10px; overflow-y:auto; <?php if($_SESSION['type']=="guest") echo 'display:none;' ?>">
         <?php
                     $members = $_SESSION['group']->get_members();
@@ -152,10 +152,10 @@
                         echo'<div style="border:2px solid transparent;"> - <a style="font-size:95%; text-decoration:none;" href="http://localhost/social-media-platform-web/'.$member->get_id().'"> '.$member->get_name().'</a><button name="'.$member->get_id().'" onclick="kick_button(this.name)" style="margin: 0 5px;'; if($_SESSION['type']!="admin") echo'display:none;';  echo'padding:1px 2px; border-radius:3px; font-size:80%;  float:right;">Kick</button></div>';
                         } 
                     }
-                    else echo '<p style="text-align:center; color:gray; font-weight:bolder; font-size:130%; margin: 60px auto;">No Members</p>';
+                    else echo '<p style="text-align:center; color:gray; font-weight:bolder; font-size:130%; margin: 40px auto;">No Members</p>';
         ?>
         </div>
-        <p style="margin:5px auto; width:80%; font-size:130%; color:white; border:2px solid black; border-radius:5px; background-color:indigo; font-weight:bolder; <?php if($_SESSION['type']!="admin") echo 'display:none;' ?>"> Requests (<?php echo $_SESSION['group']->get_requests_no(); ?>) </p>
+        <p style="margin:5px auto; width:75%; font-size:120%; color:white; border:2px solid black; border-radius:6px; background-color:indigo; font-weight:bolder; <?php if($_SESSION['type']!="admin") echo 'display:none;' ?>"> Requests (<?php echo $_SESSION['group']->get_requests_no(); ?>) </p>
         <div style="width:100%; text-align:left; padding:20px; height:30%; border:2px solid gray; border-radius:10px; overflow-y:auto; <?php if($_SESSION['type']!="admin") echo 'display:none;' ?>">
         <?php
                     $requests = $_SESSION['group']->get_requests();
@@ -169,7 +169,7 @@
                         echo'<div style="border:2px solid transparent;"> - <a style="font-size:95%; text-decoration:none;" href="http://localhost/social-media-platform-web/'.$member->get_id().'"> '.$member->get_name().'</a><button name="'.$member->get_id().'" onclick="response_button(this.name, 1)" style="margin: 0 5px; padding:1px 2px; border-radius:3px; font-size:80%;  float:right;">X</button><button name="'.$member->get_id().'" onclick="response_button(this.name , 0)" style="margin: 0 5px; padding:1px 2px; border-radius:3px; font-size:80%; float:right;">O</button> </div>';
                       }
                     }
-                    else echo '<p style="text-align:center; color:gray; font-weight:bolder; font-size:130%; margin: 60px auto;">No Requests</p>';
+                    else echo '<p style="text-align:center; color:gray; font-weight:bolder; font-size:130%; margin: 40px auto;">No Requests</p>';
         ?>
         </div>
         </div>
