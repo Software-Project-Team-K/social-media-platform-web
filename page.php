@@ -5,6 +5,8 @@
 
             //refetch the data
             $_SESSION['user'] = new user($_SESSION['user']->get_id());
+            if(isset($_SESSION['user']) && strlen($_SESSION['user']->get_id())==0) header("location: assets/operation/logout.php");
+
             $_SESSION['offset'] = 0;
         
             // Inintialize URL to the variable 

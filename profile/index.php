@@ -2,6 +2,7 @@
                 require '../assets/classes.php';
                 session_start();
                 if(!isset($_SESSION['user']))header("location: ../");
+                
                 $_SESSION['offset']=0;
 
                 $url = $_SERVER['REQUEST_URI'];
@@ -10,14 +11,13 @@
                 $user_id = $_SESSION['user']->get_id();
                 $target_id = substr($_SERVER['REQUEST_URI'],strpos($_SERVER['REQUEST_URI'],"/",1)+1);
                 $target_id = strtolower(substr($target_id,0,strlen($target_id)-1));
-                //refetch the data
-                $_SESSION['user'] = new user($user_id);
-                $_SESSION['target'] = new user($target_id);
                 //check if the target is the user
                 $isVisitor = TRUE;
                 if($user_id == $target_id) $isVisitor = FALSE;
-
-
+                //refetch the data
+                $_SESSION['user'] = new user($user_id);
+                if(isset($_SESSION['user']) && strlen($_SESSION['user']->get_id())==0) header("location: ../assets/operation/logout.php");
+                $_SESSION['target'] = new user($target_id);
                 
              echo '
                     <!DOCTYPE html>
