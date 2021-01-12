@@ -27,6 +27,8 @@
                         }
 
                         function get_name() {return $this->data['full_name'];}
+                        function get_f_name(){return $this->data['f_name'];}
+                        function get_l_name(){return $this->data['l_name'];}
                         function get_id()  {return $this->data['id'];}
                         function get_gender(){return $this->data['gender'];}
                         function get_email(){return $this->data['email'];}
@@ -120,7 +122,7 @@
                             <div class="data"><img src="assets/img/user_icon.png"><p>Total Users Number:</p><samp> '.$users_no.'</samp></div>
                             <div class="data"><img src="assets/img/online_icon.png"><p>Online Users Number:</p><samp> '.$online_no.'</samp></p></div>
                             <div class="data"><img src="assets/img/page_icon.png"><p>Total Pages Number:</p><samp> '.$pages_no.'</samp></p></div>
-                            <div class="data"><img src="assets/img/group_icon.jpg"><p>Total Groups Number:</p><samp> '.$groups_no.'</samp> </p></div>
+                            <div class="data"><img src="assets/img/group_icon.png"><p>Total Groups Number:</p><samp> '.$groups_no.'</samp> </p></div>
                             <div class="data"><img src="assets/img/post_icon.png"><p>Total Posts Number:</p><samp> '.$posts_no.'</samp></p></div>
                             <div class="data"><img src="assets/img/icn_msgx.png"><p>Total Messeges Number:</p><samp></samp></div>
                             <div class="data"><img src="assets/img/trend_icon.png"><p>Top Trends: </p></div>';
@@ -386,8 +388,8 @@
 
                             if(mysqli_num_rows($posts) == 0){
                                 echo'
-                                <div class="post" style="text-align:center; background-color:transparent; width:60%;">
-                                <p style="font-weight:bolder; color:indigo; ">Hurray! No More News.</p>
+                                <div class="post" style="text-align:center; border-radius:8px;  background-color:white; width:40%;">
+                                <p style="font-weight:bolder; color:darkblue; margin:2px;">Hurray! No More News.</p>
                                 </div>';
                                 $_SESSION['offset']=-1;
                             }
@@ -411,9 +413,6 @@
                                     <img src="http://localhost/social-media-platform-web/'.$writer->get_id().'/'.$writer->get_profile_pic().'">
                                     <p>'.$writer->get_name().'</p>';
                                     }
-                                    
-
-
                                     if($post['post_to']=='group'){
                                         $myGroup = new group($this->user_id,$post['post_to_id']);
                                         echo ' <p style="color:rgb(0,255,0); font-size:85%; margin:0 20px;"> (Group: '.$myGroup->get_name().')</p>';
@@ -452,8 +451,8 @@
                             
                             if(mysqli_num_rows($posts) == 0){
                                 echo'
-                                <div class="post" style="text-align:center; background-color:transparent; width:60%;">
-                                <p style="font-weight:bolder; color:indigo; ">No More Posts.</p>
+                                <div class="post" style="text-align:center; border-radius:8px;  background-color:white; width:40%;">
+                                <p style="font-weight:bolder; color:darkblue; margin:2px; ">No More Posts.</p>
                                 </div>';
                                 $_SESSION['offset']=-1;
                             }
@@ -462,13 +461,25 @@
                                 for($i=0;$i<mysqli_num_rows($posts);$i++){
                                     $post = mysqli_fetch_assoc($posts);
                                     $writer = new user($post['post_from']);
+                                    if($post['post_to']=='page'){
+                                    $myPage = new page($this->user_id,$post['post_to_id']);
+                                    echo' 
+                                    <div class="post">
+                                    <img src="http://localhost/social-media-platform-web/assets/img/page_icon.png">
+                                    <p>'.$myPage->get_name().'</p>';
+                                    }
+                                    else{
                                     echo' 
                                     <div class="post">
                                     <img src="http://localhost/social-media-platform-web/'.$writer->get_id().'/'.$writer->get_profile_pic().'">
-                                    <p>'.$writer->get_name();
-                                    if(strstr($post['shared'],$this->user_id)) echo '<samp style="color:rgb(0,255,0); font-size:80%;"> (Shared By '.$user->get_name().')</samp>'; 
-                                    echo '</p>
-                                    <samp>'.date_optimize($post['date']).'</samp>
+                                    <p>'.$writer->get_name().'</p>';
+                                    }
+                                    if($post['post_to']=='group'){
+                                        $myGroup = new group($this->user_id,$post['post_to_id']);
+                                        echo ' <p style="color:rgb(0,255,0); font-size:85%; margin:0 0 0 20px;"> (Group: '.$myGroup->get_name().')</p>';
+                                    }
+                                    if(strstr($post['shared'],$this->user_id)) echo '<p style="color:rgb(255,0,0); margin: 0 0 0 20px; font-size:80%;">[Shared]</p>'; 
+                                    echo'<samp>'.date_optimize($post['date']).'</samp>
                                     <hr>
                                     <textarea readonly class="body">'.$post['body'].'</textarea>
                                     <div class="toolbar">';
@@ -502,8 +513,8 @@
                             
                             if(mysqli_num_rows($posts) == 0){
                                 echo'
-                                <div class="post" style="text-align:center; background-color:transparent; width:60%;">
-                                <p style="font-weight:bolder; color:indigo; ">No More Saved Posts.</p>
+                                <div class="post" style="text-align:center; border-radius:8px;  background-color:white; width:40%;">
+                                <p style="font-weight:bolder; color:darkblue; margin:2px; ">No More Saved Posts.</p>
                                 </div>';
                                 $_SESSION['offset']=-1;
                             }
@@ -512,11 +523,27 @@
                                 for($i=0;$i<mysqli_num_rows($posts);$i++){
                                     $post = mysqli_fetch_assoc($posts);
                                     $writer = new user($post['post_from']);
+                                    if($post['post_to']=='page'){
+                                    $myPage = new page($this->user_id,$post['post_to_id']);
+
+                                    echo' 
+                                    <div class="post">
+                                    <img src="http://localhost/social-media-platform-web/assets/img/page_icon.png">
+                                    <p>'.$myPage->get_name().'</p>';
+
+                                    }
+                                    else{
                                     echo' 
                                     <div class="post">
                                     <img src="http://localhost/social-media-platform-web/'.$writer->get_id().'/'.$writer->get_profile_pic().'">
-                                    <p>'.$writer->get_name().'</p>
-                                    <samp>'.date_optimize($post['date']).'</samp>
+                                    <p>'.$writer->get_name().'</p>';
+                                    }
+                                    if($post['post_to']=='group'){
+                                        $myGroup = new group($this->user_id,$post['post_to_id']);
+                                        echo ' <p style="color:rgb(0,255,0); font-size:85%; margin:0 20px;"> (Group: '.$myGroup->get_name().')</p>';
+                                    }
+                            
+                                    echo'<samp>'.date_optimize($post['date']).'</samp>
                                     <hr>
                                     <textarea readonly class="body">'.$post['body'].'</textarea>
                                     <div class="toolbar">';
@@ -551,8 +578,8 @@
                             
                             if(mysqli_num_rows($posts) == 0){
                                 echo'
-                                <div class="post" style="text-align:center; background-color:transparent; width:60%;">
-                                <p style="font-weight:bolder; color:indigo; ">No More Group Posts.</p>
+                                <div class="post" style="text-align:center; border-radius:8px;  background-color:white; width:40%;">
+                                <p style="font-weight:bolder; color:darkblue; margin:2px; ">No More Group Posts.</p>
                                 </div>';
                                 $_SESSION['offset']=-1;
                             }
@@ -601,8 +628,8 @@
                             
                             if(mysqli_num_rows($posts) == 0){
                                 echo'
-                                <div class="post" style="text-align:center; background-color:transparent; width:60%;">
-                                <p style="font-weight:bolder; color:indigo; ">No More Page Posts.</p>
+                                <div class="post" style="text-align:center; border-radius:8px;  background-color:white; width:40%;">
+                                <p style="font-weight:bolder; color:darkblue; margin:2px; ">No More Page Posts.</p>
                                 </div>';
                                 $_SESSION['offset']=-1;
                             }
@@ -690,8 +717,8 @@
                             echo' <div class="comment">
                             <div class="who">
                                 <img src="http://localhost/social-media-platform-web/'.$user->get_id()."/".$user->get_profile_pic().'">
-                                <p>'.$user->get_name().'</p>
-                                <p>'.date_optimize($comment['date']).'</p>
+                                <p style="color:brown; font-weight:bolder;">'.$user->get_name().'</p>
+                                <p style="color:blue;">'.date_optimize($comment['date']).'</p>
                             </div>
                             <textarea readonly>'.$comment['body'].'</textarea>
                             </div>';
@@ -1040,5 +1067,4 @@
                         else if($interval->format('%i') !=0) return $interval->format('%i minutes ago.');
                         else return 'few seconds ago.';
                     }
-
 ?>
