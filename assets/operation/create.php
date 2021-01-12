@@ -48,6 +48,7 @@
                         new_noti VARCHAR(5) DEFAULT '',
                         products_no INT(10) UNSIGNED DEFAULT 0,
                         enable_market INT(2) UNSIGNED DEFAULT 0,
+                        is_online VARCHAR(5) DEFAULT 'NO',
                         saved_posts TEXT
                     )";
                     if ($conn->query($sql) === TRUE) echo "Table users created successfully"."<br>";
@@ -55,18 +56,21 @@
                     $sql = "ALTER TABLE users AUTO_INCREMENT=1001";
                     $conn->query($sql);
                     
-                   /*//CREATE ADMINS TABLE
+                   //CREATE ADMINS TABLE
                    $sql = "CREATE TABLE admins(
                         id INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
                         username VARCHAR(20) NOT NULL,
                         password VARCHAR(20) NOT NULL,
-                        f_name VARCHAR(20) NOT NULL,
-                        l_name VARCHAR(20) NOT NULL,
                         full_name VARCHAR(40) NOT NULL,
                         control_type VARCHAR(20) NOT NULL
                     )";
                     if ($conn->query($sql) === TRUE) echo "Table admins created successfully"."<br>";
-                    else echo "Error creating Table: " . $conn->error."<br>";*/
+                    else echo "Error creating Table: " . $conn->error."<br>";
+                    $conn->query("INSERT INTO admins(full_name,username,password,control_type) VALUES('Kaimo','kaimo','password','Admin')");
+                    $conn->query("INSERT INTO admins(full_name,username,password,control_type) VALUES('Haidi','haidi','password','Analyst')");
+                    $conn->query("INSERT INTO admins(full_name,username,password,control_type) VALUES('Mohamed','mohamed','password','Tracker')");
+
+
 
                     //CREATE NOTIFICATIONS TABLE
                     $sql = "CREATE TABLE notifications(

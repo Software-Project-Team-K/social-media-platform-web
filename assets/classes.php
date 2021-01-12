@@ -25,9 +25,11 @@
                         function __construct($logID){
                             //get user data from parameter (username or email)
                             $connect = new connection;
+                            $connect->conn->query("UPDATE users SET is_online='YES' WHERE id='$logID'");
                             $result = $connect->conn->query("SELECT * FROM users WHERE id='$logID' or email='$logID' or phone_num='$logID'");
                             $this->data = mysqli_fetch_assoc($result);
                         }
+
                         function get_name() {return $this->data['full_name'];}
                         function get_id()  {return $this->data['id'];}
                         function get_gender(){return $this->data['gender'];}
@@ -47,6 +49,11 @@
                         function get_groups_no(){return $this->data['groups_no'];}
                         function get_pages(){return $this->data['pages'];}
                         function get_pages_no(){return $this->data['pages_no'];}
+                        function go_offline($id)
+                        { 
+                            $connect = new connection;
+                            $connect->conn->query("UPDATE users SET is_online='NO' WHERE id='$id'"); 
+                        }
                         function update_profile_pic($link)
                         {
                             $connect = new connection;
@@ -87,27 +94,78 @@
                     }
 
                     //CLASS >> CURRENT analyst DATA
-                    /*class analyst{
+                    class admin{
 
                         private $data;
+
                         function __construct($logID){
-                            //get user data from parameter (username or email)
                             $connect = new connection;
-                            $result = $connect->conn->query("SELECT * FROM users WHERE id='$logID' or email='$logID' or phone_num='$logID'");
+                            $result = $connect->conn->query("SELECT * FROM admins WHERE username='$logID'");
                             $this->data = mysqli_fetch_assoc($result);
                         }
                         function get_name() {return $this->data['full_name'];}
-                        function get_id()  {return $this->data['id'];}
                         function get_username(){return $this->data['username'];}
+                        function get_control_type(){return $this->data['control_type'];}
 
 
                         function fetch_statistics()
                         {
                             $connect = new connection;
-                            $id = $this->get_id();
-                            $connect->conn->query("UPDATE users SET cover_pic='$link' WHERE id='$id'");
+                            $result = $connect->conn->query("SELECT * FROM users");
+                            $users_no = mysqli_num_rows($result);
+                            $result = $connect->conn->query("SELECT * FROM users WHERE is_online='YES'");
+                            $online_no = mysqli_num_rows($result);
+                            $result = $connect->conn->query("SELECT * FROM groups");
+                            $groups_no = mysqli_num_rows($result);
+                            $result = $connect->conn->query("SELECT * FROM pages");
+                            $pages_no = mysqli_num_rows($result);
+                            $result = $connect->conn->query("SELECT * FROM posts");
+                            $posts_no = mysqli_num_rows($result);
+
+                            echo'
+                            <div class="data"><img src="assets/img/user_icon.png"><p>Total Users Number:</p><samp> '.$users_no.'</samp></div>
+                            <div class="data"><img src="assets/img/online_icon.png"><p>Online Users Number:</p><samp> '.$online_no.'</samp></p></div>
+                            <div class="data"><img src="assets/img/page_icon.png"><p>Total Pages Number:</p><samp> '.$pages_no.'</samp></p></div>
+                            <div class="data"><img src="assets/img/group_icon.jpg"><p>Total Groups Number:</p><samp> '.$groups_no.'</samp> </p></div>
+                            <div class="data"><img src="assets/img/post_icon.png"><p>Total Posts Number:</p><samp> '.$posts_no.'</samp></p></div>
+                            <div class="data"><img src="assets/img/icn_msgx.png"><p>Total Messeges Number:</p><samp></samp></div>
+                            <div class="data"><img src="assets/img/trend_icon.png"><p>Top Trends: </p></div>';
                         }
-                    }*/
+                        function ban_unit($pattern){
+
+                            $connect = new connection;
+                            if(strlen($pattern) < 2) return 'Invalid Pattern!';
+                            if($pattern[0]=='G')
+                            {
+                                 $id=substr($pattern,1);   
+                                 $result = $connect->conn->query("SELECT group_owner FROM groups WHERE id='$id'");
+                                 if(mysqli_num_rows($result)==0)return 'No Matched Group!';
+                                 $result = mysqli_fetch_assoc($result);
+                                 $owner = $result['group_owner'];
+                                 $myGroup = new group($owner,$id);
+                                 $myGroup->delete_group();
+                                 return 'Banned Successfully!';
+                            }
+                            else if($pattern[0]=='P')
+                            {
+                                $id=substr($pattern,1); 
+                                $result = $connect->conn->query("SELECT page_owner FROM pages WHERE id='$id'");
+                                if(mysqli_num_rows($result)==0)return 'No Matched Page!';
+                                $result = mysqli_fetch_assoc($result);
+                                $owner = $result['page_owner'];
+                                $myPage = new page($owner,$id);
+                                $myPage->delete_page();
+                                return 'Banned Successfully!';  
+  
+                            }
+                            else if($pattern[0]=='U')
+                            {
+                                $id=substr($pattern,1);   
+ 
+                            }
+                            else return 'Invalid Pattern!';
+                        }
+                    }
 
 
 
@@ -174,6 +232,7 @@
 
                         function get_noti(){
                             $all_notifications = $this->con->query("SELECT * from notifications WHERE receiver='$this->user_id' order by at_time desc LIMIT 8");
+                            if(mysqli_num_rows($all_notifications)!=0){
                             for($i = 0; $i < mysqli_num_rows($all_notifications);$i++){
                             $notifications = mysqli_fetch_assoc($all_notifications);
                             $sender = new user($notifications['sender']);
@@ -181,6 +240,9 @@
                             $time = $notifications['at_time'];
                             echo '<div><a href="http://localhost/social-media-platform-web/'.$sender->get_id().'"><img src="http://localhost/social-media-platform-web/' .$sender->get_id().'/'.$sender->get_profile_pic().'"><a/><samp>'.date_optimize($time).'</samp><p>'.$sender->get_name()." ".$body.'</p></div>';
                             }
+                            }
+                            else echo '<p style="color:gray; font-size:120%; margin:30%;">No Notifications</p>'; 
+
                         }
                         function add_noti($target_id,$body){
                             $this->con->query("INSERT INTO notifications(sender,receiver,body) VALUES('$this->user_id','$target_id','$body')");
@@ -652,8 +714,8 @@
                         }
                         function delete_group(){
                             $connect = new connection;
-                            $members = $this->get_members();
-                            $members_no = $this->get_members_no();
+                            $members = $this->get_members().$this->user_id.",";
+                            $members_no = $this->get_members_no() + 1;
 
                             if($members_no!=0){
                                 $start = 0;
@@ -668,10 +730,8 @@
                                 $connect->conn->query("UPDATE users SET groups_no='$num' WHERE id='$user_id'");
                                 }
                             }
-                            $groups = str_replace($this->group_id.",","",$this->user->get_groups());
-                            $num = $this->user->get_groups_no() - 1;
-                            $connect->conn->query("UPDATE users SET groups='$groups' WHERE id='$this->user_id'");
-                            $connect->conn->query("UPDATE users SET groups_no='$num' WHERE id='$this->user_id'");
+
+                            $connect->conn->query("DELETE FROM posts WHERE post_to='group' and post_to_id='$this->group_id'");  
                             $connect->conn->query("DELETE FROM groups WHERE id='$this->group_id'");  
                         }
                         function accept_request($id){
@@ -815,7 +875,8 @@
                                     $connect->conn->query("UPDATE users SET pages_no='$num' WHERE id='$user_id'");
                                     }
                                 }
- 
+
+                                $connect->conn->query("DELETE FROM posts WHERE post_to='page' and post_to_id='$this->page_id'");  
                                 $connect->conn->query("DELETE FROM pages WHERE id='$this->page_id'");  
 
                             }
