@@ -7,7 +7,11 @@
                 die();
             }
             else if ($_SERVER["REQUEST_METHOD"] == "GET" && $_GET['op']=="fetch2") {
-                $_SESSION['admin']->get_trends($_GET['time']);
+                admin::get_trends($_GET['time']);
+                die();
+            }
+            else if ($_SERVER["REQUEST_METHOD"] == "GET" && $_GET['op']=="fetch3") {
+                admin::get_top_pages(0);
                 die();
             }
             else if ($_SERVER["REQUEST_METHOD"] == "GET" && $_GET['op']=="delete") {

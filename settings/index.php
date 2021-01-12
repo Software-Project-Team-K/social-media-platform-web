@@ -28,9 +28,10 @@
                                    <input type="text" id="searchbar">
                                    </form><button type="submit"><img style="width:12px; padding:0; margin:0;" src="../assets/img/icn_search.png"></button>
                                    <div id="searchbox">
-                                   <div class="searchUnit">
-                                   <samp>Search Results will be shown here!</samp>
-                                   </div>
+                                   <div class="searchUnit" style="text-align:center; width:100%;">
+                                   <samp style="color:brown;"> Results will be shown here.</samp></div>
+                                   <div style="text-align:center; border:0;">
+                                   <img style="width:50%; margin:0 10%; height:130px; border:0;" src="http://localhost/social-media-platform-web/assets/img/icn_search.png"></div>
                                    </div>
                                    
                                    

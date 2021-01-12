@@ -39,6 +39,8 @@
     display: none;
     background-color: white;
     padding: 0 1px;
+    max-height: 260px;
+    overflow-y: auto;
 }
 .searchUnit{
     width: 100%;
@@ -187,4 +189,31 @@ body{
 }
 *{
     box-sizing: border-box;
+}
+.data{
+    width:100%;
+    height:50px;
+    border-bottom:1px solid brown;
+    text-align:left;
+}
+.data img{
+    width:15%;
+    height:80%;
+    display: inline-block;
+    vertical-align:top;
+    margin:5px 15px 0 5px;
+
+}
+.data p{
+    display: inline-block;
+    width:70%;
+    font-weight:bold;
+    font-style:italic;
+    font-size:100%;
+}
+.data samp{
+    display: inline-block;
+    font-weight:bolder;
+    font-size:110%;
+    color:blue;
 }

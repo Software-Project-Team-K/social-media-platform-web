@@ -32,15 +32,15 @@
                         full_name VARCHAR(40) NOT NULL,
                         phone_num INT(25) UNSIGNED,
                         gender VARCHAR(10),
-                        bio VARCHAR (50) DEFAULT 'Hey there! im a new Chatverse User!',
+                        bio TEXT DEFAULT 'Hey there! im a new Chatverse User!',
                         google_id VARCHAR(25) DEFAULT 'X',
                         reg_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                         birth_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                        profile_pic VARCHAR(60) NOT NULL DEFAULT '../assets/img/default_pp.jpg',
-                        cover_pic VARCHAR(60) NOT NULL DEFAULT '../assets/img/default_cover.jpg',
-                        friends VARCHAR(300) NOT NULL DEFAULT '',
+                        profile_pic TEXT NOT NULL DEFAULT '../assets/img/default_pp.jpg',
+                        cover_pic TEXT NOT NULL DEFAULT '../assets/img/default_cover.jpg',
+                        friends TEXT NOT NULL DEFAULT '',
                         friends_no INT(10) UNSIGNED DEFAULT 0,
-                        fr_requests VARCHAR(300) DEFAULT '',
+                        fr_requests TEXT DEFAULT '',
                         groups TEXT NOT NULL DEFAULT '',
                         groups_no INT(10) UNSIGNED DEFAULT 0,
                         pages TEXT NOT NULL DEFAULT '',
@@ -49,13 +49,20 @@
                         products_no INT(10) UNSIGNED DEFAULT 0,
                         enable_market INT(2) UNSIGNED DEFAULT 0,
                         is_online VARCHAR(5) DEFAULT 'NO',
-                        saved_posts TEXT
+                        saved_posts TEXT NOT NULL DEFAULT ''
                     )";
                     if ($conn->query($sql) === TRUE) echo "Table users created successfully"."<br>";
                     else echo "Error creating Table: " . $conn->error."<br>";
+
+                    //INSERT TEST USERS
+                    $conn->query("INSERT INTO users(f_name,l_name,full_name,email,password,phone_num,gender,birth_date,friends_no,friends,profile_pic,cover_pic) VALUES('Ahmed','Hakim','Ahmed Hakim','kaimo@gmail.com','kaimo','01552875228','male','2000-1-1','4','2,3,4,5,','../1/kaimo.jpg','../1/cover1.jpg')");
+                    $conn->query("INSERT INTO users(f_name,l_name,full_name,email,password,phone_num,gender,birth_date,friends_no,friends,profile_pic,cover_pic) VALUES('Haidi','Amr','Haidi Amr','haidi@gmail.com','haidi','0123456789','female','2000-1-1','3','1,3,5,','../2/haidi.jpg','../2/cover2.jpg')");
+                    $conn->query("INSERT INTO users(f_name,l_name,full_name,email,password,phone_num,gender,birth_date,friends_no,friends,profile_pic,cover_pic) VALUES('Mohamed','Fahmy','Mohamed Fahmy','mohamed@gmail.com','mohamed','0123456789','male','2000-1-1','2','1,2,','../3/mohamed.jpg','../3/cover3.jpg')");
+                    $conn->query("INSERT INTO users(f_name,l_name,full_name,email,password,phone_num,gender,birth_date,friends_no,friends,profile_pic) VALUES('Ahmed','Essam','Ahmed Essam','ahmed@gmail.com','ahmed','0123456789','male','2000-1-1','1','1,','../4/ahmed.jpg')");
+                    $conn->query("INSERT INTO users(f_name,l_name,full_name,email,password,phone_num,gender,birth_date,friends_no,friends,profile_pic,cover_pic) VALUES('Rehab','Farag','Rehab Farag','rehab@gmail.com','rehab','0123456789','female','2000-1-1','2','1,2,','../5/rehab.jpg','../5/cover5.jpg')");
+                    echo "Test users inserted successfully"."<br>";
                     $sql = "ALTER TABLE users AUTO_INCREMENT=1001";
-                    $conn->query($sql);
-                    
+
                    //CREATE ADMINS TABLE
                    $sql = "CREATE TABLE admins(
                         id INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -66,11 +73,12 @@
                     )";
                     if ($conn->query($sql) === TRUE) echo "Table admins created successfully"."<br>";
                     else echo "Error creating Table: " . $conn->error."<br>";
+
+                    //INSERT TEST ADMINS
                     $conn->query("INSERT INTO admins(full_name,username,password,control_type) VALUES('Kaimo','kaimo','password','Admin')");
                     $conn->query("INSERT INTO admins(full_name,username,password,control_type) VALUES('Haidi','haidi','password','Analyst')");
                     $conn->query("INSERT INTO admins(full_name,username,password,control_type) VALUES('Mohamed','mohamed','password','Tracker')");
-
-
+                    echo "Test admins inserted successfully"."<br>";
 
                     //CREATE NOTIFICATIONS TABLE
                     $sql = "CREATE TABLE notifications(
@@ -146,21 +154,6 @@
                     )";
                     if ($conn->query($sql) === TRUE) echo "Table pages created successfully"."<br>";
                     else echo "Error creating Table: " . $conn->error."<br>";
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
                     //CLOSE THE CONNECTION
                     $conn->close();

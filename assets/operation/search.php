@@ -10,6 +10,23 @@
                 $index = $_GET['index'];
                 $connect = new connection;
                 
+                if($index == 'top_trends'){
+                    admin::get_trends(1);
+                    die();
+                }
+                else if($index == 'top_trends_w'){
+                    admin::get_trends(7);
+                    die();
+                }
+                else if($index == 'top_trends_m'){
+                    admin::get_trends(30);
+                    die();
+                }
+                else if($index == 'top_pages'){
+                    admin::get_top_pages(10);
+                    die();
+                }
+
                 $results = $connect->conn->query("SELECT full_name,profile_pic,id FROM users WHERE email='$index' OR id='$index'");
                 $pattern = '-1';
                 if(strlen($index) > 1)$pattern = substr($index,1);
@@ -50,25 +67,29 @@
                     $groups = $connect->conn->query("SELECT * FROM groups WHERE INSTR(group_name,'$index')>0");
                     $pages = $connect->conn->query("SELECT * FROM pages WHERE INSTR(page_name,'$index')>0");
 
+
                     if (strlen($index) < 1) {
                         echo '
-                        <div class="searchUnit">
-                        <samp>Search Results will be shown here.</samp>
-                        </div>';
+                        <div class="searchUnit" style="text-align:center; width:100%;">
+                        <samp style="color:brown;"> Results will be shown here.</samp></div>
+                        <div style="text-align:center; border:0;">
+                        <img style="width:50%; margin:0 10%; height:130px; border:0;" src="http://localhost/social-media-platform-web/assets/img/icn_search.png"></div>';
                     }
                    else if (mysqli_num_rows($results) == 0 && mysqli_num_rows($groups) == 0 && mysqli_num_rows($pages) == 0) {
                         echo '
-                        <div class="searchUnit">
-                        <samp>No Matching Results.</samp>
-                        </div>';
+                        <div class="searchUnit" style="text-align:center; width:100%;">
+                        <samp style="color:brown;">No Matching Results.</samp>
+                        </div><div style="text-align:center; border:0;">
+                        <img style="width:50%; margin:0 10%; height:130px; border:0;" src="http://localhost/social-media-platform-web/assets/img/no_search.png"></div>';
                     } 
                     else if (mysqli_num_rows($results) == 1 && mysqli_num_rows($groups) == 0 && mysqli_num_rows($pages) == 0) {
                         $result = mysqli_fetch_assoc($results);
                         if($result['id']==$_SESSION['user']->get_id())
                         echo '
-                        <div class="searchUnit">
-                        <samp>No Matching Results.</samp>
-                        </div>';
+                        <div class="searchUnit" style="text-align:center; width:100%;">
+                        <samp style="color:brown;">No Matching Results.</samp>
+                        </div><div style="text-align:center; border:0;">
+                        <img style="width:50%; margin:0 10%; height:130px; border:0;" src="http://localhost/social-media-platform-web/assets/img/no_search.png"></div>';
                         else
                         echo '
                         <a href="http://localhost/social-media-platform-web/'.$result["id"].'">

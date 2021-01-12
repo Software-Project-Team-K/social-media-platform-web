@@ -125,7 +125,7 @@
                             <div class="data"><img src="assets/img/group_icon.png"><p>Total Groups Number:</p><samp> '.$groups_no.'</samp> </p></div>
                             <div class="data" style="border:0;"><img src="assets/img/post_icon.png"><p>Total Posts Number:</p><samp> '.$posts_no.'</samp></p></div>';
                         }
-                        function get_trends($period){
+                        static function get_trends($period){
                             if($period == ""){echo '<p style="width:100%; text-align:center;">Trends will appear here!</p>'; return;}
                             else if($period < 1){echo '<p style="width:100%; text-align:center;">Invalid Period</p>'; return;}
                             $connect = new connection;
@@ -136,7 +136,7 @@
                             date_add($now,date_interval_create_from_date_string("1 hour"));
                             $a = date_format($now,"Y-m-d H:i:s");
                             $b = date_format($then,"Y-m-d H:i:s");
-                            echo '<div class="data" style="font-size:70%; height:50px;"><img style="vertical-align:top; margin:0;" src="assets/img/trend_icon.png"><p style="margin:5px 0;">Top Trends:<br>From '.$a.'<br>To '.$b.'</p></div>';
+                            echo '<div class="data" style="font-size:70%; margin:0 0 5px 0; height:50px;"><img style="vertical-align:top; margin:0;" src="http://localhost/social-media-platform-web/assets/img/trend_icon.png"><p style="margin:5px 0;">Top Trends:<br>From '.$b.'<br>To '.$a.'</p></div>';
                             $results = $connect->conn->query("SELECT tags FROM posts WHERE (date >= '$b') && (date <= '$a') && (LENGTH(tags)>1)");
                             $tags = array();
                             
@@ -159,12 +159,11 @@
                                         }
                                     }
                                 }
-                                echo mysqli_num_rows($results);
                                 arsort($tags);
                                 $z=1;
                                 foreach($tags as $x=>$x_value)
                                 {
-                                echo '<p style="font-size:105%; width:60%; display:inline-block; margin:0; color:blue;">#'.$z.' '.$x.'</p>('.$x_value.') Times';
+                                echo '<p style="font-size:100%; width:55%; display:inline-block; margin:0 10px 5px 10px; color:red;">#'.$z.' <samp style="color:blue; margin-left:10px;">'.$x.'</samp></p>('.$x_value.' tag)';
                                 echo "<br>";
                                 $z++;
                                 if($z == 11)return;
@@ -172,6 +171,42 @@
                             }
                             else echo '<p style="width:100%; text-align:center;">No Trends in this Period!</p>';
                         }
+
+                        static function get_top_pages($num){
+                            $connect = new connection;
+                            echo '<div class="data" style="font-size:70%; margin:0 0 5px 0; height:50px;"><img style="vertical-align:middle; margin:0;" src="http://localhost/social-media-platform-web/assets/img/page_icon.png"><p style="margin:5px 0;">Top Pages:</div>';
+                            $results = $connect->conn->query("SELECT * FROM pages ORDER BY followers_no DESC");
+                            
+                            if(mysqli_num_rows($results)!=0){
+                                for($i=0;$i<mysqli_num_rows($results);$i++){
+                                    $result = mysqli_fetch_assoc($results);
+                                    $page_name = $result['page_name'];
+                                    $page_fans = $result['followers_no'];
+                                    $n = $i + 1;
+                                    echo '<p style="font-size:100%; width:65%; display:inline-block; margin:0 10px 5px 10px; color:red;">#'.$n.' <samp style="color:blue; margin-left:10px;">'.$page_name.'</samp></p>('.$page_fans.' fan)';
+                                    echo "<br>";
+                                    if($num!=0 && $i == $num - 1)break;
+                                }
+                            }
+                            else echo '<p style="width:100%; text-align:center;">No Pages!</p>';
+                        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                         function ban_unit($pattern){
 
                             $connect = new connection;
@@ -422,8 +457,8 @@
                                 if($body[$i]!=' ')$valid=true;
                                 if($body[$i]=='#'){
                                     for($j = $i + 1;$j<strlen($body);$j++){
-                                        if($body[$j]==" "|| $body[$j]=="," || $body[$j]=="#" || $j == strlen($body) - 1){
-                                            if(($j == strlen($body)-1) &&($body[$j]!=" "&& $body[$j]!="," && $body[$j]!="#"))$j++;
+                                        if($body[$j]==" "|| $body[$j]=="."|| $body[$j]=="," || $body[$j]=="#" || $j == strlen($body) - 1){
+                                            if(($j == strlen($body)-1) &&($body[$j]!=" "&&$body[$j]!="."&& $body[$j]!="," && $body[$j]!="#"))$j++;
                                             $tag = substr($body,$i + 1, $j - $i - 1).",";
                                             if(strlen($tag)!=1 && !strstr($tags,$tag)){
                                                 $tags .= $tag;

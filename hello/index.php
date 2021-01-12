@@ -2,7 +2,8 @@
         require "../assets/classes.php";
         include ('config.php');
         session_start();
-        if(isset($_SESSION['user']))header("location: ../");
+        if(isset($_SESSION['user']) && !isset($_SESSION['success']))header("location: ../");
+        if(isset($_SESSION['admin']))header("location: ../admin.php");
         if(isset($_SESSION['validator']))unset($_SESSION['validator']);
 
 
@@ -51,6 +52,18 @@ if(!isset($_SESSION['access_token']))
     </head>
     
     <body>
+            <img id="welcome" style="position:absolute; display:none; width:100%; height:100%; top:0%; left:0%; z-index:3; " src="../assets/img/welcome.gif">
+            
+            <?php 
+            if(isset($_SESSION['success'])){
+            echo '<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+            <script>
+            $("#welcome").fadeIn(1000,function(e){location.replace("../")});
+            $("body").css({"overflow":"hidden"});
+            </script>
+            ';
+            }
+            ?>
 
             <div class ="fulllogo">
                 <img src="../assets/img/icn_logo.png">
@@ -64,7 +77,7 @@ if(!isset($_SESSION['access_token']))
                 <div class="fullbox">
             
                     <div id="switchbar">
-                        <div style="border-right: indigo 2px solid;"><p id="slogin">Login</p></div><div><p id="sreg">Register</p></div>
+                        <div style="border-right: gray 3px solid;"><p id="slogin">Login</p></div><div><p id="sreg">Register</p></div>
                     </div>
 
                    <div>

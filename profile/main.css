@@ -126,13 +126,14 @@
 }
 .dataunit > img{
     width: 100%;
-    height: 120px;
+    height: 100px;
     border: 2px white solid;
     border-radius: 20px;
 }
 .dataunit > a{
     color:black;
     font-weight: bold;
+    font-size: 85%;
     font-style: italic;
     text-decoration-line: none;
 }

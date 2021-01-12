@@ -25,13 +25,14 @@
             .block{
                 width:35%; 
                 height:auto; 
-                display:inline-block;
-                border:5px solid indigo; 
+                border:4px solid indigo; 
                 background-color: whitesmoke;
                 border-radius:15px; 
-                margin:0 5%;
+                margin:10px auto 0 auto;
                 vertical-align:top;
                 text-align:center;
+                max-height:550px;
+                padding-bottom:10px;
             }
             #rank{
                 width:30%; 
@@ -43,7 +44,7 @@
             }
             .data{
                 width:100%;
-                height:50px;
+                height:51px;
                 border-bottom:1px solid brown;
                 text-align:left;
             }
@@ -68,6 +69,10 @@
                 font-size:110%;
                 color:blue;
             }
+            #status , #pages, #trends{
+                overflow-y: auto;
+                max-height:270px;
+            }
 
 
 
@@ -81,28 +86,29 @@
     <img style="width:100px; display:inline-block; vertical-align:middle; margin: 5px 50px; background-color:indigo; border:3px brown solid; border-radius:20px;" src="assets/img/icn_logo.png"><p style="display:inline-block; font-size:120%; color:darkblue;">Welcome <?php echo $_SESSION['admin']->get_name()." - (".$_SESSION['admin']->get_control_type().")"; ?></p>
     </div>
 
-    <div class="block" id="analysis" <?php if($_SESSION['admin']->get_control_type()=='Tracker') echo 'style="display:none;"'; ?>>
+    <div class="block" id="analysis"  <?php if($_SESSION['admin']->get_control_type()=='Tracker') echo 'style="display:none; width:60%;"'; else echo'style="width:60%;"' ?>>
             <img style="width:20%;" src="assets/img/analyst.png">
             <p id="rank">Data Analysis</p>
-            <samp style="font-size:110%; color:royalblue; margin: 0 10px;">Trends In The last (x) Days:</samp><input id="time" type="number" placeholder="Enter (X) Days" oninput="get_trends(this.value)" style="margin-bottom:10px; width:40%; color:green; border-radius:5px;"><br>
-            <div id="status" style="display:inline-block; padding:5px; width:50%; border:2px solid black; "></div><div 
-            id="trends" style="display:inline-block; text-align:left; border:2px solid black; border-left:0; vertical-align:top; padding:5px; width:50%;">
+            <samp style="font-size:110%; color:royalblue; font-weight:bolder; margin: 0 10px;">Trends In The last (x) Days:</samp><input id="time" type="number" placeholder="Enter (X) Days" oninput="get_trends(this.value)" style="margin-bottom:10px; width:40%; color:green; border-radius:5px;"><br>
+            <div id="status" style="display:inline-block; padding:5px; width:40%; border:2px solid black; "></div><div 
+            id="pages" style="display:inline-block; text-align:left; border:2px solid black; vertical-align:top; padding:5px; width:30%;">
+            <p style="width:100%; text-align:center;">No Pages.</p>
+            </div><div 
+            id="trends" style="display:inline-block; text-align:left; border:2px solid black; vertical-align:top; padding:5px; width:30%;">
             <p style="width:100%; text-align:center;">Trends will appear here!</p>
             </div>
 
-
-
-
-    </div><div class="block" <?php if($_SESSION['admin']->get_control_type()=='Analyst') echo 'style="display:none;"'; ?> >
+    </div>
+    
+    <div class="block" <?php if($_SESSION['admin']->get_control_type()=='Analyst') echo 'style="display:none;"'; ?> >
             <img style="width:20%;" src="assets/img/tracker.png">
             <p id="rank">System Tracking</p>
-        <?php
-            echo'
 
+            <?php
+            echo'
             <p style="width:30%; display:inline-block; font-weight:bolder;"> Enter Unit Pattern: </p><samp style="color: blue;">(U > [User] | G > [Group] | P > [Page]) + ID</samp>
             <input type="text" id="pattern" style="width:40%; margin:10px 20px;"><input type="button" id="delete" value="Ban" style="width:20%; color:red; border-radius:5px; margin:10px;";>';
-        ?>
-
+            ?>
     </div>
 
 
@@ -112,11 +118,22 @@
         var body = document.getElementById("body");
         var analysis = document.getElementById("status");
         var analysis2 = document.getElementById("trends");
+        var analysis3 = document.getElementById("pages");
         body.onload = function(){
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function() {
                 if (this.readyState == 4 && this.status == 200) {
                     analysis.innerHTML =  this.responseText;
+                    /////////
+                    var xhttp2 = new XMLHttpRequest();
+                    xhttp2.onreadystatechange = function() {
+                        if (this.readyState == 4 && this.status == 200) {
+                            analysis3.innerHTML =  this.responseText;
+                            }
+                        };
+                    xhttp2.open("GET","assets/operation/admin.php?op=fetch3");
+                    xhttp2.send();
+                    /////////
                     }
                 };
             xhttp.open("GET","assets/operation/admin.php?op=fetch");
