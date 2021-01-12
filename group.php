@@ -1,4 +1,4 @@
-<?php 
+<?php       
             require 'assets/classes.php';
             session_start();
             if(!isset($_SESSION['user']))header("location: hello/");
@@ -6,10 +6,20 @@
             //refetch the data
             $_SESSION['user'] = new user($_SESSION['user']->get_id());
             $_SESSION['offset'] = 0;
-
-
-            
         
+            // Inintialize URL to the variable 
+            $url = $_SERVER['REQUEST_URI'];
+            $url_components = parse_url($url); 
+            parse_str($url_components['query'], $params);
+            $_SESSION['group'] = new group($_SESSION['user']->get_id(),$params['group']); 
+           
+            if($_SESSION['group']->get_owner()==$_SESSION['user']->get_id()) $_SESSION['type']="admin";
+            else if(strstr($_SESSION['group']->get_members(),$_SESSION['user']->get_id())) $_SESSION['type']="member";
+            else $_SESSION['type']="guest";
+
+            if($_SESSION['type']=="guest") $_SESSION['requested'] = strstr($_SESSION['group']->get_requests(),$_SESSION['user']->get_id());
+            
+
             echo '
                  <!DOCTYPE html>
                     <html id="html">
@@ -18,12 +28,12 @@
                                 <meta charset="utf-8">
                                 <meta http-equiv="X-UA-Compatible" content="IE=edge">
                                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                                <title>Chatverse | Newsfeed</title>
+                                <title>Chatverse | '.$_SESSION['group']->get_name().'</title>
                                 <link rel="icon" href="assets/img/icn_logo.png">
             
                                  <!--Navigation Bar-->
                                  <div id="nav">
-                                    <a href=""><img src="assets/img/icn_logo.png" style="width: 30px;  margin: 5px 20px;"></a>
+                                    <a href="settings/../"><img src="assets/img/icn_logo.png" style="width: 30px;  margin: 5px 20px;"></a>
 
                                     <form>
                                     <input type="text" id="searchbar">
@@ -113,63 +123,66 @@
 ?>
         <!-- LETS GO BABY -->
 
-            <div id="groups_pages">
-                <div id="groups" style="height: 40%; border:0;">
-                    <h3 style="color:white; background-color:indigo; width:50%; margin:5px auto; border-radius:10px;">Groups (<?php echo $_SESSION['user']->get_groups_no(); ?>)</h3>
-                    <div id="show" style="height: 80%; border:0; text-align:left; padding: 10px 20px; overflow-y:auto;">
-                    <?php
-                    $groups = $_SESSION['user']->get_groups();
-                    $groups_no = $_SESSION['user']->get_groups_no();
-                    if($groups_no!=0){
+        <div id="groups_pages" style="text-align:center;">
+        <img src="assets/img/group_icon.jpg" style="width:70%; margin: 10px auto; border-radius:inherit;" >
+        <h3 style="margin:0 0 10px 0; color:green; font-style:italic;"> <?php echo $_SESSION['group']->get_name(); ?> </h3>
+
+        <button id="g_button" style="border-radius:5px; color:indigo; font-weight:bolder;" onclick="group_button()"><?php
+        if($_SESSION['type']=="admin")echo 'Delete Group';
+        else if($_SESSION['type']=="member")echo 'Leave Group';
+        else {
+            if($_SESSION['requested']) echo 'Cancel Request';
+            else echo 'Join Group';
+        }
+       
+       ?></button>
+        <hr>
+        <p style="margin:5px auto; width:80%; font-size:130%; color:white; border:2px solid black; border-radius:5px; background-color:indigo; font-weight:bolder; <?php if($_SESSION['type']=="guest") echo 'display:none;' ?>"> Members (<?php echo $_SESSION['group']->get_members_no();?>) </p>
+        <div style="width:100%; text-align:left; padding:20px; height:30%; border:2px solid gray; border-radius:10px; overflow-y:auto; <?php if($_SESSION['type']=="guest") echo 'display:none;' ?>">
+        <?php
+                    $members = $_SESSION['group']->get_members();
+                    $members_no = $_SESSION['group']->get_members_no();
+                    if($members_no!=0){
                         $start = 0;
-                        for($i=0; $i<$groups_no; $i++){
-                        $end = strpos($groups,",",$start + 1);
-                        $group = new group($_SESSION['user']->get_id(),substr($groups,$start,$end - $start));
+                        for($i=0; $i<$members_no; $i++){
+                        $end = strpos($members,",",$start + 1);
+                        $member = new user(substr($members,$start,$end - $start));
                         $start = $end + 1;
-                        echo' - <a href="group.php?group='.$group->get_id().'"> '.$group->get_name().'</a><br>';
-                        }
+                        echo'<div style="border:2px solid transparent;"> - <a style="font-size:95%; text-decoration:none;" href="http://localhost/social-media-platform-web/'.$member->get_id().'"> '.$member->get_name().'</a><button name="'.$member->get_id().'" onclick="kick_button(this.name)" style="margin: 0 5px;'; if($_SESSION['type']!="admin") echo'display:none;';  echo'padding:1px 2px; border-radius:3px; font-size:80%;  float:right;">Kick</button></div>';
+                        } 
                     }
-                    else echo '<p style="text-align:center; color:gray; font-weight:bolder; font-size:130%; margin: 30px;">No Groups To Show</p>';
-                    ?>
-                    </div>
-                </div>
-                <div id="pages" style="height: 40%;">
-                    <h3 style="color:white; background-color:indigo; width:50%; margin:5px auto; border-radius:10px;">Pages (<?php echo $_SESSION['user']->get_pages_no(); ?>)</h3>
-                    <div id="show" style="height: 80%; border:0; text-align:left; padding: 10px 20px; overflow-y:auto;">
-                    <?php
-                    $pages = $_SESSION['user']->get_pages();
-                    $pages_no = $_SESSION['user']->get_pages_no();
-                    if($pages_no!=0){
+                    else echo '<p style="text-align:center; color:gray; font-weight:bolder; font-size:130%; margin: 60px auto;">No Members</p>';
+        ?>
+        </div>
+        <p style="margin:5px auto; width:80%; font-size:130%; color:white; border:2px solid black; border-radius:5px; background-color:indigo; font-weight:bolder; <?php if($_SESSION['type']!="admin") echo 'display:none;' ?>"> Requests (<?php echo $_SESSION['group']->get_requests_no(); ?>) </p>
+        <div style="width:100%; text-align:left; padding:20px; height:30%; border:2px solid gray; border-radius:10px; overflow-y:auto; <?php if($_SESSION['type']!="admin") echo 'display:none;' ?>">
+        <?php
+                    $requests = $_SESSION['group']->get_requests();
+                    $requests_no = $_SESSION['group']->get_requests_no();
+                    if($requests_no!=0){
                         $start = 0;
-                        for($i=0; $i<$pages_no; $i++){
-                        $end = strpos($pages,",",$start + 1);
-                        $page = new page($_SESSION['user']->get_id(),substr($pages,$start,$end - $start));
+                        for($i=0; $i<$requests_no; $i++){
+                        $end = strpos($requests,",",$start + 1);
+                        $member = new user(substr($requests,$start,$end - $start));
                         $start = $end + 1;
-                        echo'<a> - '.$page->get_name().'</a><br>';
-                        }
+                        echo'<div style="border:2px solid transparent;"> - <a style="font-size:95%; text-decoration:none;" href="http://localhost/social-media-platform-web/'.$member->get_id().'"> '.$member->get_name().'</a><button name="'.$member->get_id().'" onclick="response_button(this.name, 1)" style="margin: 0 5px; padding:1px 2px; border-radius:3px; font-size:80%;  float:right;">X</button><button name="'.$member->get_id().'" onclick="response_button(this.name , 0)" style="margin: 0 5px; padding:1px 2px; border-radius:3px; font-size:80%; float:right;">O</button> </div>';
+                      }
                     }
-                    else echo '<p style="text-align:center; color:gray; font-weight:bolder; font-size:130%; margin: 30px;">No Pages To Show</p>';
-                    ?>
-                    </div>
-                </div>
-                <div id="create" style="height: 20%;">
-                <h3 style="color:rgb(0,255,0); background-color:indigo; width:50%; margin:5px auto; border-radius:10px;">Create</h3>
-                <form method="POST" action="http://localhost/social-media-platform-web/assets/operation/db_update.php">
-                    <p>Name:</p><input style="width:60%" name="name" type="text"><br>
-                    <p>Type:</p>
-                    <input type="radio" id="male" name="type" value="Page" checked="checked"><samp> Page &emsp;</samp>
-                    <input type="radio" id="female" name="type" value="Group"><samp> Group</samp><br>
-                    <input type="submit" name="submit" style="margin:5px 35%;" value="Create"> 
-                </form>
-                </div>
+                    else echo '<p style="text-align:center; color:gray; font-weight:bolder; font-size:130%; margin: 60px auto;">No Requests</p>';
+        ?>
+        </div>
+        </div>
+            
+            <div style="display:none; border: 2px indigo solid; border-radius:15px; margin: 50px 30%; text-align:center;  <?php if($_SESSION['type']=="guest") echo 'display:block;' ?>">
+                            <h1 style="color:brown;"> Join The Group To See Posts</h1>
             </div>
 
-            <div id="newsfeed">
+            <div id="newsfeed" <?php if($_SESSION['type']=="guest") echo 'style="display:none"' ?>>
                 <div id="writepost">
                     <img src="<?php echo $_SESSION['user']->get_id()."/".$_SESSION['user']->get_profile_pic()  ?>">
                     <form id="writepostform" method="POST" action="http://localhost/social-media-platform-web/assets/operation/post.php">
                         <textarea rows="5" placeholder="Whats in your mind ?.." id="postbody" type="textbox" name="body"></textarea>
-                        <input type="text" placeholder="Write the Post To..." style="width:30%; float:left; margin:10px 0;" name="post_to"> <input style="width:18%; float:right; margin:10px; border-radius:5px; background-color:indigo; color:white;" name="submit" type="submit" value="Post">
+                        <input type="hidden" placeholder="Write the Post To..." style="width:30%; float:left; margin:10px 0;" name="post_to" value="G<?php echo $_SESSION['group']->get_id(); ?>"> <input style="width:18%; float:right; margin:10px; border-radius:5px; background-color:indigo; color:white;" name="submit" type="submit" value="Post">
                     </form>
                 </div>
                 <!-- Load Posts -->
@@ -210,7 +223,7 @@
                                             execute = true;
                                         }
                                         };
-                                        xhttp.open("GET","http://localhost/social-media-platform-web/assets/operation/post.php?op=load&page=home");
+                                        xhttp.open("GET","http://localhost/social-media-platform-web/assets/operation/post.php?op=load&page=group&id="+<?php echo $_SESSION['group']->get_id(); ?>);
                                         xhttp.send();
                                     }
                                 }
@@ -226,12 +239,12 @@
                                                     newsfeed.innerHTML += this.responseText;
                                                 }
                                                 };
-                                                xhttp2.open("GET","http://localhost/social-media-platform-web/assets/operation/post.php?op=load&page=home");
+                                                xhttp2.open("GET","http://localhost/social-media-platform-web/assets/operation/post.php?op=load&page=group&id="+<?php echo $_SESSION['group']->get_id(); ?>);
                                                 xhttp2.send(); 
                                             }
                                         }
                                         };
-                                        xhttp.open("GET","http://localhost/social-media-platform-web/assets/operation/post.php?op=load&page=home");
+                                        xhttp.open("GET","http://localhost/social-media-platform-web/assets/operation/post.php?op=load&page=group&id="+<?php echo $_SESSION['group']->get_id(); ?>);
                                         xhttp.send();
                                 }
                                 ///// buttons of post
@@ -301,6 +314,42 @@
                                         };
                                         xhttp.open("GET","http://localhost/social-media-platform-web/assets/operation/post.php?op=save&id=" + post_id );
                                         xhttp.send();
+                                }
+                                function group_button(){
+                                    var g_button = document.getElementById("g_button");
+                                    if(g_button.innerHTML == "Delete Group"){var op="delete";}
+                                    else if(g_button.innerHTML == "Join Group"){var op="join";}
+                                    else if(g_button.innerHTML == "Leave Group"){var op="leave";}
+                                    else if(g_button.innerHTML == "Cancel Request"){var op="cancel";}
+                                    var xhttp = new XMLHttpRequest();
+                                        xhttp.onreadystatechange = function() {
+                                        if (this.readyState == 4 && this.status == 200) {
+                                            if(op=="delete") window.location.replace("settings/../");
+                                            else location.reload();
+                                        }
+                                        };
+                                        xhttp.open("GET","http://localhost/social-media-platform-web/assets/operation/group.php?op="+ op);
+                                        xhttp.send(); 
+                                }
+                                function kick_button(id){
+                                    var xhttp = new XMLHttpRequest();
+                                        xhttp.onreadystatechange = function() {
+                                        if (this.readyState == 4 && this.status == 200) {
+                                            location.reload();
+                                        }
+                                        };
+                                        xhttp.open("GET","http://localhost/social-media-platform-web/assets/operation/group.php?op=kick&id="+ id);
+                                        xhttp.send(); 
+                                }
+                                function response_button(id,op){
+                                        var xhttp = new XMLHttpRequest();
+                                        xhttp.onreadystatechange = function() {
+                                        if (this.readyState == 4 && this.status == 200) {
+                                             location.reload();
+                                        }
+                                        };
+                                        xhttp.open("GET","http://localhost/social-media-platform-web/assets/operation/group.php?op=" + op + "&id=" + id);
+                                        xhttp.send(); 
                                 }
 
             </script>
