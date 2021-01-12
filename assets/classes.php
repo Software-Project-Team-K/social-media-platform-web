@@ -1,7 +1,5 @@
 <?php
 
-            
-                    //CLASS >> CONNECTION TO DATABASE
                     class connection{
                         private  $_server = "localhost";
                         private  $_user = "root";
@@ -16,8 +14,6 @@
                         $this->conn->close();
                          }
                     }
-
-                    //CLASS >> CURRENT USER DATA
                     class user{
 
                         private $data;
@@ -92,8 +88,6 @@
                             else echo 'This Google Account already associated!.';
                         }
                     }
-
-                    //CLASS >> CURRENT analyst DATA
                     class admin{
 
                         private $data;
@@ -160,15 +154,65 @@
                             }
                             else if($pattern[0]=='U')
                             {
-                                $id=substr($pattern,1);   
- 
+                                $id=substr($pattern,1);  
+                                $result = $connect->conn->query("SELECT * FROM users WHERE id='$id'");
+                                if(mysqli_num_rows($result)==0)return 'No Matched Users!'; 
+                                $user = new user($id);
+                                $connect->conn->query("DELETE FROM posts WHERE post_from='$id'");  
+                                $connect->conn->query("DELETE FROM notifications WHERE sender='$id'");  
+                                $connect->conn->query("DELETE FROM marketplace WHERE seller='$id'");  
+                                $connect->conn->query("DELETE FROM comments WHERE comment_from='$id'");  
+                                $friends = $user->get_friends();
+                                $friends_no = $user->get_friends_no();
+                                $start = 0;
+                                for($i=0; $i<$friends_no; $i++){
+                                $end = strpos($friends,",",$start + 1);
+                                $friend = substr($friends,$start,$end - $start);
+                                $start = $end + 1;
+                                friendship::removeFriend($id,$friend);
+                                }
+                                $results = $connect->conn->query("SELECT id FROM users WHERE fr_requests LIKE '%$id%' ");
+                                for($i=0;$i<mysqli_num_rows($results);$i++){
+                                $result = mysqli_fetch_assoc($results);
+                                friendship::cancelRequest($id,$result['id']);
+                                }
+                                $groups = $user->get_groups();
+                                $groups_no = $user->get_groups_no();
+                                $start = 0;
+                                for($i=0; $i<$groups_no; $i++){
+                                $end = strpos($groups,",",$start + 1);
+                                $group = new group($id,substr($groups,$start,$end - $start));
+                                $start = $end + 1;
+                                if($group->get_owner() == $id)$group->delete_group();
+                                else $group->leave_group();
+                                }
+                                $results = $connect->conn->query("SELECT id FROM groups WHERE requests LIKE '%$id%' ");
+                                for($i=0;$i<mysqli_num_rows($results);$i++){
+                                $result = mysqli_fetch_assoc($results);
+                                $group = new group($id,$result['id']);
+                                $group->cancel_request();
+                                }
+                                $pages = $user->get_pages();
+                                $pages_no = $user->get_pages_no();
+                                $start = 0;
+                                for($i=0; $i<$pages_no; $i++){
+                                $end = strpos($pages,",",$start + 1);
+                                $page = new page($id,substr($pages,$start,$end - $start));
+                                $start = $end + 1;
+                                if($page->get_owner() == $id)$page->delete_page();
+                                else if(strstr($page->get_admins(),$id))
+                                {
+                                    $page->leave_admin();
+                                    $page->unfollow_page();
+                                }
+                                else $page->unfollow_page();
+                                }
+                                $connect->conn->query("DELETE FROM users WHERE id='$id'"); 
+                                return 'Banned Successfully!'; 
                             }
                             else return 'Invalid Pattern!';
                         }
                     }
-
-
-
                     class friendship{
                         static function isFriend($user_id,$target_id){
                             $user = new user($user_id);
@@ -730,7 +774,6 @@
                                 $connect->conn->query("UPDATE users SET groups_no='$num' WHERE id='$user_id'");
                                 }
                             }
-
                             $connect->conn->query("DELETE FROM posts WHERE post_to='group' and post_to_id='$this->group_id'");  
                             $connect->conn->query("DELETE FROM groups WHERE id='$this->group_id'");  
                         }
@@ -882,7 +925,6 @@
                             }
 
                     }
-
                     class dynamic_validation{
 
                         private $errors = array("</br>");
@@ -978,7 +1020,6 @@
                             return $this->errors;
                         }
                     }
-
                     //Some Functions
                     function test_input($data) {
                         $data = trim($data);
