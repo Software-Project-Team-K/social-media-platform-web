@@ -9,6 +9,7 @@
         
             // Inintialize URL to the variable 
             $url = $_SERVER['REQUEST_URI'];
+            $_SESSION['current']= $url;
             $url_components = parse_url($url); 
             parse_str($url_components['query'], $params);
             $_SESSION['group'] = new group($_SESSION['user']->get_id(),$params['group']); 

@@ -94,7 +94,8 @@
                      $sql = "CREATE TABLE posts(
                         id INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
                         post_from VARCHAR(30) NOT NULL,
-                        post_to VARCHAR (30) NOT NULL,
+                        post_to VARCHAR (10) NOT NULL,
+                        post_to_id VARCHAR (10) NOT NULL,
                         body TEXT NOT NULL,
                         date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                         likes VARCHAR(200),

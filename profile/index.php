@@ -4,6 +4,8 @@
                 if(!isset($_SESSION['user']))header("location: ../");
                 $_SESSION['offset']=0;
 
+                $url = $_SERVER['REQUEST_URI'];
+                $_SESSION['current']= $url;
                 //aquire the usernames
                 $user_id = $_SESSION['user']->get_id();
                 $target_id = substr($_SERVER['REQUEST_URI'],strpos($_SERVER['REQUEST_URI'],"/",1)+1);

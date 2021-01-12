@@ -4,19 +4,19 @@
 
             if ($_SERVER["REQUEST_METHOD"] == "POST" && $_POST['submit']=="Post") {
                 $body = $_POST['body'];
-                $post_to = $_POST['post_to'];
+                $pattern = $_POST['post_to'];
                 $myPost = new post($_SESSION['user']->get_id());
-                $myPost->write_post($body,$post_to);
-                //make it dynamic
-                header("location: ../../");
+                $myPost->write_post($body,$pattern);
+                $goto = $_SESSION['current'] ;
+                header("location: $goto");
             }
             else if ($_SERVER["REQUEST_METHOD"] == "POST" && $_POST['submit']=="Write") {
                 $body = $_POST['body'];
                 $post_to = $_POST['post_to'];
                 $myPost = new post($_SESSION['user']->get_id());
                 $myPost->write_comment($_SESSION['post'],$_POST['body']);
-                //make it dynamic
-                header("location: ../../");
+                $goto = $_SESSION['current'] ;
+                header("location: $goto");
             }
             
             else if ($_SERVER["REQUEST_METHOD"] == "GET" && $_GET['op']=="load" && $_SESSION['offset']!=-1) {
@@ -69,11 +69,5 @@
                 die();
             }
       
-
-
-
-
-
-
 
 ?>

@@ -3,6 +3,9 @@
             session_start();
             if(!isset($_SESSION['user']))header("location: hello/");
 
+
+            $url = $_SERVER['REQUEST_URI'];
+            $_SESSION['current']= $url;
             //refetch the data
             $_SESSION['user'] = new user($_SESSION['user']->get_id());
             $_SESSION['offset'] = 0;
@@ -169,7 +172,7 @@
                     <img src="<?php echo $_SESSION['user']->get_id()."/".$_SESSION['user']->get_profile_pic()  ?>">
                     <form id="writepostform" method="POST" action="http://localhost/social-media-platform-web/assets/operation/post.php">
                         <textarea rows="5" placeholder="Whats in your mind ?.." id="postbody" type="textbox" name="body"></textarea>
-                        <input type="text" placeholder="Write the Post To..." style="width:30%; float:left; margin:10px 0;" name="post_to"> <input style="width:18%; float:right; margin:10px; border-radius:5px; background-color:indigo; color:white;" name="submit" type="submit" value="Post">
+                        <input type="hidden" placeholder="Write the Post To..." style="width:30%; float:left; margin:10px 0;" name="post_to" value="H"> <input style="width:18%; float:right; margin:10px; border-radius:5px; background-color:indigo; color:white;" name="submit" type="submit" value="Post">
                     </form>
                 </div>
                 <!-- Load Posts -->

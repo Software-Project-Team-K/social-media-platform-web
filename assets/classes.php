@@ -261,16 +261,23 @@
                         function __construct($user_id){
                             $this->user_id =$user_id;
                         }
-                        function write_post($body,$post_to){
+                        function write_post($body,$pattern){
                             $connect = new connection;
-                            $connect->conn->query("INSERT INTO posts(post_from,post_to,body) VALUES('$this->user_id','$post_to','$body')");
+                            if($pattern[0]=='G'){$post_to ='group'; $post_to_id =substr($pattern,1);}
+                            else if($pattern[0]=='P'){$post_to ='page'; $post_to_id =substr($pattern,1);}
+                            else if($pattern[0]=='F'){$post_to ='friend'; $post_to_id =substr($pattern,1);}
+                            else {$post_to ='home'; $post_to_id='';}
+                            $connect->conn->query("INSERT INTO posts(post_from,post_to,post_to_id,body) VALUES('$this->user_id','$post_to','$post_to_id','$body')");
                         }
                         function load_timeline_posts($offset){
                             $connect = new connection;
                             $user = new user($this->user_id);
                             $friends = $this->user_id.','.$user->get_friends();
-                            $posts = $connect->conn->query("SELECT * FROM posts WHERE '$friends' LIKE CONCAT('%', post_from, '%') AND post_to='' order by date DESC LIMIT 5 OFFSET $offset");
-                            
+                            $groups = $user->get_groups();
+                            $pages = $user->get_pages();
+                            $posts = $connect->conn->query("SELECT * FROM posts WHERE ('$friends' LIKE CONCAT('%', post_from, '%') AND post_to='home') or ('$groups' LIKE CONCAT('%', post_to_id, '%') AND post_to='group') or ('$pages' LIKE CONCAT('%', post_to_id, '%') AND post_to='page')  order by date DESC LIMIT 5 OFFSET $offset");
+
+
                             if(mysqli_num_rows($posts) == 0){
                                 echo'
                                 <div class="post" style="text-align:center; background-color:transparent; width:60%;">
@@ -283,11 +290,30 @@
                                 for($i=0;$i<mysqli_num_rows($posts);$i++){
                                     $post = mysqli_fetch_assoc($posts);
                                     $writer = new user($post['post_from']);
+                                    if($post['post_to']=='page'){
+                                    $myPage = new page($this->user_id,$post['post_to_id']);
+
+                                    echo' 
+                                    <div class="post">
+                                    <img src="http://localhost/social-media-platform-web/assets/img/page_icon.png">
+                                    <p>'.$myPage->get_name().'</p>';
+
+                                    }
+                                    else{
                                     echo' 
                                     <div class="post">
                                     <img src="http://localhost/social-media-platform-web/'.$writer->get_id().'/'.$writer->get_profile_pic().'">
-                                    <p>'.$writer->get_name().'</p>
-                                    <samp>'.date_optimize($post['date']).'</samp>
+                                    <p>'.$writer->get_name().'</p>';
+                                    }
+                                    
+
+
+                                    if($post['post_to']=='group'){
+                                        $myGroup = new group($this->user_id,$post['post_to_id']);
+                                        echo ' <p style="color:rgb(0,255,0); font-size:85%; margin:0 20px;"> (Group: '.$myGroup->get_name().')</p>';
+                                    }
+                            
+                                    echo'<samp>'.date_optimize($post['date']).'</samp>
                                     <hr>
                                     <textarea readonly class="body">'.$post['body'].'</textarea>
                                     <div class="toolbar">';
@@ -316,7 +342,7 @@
                         function load_profile_posts($offset){
                             $connect = new connection;
                             $user = new user($this->user_id);
-                            $posts = $connect->conn->query("SELECT * FROM posts WHERE (post_from='$this->user_id' and post_to='') or post_to='$this->user_id' or shared LIKE CONCAT('%', '$this->user_id', '%') order by date DESC LIMIT 5 OFFSET $offset");
+                            $posts = $connect->conn->query("SELECT * FROM posts WHERE (post_from='$this->user_id' and post_to='home') or shared LIKE CONCAT('%', '$this->user_id', '%') order by date DESC LIMIT 5 OFFSET $offset");
                             
                             if(mysqli_num_rows($posts) == 0){
                                 echo'
@@ -415,8 +441,7 @@
                         function load_group_posts($offset,$group_id){
                             $connect = new connection;
                             $user = new user($this->user_id);
-                            $pattern = "G".$group_id;
-                            $posts = $connect->conn->query("SELECT * FROM posts WHERE post_to='$pattern' order by date DESC LIMIT 5 OFFSET $offset");
+                            $posts = $connect->conn->query("SELECT * FROM posts WHERE post_to='group' and post_to_id='$group_id' order by date DESC LIMIT 5 OFFSET $offset");
                             
                             if(mysqli_num_rows($posts) == 0){
                                 echo'
@@ -466,8 +491,7 @@
                         function load_page_posts($offset,$page_id){
                             $connect = new connection;
                             $user = new user($this->user_id);
-                            $pattern = "P".$page_id;
-                            $posts = $connect->conn->query("SELECT * FROM posts WHERE post_to='$pattern' order by date DESC LIMIT 5 OFFSET $offset");
+                            $posts = $connect->conn->query("SELECT * FROM posts WHERE post_to='page' and post_to_id='$page_id' order by date DESC LIMIT 5 OFFSET $offset");
                             
                             if(mysqli_num_rows($posts) == 0){
                                 echo'
