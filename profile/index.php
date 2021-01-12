@@ -353,6 +353,7 @@
                                         if (this.readyState == 4 && this.status == 200) {
                                             var num = document.getElementById("s" + post_id);
                                             num.innerHTML = Number(num.innerHTML) + Number(this.responseText);
+                                            if(this.responseText == '0')alert("You Cant Share your own post! \n and You Cant Share a Post Twice!");
                                         }
                                         };
                                         xhttp.open("GET","http://localhost/social-media-platform-web/assets/operation/post.php?op=share&id=" + post_id );

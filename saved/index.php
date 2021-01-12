@@ -124,8 +124,8 @@
    ?>
 
 
-        <div style="width:15%; display:inline-block; border-right:2px solid indigo; border-bottom:2px solid indigo; padding:0 30px 30px 30px; border-radius:0 0 50px 0; vertical-align:top; text-align:center;">
-        <h2 style="color:royalblue;">Saved Posts</h2>
+        <div style="width:15%; display:inline-block; background-color:rgb(180,180,180); border-right:2px solid indigo; border-bottom:2px solid indigo; padding:0 30px 30px 30px; border-radius:0 0 50px 0; vertical-align:top; text-align:center;">
+        <h2 style="color:blue; background-color:whitesmoke; border:1px solid indigo; border-radius:5px">Saved Posts</h2>
         <img style="width:100%;" src="../assets/img/post_save2.png">
         </div>
 

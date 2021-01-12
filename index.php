@@ -57,6 +57,7 @@
                                         </div>
                                 <div style="height:40px; background-color: white;"></div>
 
+                                <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
                                 <script>
                                 var arrow = document.getElementById("arrow");
                                 var notiBtn = document.getElementById("notiBtn");
@@ -64,10 +65,10 @@
                                 var menu = document.getElementById("menu");  
                                 var noti = document.getElementById("noti");
                                 arrow.onclick = function() {
-                                    if(menu.style.display == "block")menu.style.display = "none"
-                                    else menu.style.display = "block";}
+                                    $("#menu").slideToggle();
+                                }
                                 notiBtn.onclick = function() {
-                                    if(noti.style.display == "block")noti.style.display = "none"
+                                    if(noti.style.display == "block")$("#noti").slideUp();
                                     else {
                                         var xhttp = new XMLHttpRequest();
                                         xhttp.onreadystatechange = function() {
@@ -77,21 +78,24 @@
                                         };
                                         xhttp.open("GET","assets/operation/db_update.php");
                                         xhttp.send();
-                                        noti.style.display = "block";
+                                        $("#noti").slideDown();
                                     }
                                 }
 
+
+         
 
                                 /////////
 
                                 var searchBar = document.getElementById("searchbar");
                                 var searchBox = document.getElementById("searchbox");
                                 searchBar.onfocus= function(){
-                                    searchBox.style.display = "block";
+                                    $("#searchbox").slideDown();
+         
                                 }
                                 searchBar.onblur= function(){
                                     myVar = setInterval(function () {
-                                        searchBox.style.display = "none";
+                                        $("#searchbox").slideUp();
                                         clearInterval(myVar);
                                     }, 100);
                                 }
@@ -110,6 +114,15 @@
 
 
                                 </script>
+
+                                <audio  id="sound1">
+                                <source src="assets/audio/clickon.mp3" type="audio/mpeg">
+                                </audio>
+                                <audio id="sound2">
+                                <source src="assets/audio/clickoff.mp3" type="audio/mpeg">
+                                </audio>
+
+
 
                             </head>
                         <body id="body">'
@@ -248,13 +261,18 @@
                                         if (this.readyState == 4 && this.status == 200) {
                                             var img = document.getElementById("love" + post_id);
                                             var num = document.getElementById("l" + post_id);
+                                            var c1 = document.getElementById("sound1");
+                                            var c2 = document.getElementById("sound2");
+
                                             if(img.src == "http://localhost/social-media-platform-web/assets/img/post_love1.png") 
                                             {
+                                            c1.play();
                                             img.src = "http://localhost/social-media-platform-web/assets/img/post_love2.png";
                                             num.innerHTML = Number(num.innerHTML) + 1;
                                             }
                                             else 
                                             {
+                                            c2.play();
                                             img.src = "http://localhost/social-media-platform-web/assets/img/post_love1.png";
                                             num.innerHTML = Number(num.innerHTML) - 1;
                                             }
@@ -265,6 +283,7 @@
                                 }
                                 function comment(post_id){
                                     var commentbox = document.getElementById("comments");
+                                    if(commentbox.style.display=="block"){$("#comments").fadeOut(); return;}
                                     var comments = document.getElementById("load");
                                     var xhttp = new XMLHttpRequest();
                                         xhttp.onreadystatechange = function() {
@@ -274,11 +293,12 @@
                                         };
                                         xhttp.open("GET","http://localhost/social-media-platform-web/assets/operation/post.php?op=loadcomments&id="+post_id);
                                         xhttp.send();
-                                    commentbox.style.display = "block";
+                                    $("#comments").fadeIn();
+                                   
                                 }
                                 function closecomment(){
                                     var commentbox = document.getElementById("comments");
-                                    commentbox.style.display = "none";
+                                    $("#comments").fadeOut();
                                 }
                                 function share(post_id){
                                         var xhttp = new XMLHttpRequest();
@@ -286,6 +306,7 @@
                                         if (this.readyState == 4 && this.status == 200) {
                                             var num = document.getElementById("s" + post_id);
                                             num.innerHTML = Number(num.innerHTML) + Number(this.responseText);
+                                            if(this.responseText == '0')alert("You Cant Share your own post! \n and You Cant Share a Post Twice!");
                                         }
                                         };
                                         xhttp.open("GET","http://localhost/social-media-platform-web/assets/operation/post.php?op=share&id=" + post_id );
@@ -312,8 +333,7 @@
 
                                 function create(){
                                     var but = document.getElementById("create");
-                                    if(but.style.display =="block")but.style.display ="none"
-                                    else but.style.display ="block";
+                                    $("#create").fadeToggle();
                                 }
 
             </script>
