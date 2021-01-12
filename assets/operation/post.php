@@ -7,6 +7,7 @@
                 $post_to = $_POST['post_to'];
                 $myPost = new post($_SESSION['user']->get_id());
                 $myPost->write_post($body,$post_to);
+                //make it dynamic
                 header("location: ../../");
             }
             else if ($_SERVER["REQUEST_METHOD"] == "POST" && $_POST['submit']=="Write") {
@@ -29,6 +30,11 @@
                 {
                     $myPost = new post($_SESSION['user']->get_id());
                     $myPost->load_saved_posts($_SESSION['offset']);
+                }
+                else if($_GET['page']=="group")
+                {
+                    $myPost = new post($_SESSION['user']->get_id());
+                    $myPost->load_group_posts($_SESSION['offset'],$_GET['id']);
                 }
                 else {
                     $myPost = new post($_SESSION['target']->get_id());

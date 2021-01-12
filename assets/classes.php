@@ -366,7 +366,7 @@
                         function load_saved_posts($offset){
                             $connect = new connection;
                             $user = new user($this->user_id);
-                            $posts = $connect->conn->query("SELECT * FROM posts WHERE saved LIKE CONCAT('%', $this->user_id, '%') AND post_to='' order by date DESC LIMIT 5 OFFSET $offset");
+                            $posts = $connect->conn->query("SELECT * FROM posts WHERE saved LIKE CONCAT('%', $this->user_id, '%') order by date DESC LIMIT 5 OFFSET $offset");
                             
                             if(mysqli_num_rows($posts) == 0){
                                 echo'
@@ -410,6 +410,57 @@
                                 $_SESSION['offset'] = $_SESSION['offset'] + mysqli_num_rows($posts); 
                             }
                         }
+
+
+                        function load_group_posts($offset,$group_id){
+                            $connect = new connection;
+                            $user = new user($this->user_id);
+                            $pattern = "G".$group_id;
+                            $posts = $connect->conn->query("SELECT * FROM posts WHERE post_to='$pattern' order by date DESC LIMIT 5 OFFSET $offset");
+                            
+                            if(mysqli_num_rows($posts) == 0){
+                                echo'
+                                <div class="post" style="text-align:center; background-color:transparent; width:60%;">
+                                <p style="font-weight:bolder; color:indigo; ">No More Group Posts.</p>
+                                </div>';
+                                $_SESSION['offset']=-1;
+                            }
+
+                            else{
+                                for($i=0;$i<mysqli_num_rows($posts);$i++){
+                                    $post = mysqli_fetch_assoc($posts);
+                                    $writer = new user($post['post_from']);
+                                    echo' 
+                                    <div class="post">
+                                    <img src="http://localhost/social-media-platform-web/'.$writer->get_id().'/'.$writer->get_profile_pic().'">
+                                    <p>'.$writer->get_name().'</p>
+                                    <samp>'.date_optimize($post['date']).'</samp>
+                                    <hr>
+                                    <textarea readonly class="body">'.$post['body'].'</textarea>
+                                    <div class="toolbar">';
+                                    
+                                    if(!(strstr($post['likes'],$this->user_id))) echo '<button style="margin-top: 0px;" name="'.$post['id'].'" onclick="love(this.name)"><img id="love'.$post['id'].'" src="http://localhost/social-media-platform-web/assets/img/post_love1.png"></button>';
+                                    else  echo '<button style="margin-top: 0px;" name="'.$post['id'].'" onclick="love(this.name)"><img id="love'.$post['id'].'" src="http://localhost/social-media-platform-web/assets/img/post_love2.png"></button>';
+                                    echo'
+                                    <p id="l'.$post['id'].'">'.substr_count($post['likes'],",").'</p>
+                                    <button  name="'.$post['id'].'" onclick="comment(this.name)" ><img src="http://localhost/social-media-platform-web/assets/img/post_comment.png"></button>
+                                    <p>';
+                                    $id = $post['id'];
+                                    $comments = $connect->conn->query("SELECT * FROM comments WHERE post_id='$id'");
+                                    echo mysqli_num_rows($comments);
+                                    echo'</p>
+                                    <button name="'.$post['id'].'" onclick="share(this.name)" ><img  src="http://localhost/social-media-platform-web/assets/img/post_share.png"></button>
+                                    <p id="s'.$post['id'].'">'.substr_count($post['shared'],",").'</p>';
+
+                                    if(!(strstr($post['saved'],$this->user_id))) echo '<button name="'.$post['id'].'" onclick="save(this.name)" ><img id="save'.$post['id'].'" src="http://localhost/social-media-platform-web/assets/img/post_save1.png"></button>';
+                                    else echo '<button name="'.$post['id'].'" onclick="save(this.name)" ><img id="save'.$post['id'].'" src="http://localhost/social-media-platform-web/assets/img/post_save2.png"></button>';  
+                                    echo '</div>
+                                    </div>';
+                                }
+                                $_SESSION['offset'] = $_SESSION['offset'] + mysqli_num_rows($posts); 
+                            }
+                        }
+
 
 
                         function love_post($post_id){
@@ -480,7 +531,13 @@
                             $result = $connect->conn->query("SELECT * FROM groups WHERE id='$group_id'");
                             $this->data = mysqli_fetch_assoc($result);
                         }
+                        function get_id(){return $this->data['id'];}
                         function get_name(){return $this->data['group_name'];}
+                        function get_owner(){return $this->data['group_owner'];}
+                        function get_members(){return $this->data['members'];}
+                        function get_members_no(){return $this->data['members_no'];}
+                        function get_requests(){return $this->data['requests'];}
+                        function get_requests_no(){return $this->data['requests_no'];}
                         static function create($name,$user_id){
                             $connect = new connection;
                             $connect->conn->query("INSERT INTO groups(group_name,group_owner) VALUES('$name','$user_id')");
@@ -492,7 +549,93 @@
                             $connect->conn->query("UPDATE users SET groups='$groups' WHERE id='$user_id'");
                             $connect->conn->query("UPDATE users SET groups_no='$num' WHERE id='$user_id'");
                         }
-                        
+                        function join_group(){
+                        $connect = new connection;
+                        $requests = $this->get_requests().$this->user_id.",";
+                        $requests_no = $this->get_requests_no() + 1;
+                        $connect->conn->query("UPDATE groups SET requests='$requests' WHERE id='$this->group_id'");
+                        $connect->conn->query("UPDATE groups SET requests_no='$requests_no' WHERE id='$this->group_id'");
+                        }
+                        function cancel_request(){
+                        $connect = new connection;
+                        $requests = str_replace($this->user_id.",","",$this->get_requests());
+                        $requests_no = $this->get_requests_no() - 1;
+                        $connect->conn->query("UPDATE groups SET requests='$requests' WHERE id='$this->group_id'");
+                        $connect->conn->query("UPDATE groups SET requests_no='$requests_no' WHERE id='$this->group_id'");
+                        }
+                        function leave_group(){
+                        $connect = new connection;
+                        $members = str_replace($this->user_id.",","",$this->get_members());
+                        $members_no=$this->get_members_no() - 1;
+                        $connect->conn->query("UPDATE groups SET members='$members' WHERE id='$this->group_id'");
+                        $connect->conn->query("UPDATE groups SET members_no='$members_no' WHERE id='$this->group_id'");
+                        $user = new user($this->user_id);
+                        $groups = str_replace($this->group_id.",","",$user->get_groups());
+                        $num = $user->get_groups_no() -1;
+                        $connect->conn->query("UPDATE users SET groups='$groups' WHERE id='$this->user_id'");
+                        $connect->conn->query("UPDATE users SET groups_no='$num' WHERE id='$this->user_id'");
+                        }
+                        function delete_group(){
+                            $connect = new connection;
+                            $members = $this->get_members();
+                            $members_no = $this->get_members_no();
+
+                            if($members_no!=0){
+                                $start = 0;
+                                for($i = 0; $i <$members_no; $i++){
+                                $end = strpos($members,",",$start + 1);
+                                $user = new user(substr($members,$start,$end - $start));
+                                $start = $end + 1;
+                                $groups = str_replace($this->group_id.",","",$user->get_groups());
+                                $num = $user->get_groups_no() -1;
+                                $user_id = $user->get_id();
+                                $connect->conn->query("UPDATE users SET groups='$groups' WHERE id='$user_id'");
+                                $connect->conn->query("UPDATE users SET groups_no='$num' WHERE id='$user_id'");
+                                }
+                            }
+                            $groups = str_replace($this->group_id.",","",$this->user->get_groups());
+                            $num = $this->user->get_groups_no() - 1;
+                            $connect->conn->query("UPDATE users SET groups='$groups' WHERE id='$this->user_id'");
+                            $connect->conn->query("UPDATE users SET groups_no='$num' WHERE id='$this->user_id'");
+                            $connect->conn->query("DELETE FROM groups WHERE id='$this->group_id'");  
+                        }
+                        function accept_request($id){
+                            $connect = new connection;
+                            $requests = str_replace($id.",","",$this->get_requests());
+                            $requests_no = $this->get_requests_no() - 1;
+                            $connect->conn->query("UPDATE groups SET requests='$requests' WHERE id='$this->group_id'");
+                            $connect->conn->query("UPDATE groups SET requests_no='$requests_no' WHERE id='$this->group_id'");
+                            $user = new user($id);
+                            $groups = $user->get_groups().$this->group_id.",";
+                            $num = $user->get_groups_no() +1;
+                            $connect->conn->query("UPDATE users SET groups='$groups' WHERE id='$id'");
+                            $connect->conn->query("UPDATE users SET groups_no='$num' WHERE id='$id'");
+                            $members=$this->get_members().$id.",";
+                            $members_no=$this->get_members_no() + 1;
+                            $connect->conn->query("UPDATE groups SET members='$members' WHERE id='$this->group_id'");
+                            $connect->conn->query("UPDATE groups SET members_no='$members_no' WHERE id='$this->group_id'");
+                        }
+                        function refuse_request($id){
+                            $connect = new connection;
+                            $requests = str_replace($id.",","",$this->get_requests());
+                            $requests_no = $this->get_requests_no() - 1;
+                            $connect->conn->query("UPDATE groups SET requests='$requests' WHERE id='$this->group_id'");
+                            $connect->conn->query("UPDATE groups SET requests_no='$requests_no' WHERE id='$this->group_id'");  
+                        }
+                        function kick_member($id){
+                            $connect = new connection;
+                            $user = new user($id);
+                            $groups = str_replace($this->group_id.",","",$user->get_groups());
+                            $num = $user->get_groups_no() -1;
+                            $connect->conn->query("UPDATE users SET groups='$groups' WHERE id='$id'");
+                            $connect->conn->query("UPDATE users SET groups_no='$num' WHERE id='$id'");
+                            
+                            $members= str_replace($id.",","",$this->get_members());
+                            $members_no=$this->get_members_no() - 1;
+                            $connect->conn->query("UPDATE groups SET members='$members' WHERE id='$this->group_id'");
+                            $connect->conn->query("UPDATE groups SET members_no='$members_no' WHERE id='$this->group_id'");
+                        }
+
                     }
                     class page{
                         private $user_id;
@@ -508,6 +651,7 @@
                             $result = $connect->conn->query("SELECT * FROM pages WHERE id='$page_id'");
                             $this->data = mysqli_fetch_assoc($result);
                         }
+                        function get_id(){return $this->data['id'];}
                         function get_name(){return $this->data['page_name'];}
                         static function create($name,$user_id){
                             $connect = new connection;

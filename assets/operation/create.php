@@ -120,8 +120,10 @@
                         id INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
                         group_name VARCHAR(30) NOT NULL,
                         group_owner VARCHAR(30) NOT NULL,
-                        requests TEXT NOT NULL,     
-                        members TEXT NOT NULL
+                        requests TEXT NOT NULL,
+                        requests_no INT(10) NOT NULL,     
+                        members TEXT NOT NULL,
+                        members_no INT(10) NOT NULL
                     )";
                     if ($conn->query($sql) === TRUE) echo "Table groups created successfully"."<br>";
                     else echo "Error creating Table: " . $conn->error."<br>";
@@ -132,7 +134,8 @@
                         page_name VARCHAR(30) NOT NULL,
                         page_owner VARCHAR(30) NOT NULL,
                         admins TEXT NOT NULL,     
-                        followers TEXT NOT NULL
+                        followers TEXT NOT NULL,
+                        followers_no INT(10) NOT NULL
                     )";
                     if ($conn->query($sql) === TRUE) echo "Table pages created successfully"."<br>";
                     else echo "Error creating Table: " . $conn->error."<br>";
