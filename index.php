@@ -2,6 +2,7 @@
             require 'assets/classes.php';
             session_start();
             if(!isset($_SESSION['user']))header("location: hello/");
+            
 
 
             $url = $_SERVER['REQUEST_URI'];

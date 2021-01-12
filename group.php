@@ -139,7 +139,7 @@
        ?></button>
         <hr>
         <p style="margin:5px auto; width:75%; font-size:120%; color:white; border:2px solid black; border-radius:6px; background-color:indigo; font-weight:bolder; <?php if($_SESSION['type']=="guest") echo 'display:none;' ?>"> Members (<?php echo $_SESSION['group']->get_members_no();?>) </p>
-        <div style="width:100%; text-align:left; padding:20px; height:30%; border:2px solid gray; border-radius:10px; overflow-y:auto; <?php if($_SESSION['type']=="guest") echo 'display:none;' ?>">
+        <div style="width:100%; text-align:left; padding:5px; height:30%; border:2px solid gray; border-radius:10px; overflow-y:auto; <?php if($_SESSION['type']=="guest") echo 'display:none;' ?>">
         <?php
                     $members = $_SESSION['group']->get_members();
                     $members_no = $_SESSION['group']->get_members_no();
@@ -156,7 +156,7 @@
         ?>
         </div>
         <p style="margin:5px auto; width:75%; font-size:120%; color:white; border:2px solid black; border-radius:6px; background-color:indigo; font-weight:bolder; <?php if($_SESSION['type']!="admin") echo 'display:none;' ?>"> Requests (<?php echo $_SESSION['group']->get_requests_no(); ?>) </p>
-        <div style="width:100%; text-align:left; padding:20px; height:30%; border:2px solid gray; border-radius:10px; overflow-y:auto; <?php if($_SESSION['type']!="admin") echo 'display:none;' ?>">
+        <div style="width:100%; text-align:left; padding:5px; height:30%; border:2px solid gray; border-radius:10px; overflow-y:auto; <?php if($_SESSION['type']!="admin") echo 'display:none;' ?>">
         <?php
                     $requests = $_SESSION['group']->get_requests();
                     $requests_no = $_SESSION['group']->get_requests_no();

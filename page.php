@@ -139,7 +139,7 @@
        ?></button>
         <hr>
         <p style="margin:5px auto; width:70%; font-size:120%; color:white; border:2px solid black; border-radius:6px; background-color:indigo; font-weight:bolder; "> Fans (<?php echo $_SESSION['page']->get_followers_no();?>) </p>
-        <div style="width:100%; text-align:left; padding:20px; height:30%; border:2px solid gray; border-radius:10px; overflow-y:auto; <?php if($_SESSION['type']=="fan") echo 'display:none;' ?>">
+        <div style="width:100%; text-align:left; padding:5px; height:30%; border:2px solid gray; border-radius:10px; overflow-y:auto; <?php if($_SESSION['type']=="fan") echo 'display:none;' ?>">
         <?php
                     $followers = $_SESSION['page']->get_followers();
                     $followers_no = $_SESSION['page']->get_followers_no();
@@ -156,7 +156,7 @@
         ?>
         </div>
         <p style="margin:5px auto; width:70%; font-size:120%; color:white; border:2px solid black; border-radius:6px; background-color:indigo; font-weight:bolder; <?php if($_SESSION['type']!="owner") echo 'display:none;' ?>"> Admins (<?php echo $_SESSION['page']->get_admins_no(); ?>) </p>
-        <div style="width:100%; text-align:left; padding:20px; height:30%; border:2px solid gray; border-radius:10px; overflow-y:auto; <?php if($_SESSION['type']!="owner") echo 'display:none;' ?>">
+        <div style="width:100%; text-align:left; padding:5px; height:30%; border:2px solid gray; border-radius:10px; overflow-y:auto; <?php if($_SESSION['type']!="owner") echo 'display:none;' ?>">
         <?php
                     $admins = $_SESSION['page']->get_admins();
                     $admins_no = $_SESSION['page']->get_admins_no();
