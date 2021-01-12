@@ -16,6 +16,8 @@
 
             body{
                 margin: 0;
+                background-image: url(assets/img/control.jpg);
+                background-size: cover;
             }
             *{
                 box-sizing: border-box;
@@ -24,7 +26,8 @@
                 width:35%; 
                 height:auto; 
                 display:inline-block;
-                border:4px solid indigo; 
+                border:5px solid indigo; 
+                background-color: whitesmoke;
                 border-radius:15px; 
                 margin:10px 5%;
                 vertical-align:top;
@@ -68,17 +71,14 @@
 
 
 
-
-
-
         </style>
     </head>
 
     <body>
 
-    <div style="width:40%; background:whitesmoke; margin:20px auto; text-align:left; border:5px solid black; border-radius:10px;"><a href="assets/operation/logout.php" style="float:right; border:black 2px solid; background-color:white; color:indigo; text-decoration:none; pointer:cursor; border-radius:10px; margin:5px; padding:2px; font-size:130%;">Logout</a>
-    <h3 style="margin:5px;">Chatverse Control Room</h3>
-    <img style="width:100px; display:inline-block; vertical-align:middle; margin: 5px 50px; background-color:indigo; border:5px brown solid; border-radius:20px;" src="assets/img/icn_logo.png"><p style="display:inline-block; font-size:120%; color:blue;">Welcome <?php echo $_SESSION['admin']->get_name()." - (".$_SESSION['admin']->get_control_type().")"; ?></p>
+    <div style="width:40%; background:whitesmoke; margin:0 auto 50px auto; text-align:left; border:4px solid gray; border-top:0; border-radius:0 0 10px 10px;"><a href="assets/operation/logout.php" style="float:right; border:black 2px solid; background-color:indigo; color:white; text-decoration:none; pointer:cursor; border-radius:10px; margin:5px; padding:5px; font-size:120%;">Logout</a>
+    <h3 style="margin:5px; color:royalblue;">Chatverse Control Room</h3>
+    <img style="width:100px; display:inline-block; vertical-align:middle; margin: 5px 50px; background-color:indigo; border:3px brown solid; border-radius:20px;" src="assets/img/icn_logo.png"><p style="display:inline-block; font-size:120%; color:darkblue;">Welcome <?php echo $_SESSION['admin']->get_name()." - (".$_SESSION['admin']->get_control_type().")"; ?></p>
     </div>
 
     <div class="block" id="analysis" <?php if($_SESSION['admin']->get_control_type()=='Tracker') echo 'style="display:none;"'; ?>>
