@@ -76,7 +76,7 @@
 
     <body>
 
-    <div style="width:40%; background:whitesmoke; margin:0 auto 50px auto; text-align:left; border:4px solid gray; border-top:0; border-radius:0 0 10px 10px;"><a href="assets/operation/logout.php" style="float:right; border:black 2px solid; background-color:indigo; color:white; text-decoration:none; pointer:cursor; border-radius:10px; margin:5px; padding:5px; font-size:120%;">Logout</a>
+    <div style="width:40%; background:whitesmoke; margin:0 auto 50px auto; padding:10px 5px; text-align:left; border:3px solid gray; border-top:0; border-radius:0 0 100px 100px;"><a href="assets/operation/logout.php" style="float:right; border:black 2px solid; background-color:indigo; color:white; text-decoration:none; pointer:cursor; border-radius:10px; margin:5px; padding:5px; font-size:120%;">Logout</a>
     <h3 style="margin:5px; color:royalblue;">Chatverse Control Room</h3>
     <img style="width:100px; display:inline-block; vertical-align:middle; margin: 5px 50px; background-color:indigo; border:3px brown solid; border-radius:20px;" src="assets/img/icn_logo.png"><p style="display:inline-block; font-size:120%; color:darkblue;">Welcome <?php echo $_SESSION['admin']->get_name()." - (".$_SESSION['admin']->get_control_type().")"; ?></p>
     </div>

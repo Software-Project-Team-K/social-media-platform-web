@@ -683,10 +683,11 @@
                         function share_post($post_id){
                             $stat = 0;
                             $connect = new connection;
-                            $shares = $connect->conn->query("SELECT shared FROM posts WHERE id='$post_id'");
+                            $shares = $connect->conn->query("SELECT * FROM posts WHERE id='$post_id'");
                             $shares = mysqli_fetch_assoc($shares);
+                            $post_from = $shares['post_from'];
                             $shares = $shares['shared'];
-                            if(!(strstr($shares,$this->user_id)))
+                            if(!(strstr($shares,$this->user_id)) && $this->user_id != $post_from)
                             {
                                 $shares = $shares.$this->user_id.",";
                                 $stat = 1;
