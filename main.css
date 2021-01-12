@@ -213,9 +213,8 @@ background-color: darkblue;
     text-align: center;
 }
 #groups_pages > div a{
-    color: darkblue;
-    text-decoration: none;
-    font-size: 100%;
+    color: royalblue;
+    font-size: 110%;
     font-weight: bolder;
     font-style: italic;
 }

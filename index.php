@@ -6,9 +6,6 @@
             //refetch the data
             $_SESSION['user'] = new user($_SESSION['user']->get_id());
             $_SESSION['offset'] = 0;
-
-
-            
         
             echo '
                  <!DOCTYPE html>
@@ -115,7 +112,7 @@
 
             <div id="groups_pages">
                 <div id="groups" style="height: 40%; border:0;">
-                    <h3 style="color:white; background-color:indigo; width:50%; margin:5px auto; border-radius:10px;">Groups (<?php echo $_SESSION['user']->get_groups_no(); ?>)</h3>
+                    <h3 style="color:indigo; text-decoration:underline; margin:5px;">Groups (<?php echo $_SESSION['user']->get_groups_no(); ?>)</h3>
                     <div id="show" style="height: 80%; border:0; text-align:left; padding: 10px 20px; overflow-y:auto;">
                     <?php
                     $groups = $_SESSION['user']->get_groups();
@@ -126,7 +123,7 @@
                         $end = strpos($groups,",",$start + 1);
                         $group = new group($_SESSION['user']->get_id(),substr($groups,$start,$end - $start));
                         $start = $end + 1;
-                        echo' - <a href="group.php?group='.$group->get_id().'"> '.$group->get_name().'</a><br>';
+                        echo'<a> - '.$group->get_name().'</a><br>';
                         }
                     }
                     else echo '<p style="text-align:center; color:gray; font-weight:bolder; font-size:130%; margin: 30px;">No Groups To Show</p>';
@@ -134,7 +131,7 @@
                     </div>
                 </div>
                 <div id="pages" style="height: 40%;">
-                    <h3 style="color:white; background-color:indigo; width:50%; margin:5px auto; border-radius:10px;">Pages (<?php echo $_SESSION['user']->get_pages_no(); ?>)</h3>
+                    <h3 style="color:indigo; text-decoration:underline; margin:5px;">Pages (<?php echo $_SESSION['user']->get_pages_no(); ?>)</h3>
                     <div id="show" style="height: 80%; border:0; text-align:left; padding: 10px 20px; overflow-y:auto;">
                     <?php
                     $pages = $_SESSION['user']->get_pages();
@@ -153,7 +150,7 @@
                     </div>
                 </div>
                 <div id="create" style="height: 20%;">
-                <h3 style="color:rgb(0,255,0); background-color:indigo; width:50%; margin:5px auto; border-radius:10px;">Create</h3>
+                <h3 style="color:indigo; text-decoration:underline; margin:5px;">Create</h3>
                 <form method="POST" action="http://localhost/social-media-platform-web/assets/operation/db_update.php">
                     <p>Name:</p><input style="width:60%" name="name" type="text"><br>
                     <p>Type:</p>
