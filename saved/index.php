@@ -1,13 +1,17 @@
 <?php 
+
                 require '../assets/classes.php';
                 session_start();
                 if(!isset($_SESSION['user']))header("location: ../");
-                $_SESSION['offset']=0;
 
-                //aquire the usernames
-                $user_id = $_SESSION['user']->get_id();
                 //refetch the data
-                $_SESSION['user'] = new user($user_id);
+                $_SESSION['user'] = new user($_SESSION['user']->get_id());
+                if(isset($_SESSION['user']) && strlen($_SESSION['user']->get_id())==0) header("location: ../assets/operation/logout.php");
+
+
+                $url = $_SERVER['REQUEST_URI'];
+                $_SESSION['current']= $url;
+                $_SESSION['offset'] = 0;
 
 
                 
