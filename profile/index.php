@@ -66,6 +66,7 @@
                                    <div style="height:40px; background-color: white;"></div>
    
              
+                                   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
                                    <script>
                                    var arrow = document.getElementById("arrow");
                                    var notiBtn = document.getElementById("notiBtn");
@@ -73,37 +74,39 @@
                                    var menu = document.getElementById("menu");  
                                    var noti = document.getElementById("noti");
                                    arrow.onclick = function() {
-                                       if(menu.style.display == "block")menu.style.display = "none"
-                                       else menu.style.display = "block";}
+                                       $("#menu").slideToggle();
+                                   }
                                    notiBtn.onclick = function() {
-                                       if(noti.style.display == "block")noti.style.display = "none"
+                                       if(noti.style.display == "block")$("#noti").slideUp();
                                        else {
-   
                                            var xhttp = new XMLHttpRequest();
                                            xhttp.onreadystatechange = function() {
                                              if (this.readyState == 4 && this.status == 200) {
                                               document.getElementById("noti_img").src = "../assets/img/icn_notification.png";
                                              }
                                            };
-                                           xhttp.open("GET","../assets/operation/db_update.php");
+                                           xhttp.open("GET","assets/operation/db_update.php");
                                            xhttp.send();
-                                           noti.style.display = "block";
+                                           $("#noti").slideDown();
                                        }
                                    }
-
-
+   
+   
+            
+   
                                    /////////
-
+   
                                    var searchBar = document.getElementById("searchbar");
                                    var searchBox = document.getElementById("searchbox");
                                    searchBar.onfocus= function(){
-                                       searchBox.style.display = "block";
+                                       $("#searchbox").slideDown();
+            
                                    }
                                    searchBar.onblur= function(){
                                        myVar = setInterval(function () {
-                                           searchBox.style.display = "none";
+                                           $("#searchbox").slideUp();
                                            clearInterval(myVar);
-                                       }, 100);
+                                       }, 200);
                                    }
    
    
@@ -118,10 +121,20 @@
                                    xhttp.send();
                                    }
 
-
-
                                    </script>
    
+                                   <audio  id="sound1">
+                                   <source src="../assets/audio/clickon.wav" type="audio/x-wav">
+                                   </audio>
+                                   <audio id="sound2">
+                                   <source src="../assets/audio/clickoff.wav" type="audio/x-wav">
+                                   </audio>
+                                   <audio  id="sound3">
+                                   <source src="../assets/audio/saveon.wav" type="audio/x-wav">
+                                   </audio>
+                                   <audio id="sound4">
+                                   <source src="../assets/audio/saveoff.wav" type="audio/x-wav">
+                                   </audio>
    
                                </head>
                            <body id="body">'
@@ -273,6 +286,7 @@
                                 var body = document.getElementById("body");
                                 var newsfeed = document.getElementById("newsfeed");
                                 var execute = true;
+                                var current_comm;
                                 body.onscroll=function(){
                                     if(execute && html.scrollHeight - html.scrollTop <= html.clientHeight + 2){
                                         execute = false;
@@ -315,14 +329,19 @@
                                             if (this.readyState == 4 && this.status == 200) {
                                             var img = document.getElementById("love" + post_id);
                                             var num = document.getElementById("l" + post_id);
+                                            var c1 = document.getElementById("sound1");
+                                            var c2 = document.getElementById("sound2");
+
                                             if(img.src == "http://localhost/social-media-platform-web/assets/img/post_love1.png") 
                                             {
                                             img.src = "http://localhost/social-media-platform-web/assets/img/post_love2.png";
+                                            c1.play();
                                             num.innerHTML = Number(num.innerHTML) + 1;
                                             }
                                             else 
                                             {
                                             img.src = "http://localhost/social-media-platform-web/assets/img/post_love1.png";
+                                            c2.play();
                                             num.innerHTML = Number(num.innerHTML) - 1;
                                             }
                                         }
@@ -332,6 +351,9 @@
                                 }
                                 function comment(post_id){
                                     var commentbox = document.getElementById("comments");
+                                    if(commentbox.style.display=="block"){$("#comments").fadeOut(); current_comm.src = "http://localhost/social-media-platform-web/assets/img/post_comment.png"; return;}
+                                    current_comm = document.getElementById("comment" + post_id);
+                                    current_comm.src = "http://localhost/social-media-platform-web/assets/img/post_comment1.png";
                                     var comments = document.getElementById("load");
                                     var xhttp = new XMLHttpRequest();
                                         xhttp.onreadystatechange = function() {
@@ -341,11 +363,11 @@
                                         };
                                         xhttp.open("GET","http://localhost/social-media-platform-web/assets/operation/post.php?op=loadcomments&id="+post_id);
                                         xhttp.send();
-                                    commentbox.style.display = "block";
+                                        $("#comments").fadeIn();
                                 }
                                 function closecomment(){
-                                    var commentbox = document.getElementById("comments");
-                                    commentbox.style.display = "none";
+                                    current_comm.src = "http://localhost/social-media-platform-web/assets/img/post_comment.png";
+                                    $("#comments").fadeOut();
                                 }
                                 function share(post_id){
                                         var xhttp = new XMLHttpRequest();
@@ -364,13 +386,18 @@
                                         xhttp.onreadystatechange = function() {
                                         if (this.readyState == 4 && this.status == 200) {
                                             var img = document.getElementById("save" + post_id);
+                                            var c3 = document.getElementById("sound3");
+                                            var c4 = document.getElementById("sound4");
+
                                             if(img.src == "http://localhost/social-media-platform-web/assets/img/post_save1.png") 
                                             {
                                             img.src = "http://localhost/social-media-platform-web/assets/img/post_save2.png";
+                                            c3.play();
                                             }
                                             else 
                                             {
                                             img.src = "http://localhost/social-media-platform-web/assets/img/post_save1.png";
+                                            c4.play();
                                             }
                                         }
                                         };

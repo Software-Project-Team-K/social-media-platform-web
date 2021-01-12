@@ -86,8 +86,8 @@
                             $result = $connect->conn->query("SELECT * FROM users WHERE google_id='$google'");
                             if (mysqli_num_rows($result) == 0) {
                             $connect->conn->query("UPDATE users SET google_id='$google' WHERE id='$id'");
-                            echo 'This Google Account associated Successfully!.';}
-                            else echo 'This Google Account already associated!.';
+                            return 'Associated Successfully!.';}
+                            else return 'Account already associated!.';
                         }
                     }
                     class admin{
@@ -123,9 +123,54 @@
                             <div class="data"><img src="assets/img/online_icon.png"><p>Online Users Number:</p><samp> '.$online_no.'</samp></p></div>
                             <div class="data"><img src="assets/img/page_icon.png"><p>Total Pages Number:</p><samp> '.$pages_no.'</samp></p></div>
                             <div class="data"><img src="assets/img/group_icon.png"><p>Total Groups Number:</p><samp> '.$groups_no.'</samp> </p></div>
-                            <div class="data"><img src="assets/img/post_icon.png"><p>Total Posts Number:</p><samp> '.$posts_no.'</samp></p></div>
-                            <div class="data"><img src="assets/img/icn_msgx.png"><p>Total Messeges Number:</p><samp></samp></div>
-                            <div class="data"><img src="assets/img/trend_icon.png"><p>Top Trends: </p></div>';
+                            <div class="data" style="border:0;"><img src="assets/img/post_icon.png"><p>Total Posts Number:</p><samp> '.$posts_no.'</samp></p></div>';
+                        }
+                        function get_trends($period){
+                            if($period == ""){echo '<p style="width:100%; text-align:center;">Trends will appear here!</p>'; return;}
+                            else if($period < 1){echo '<p style="width:100%; text-align:center;">Invalid Period</p>'; return;}
+                            $connect = new connection;
+                            $now = date_create();
+                            date_add($now,date_interval_create_from_date_string("1 hour"));
+                            $then = date_sub($now,date_interval_create_from_date_string("$period days"));
+                            $now = date_create();
+                            date_add($now,date_interval_create_from_date_string("1 hour"));
+                            $a = date_format($now,"Y-m-d H:i:s");
+                            $b = date_format($then,"Y-m-d H:i:s");
+                            echo '<div class="data" style="font-size:70%; height:50px;"><img style="vertical-align:top; margin:0;" src="assets/img/trend_icon.png"><p style="margin:5px 0;">Top Trends:<br>From '.$a.'<br>To '.$b.'</p></div>';
+                            $results = $connect->conn->query("SELECT tags FROM posts WHERE (date >= '$b') && (date <= '$a') && (LENGTH(tags)>1)");
+                            $tags = array();
+                            
+                            if(mysqli_num_rows($results)!=0){
+                                for($i=0;$i<mysqli_num_rows($results);$i++){
+                                    $result = mysqli_fetch_assoc($results);
+                                    $result = $result['tags'];
+                                    $start=0;
+                                    while($start < strlen($result)){
+                                        $end = strpos($result,",",$start + 1);
+                                        $tag = substr($result,$start,$end - $start);
+                                        $start = $end + 1;
+                                        if (array_key_exists($tag,$tags))
+                                        {
+                                            $tags[$tag]+=1;
+                                        }
+                                        else
+                                        {
+                                            $tags[$tag]=1;
+                                        }
+                                    }
+                                }
+                                echo mysqli_num_rows($results);
+                                arsort($tags);
+                                $z=1;
+                                foreach($tags as $x=>$x_value)
+                                {
+                                echo '<p style="font-size:105%; width:60%; display:inline-block; margin:0; color:blue;">#'.$z.' '.$x.'</p>('.$x_value.') Times';
+                                echo "<br>";
+                                $z++;
+                                if($z == 11)return;
+                                }
+                            }
+                            else echo '<p style="width:100%; text-align:center;">No Trends in this Period!</p>';
                         }
                         function ban_unit($pattern){
 
@@ -371,11 +416,30 @@
                         }
                         function write_post($body,$pattern){
                             $connect = new connection;
+                            $valid = false;
+                            $tags;
+                            for($i=0;$i<strlen($body);$i++){
+                                if($body[$i]!=' ')$valid=true;
+                                if($body[$i]=='#'){
+                                    for($j = $i + 1;$j<strlen($body);$j++){
+                                        if($body[$j]==" "|| $body[$j]=="," || $body[$j]=="#" || $j == strlen($body) - 1){
+                                            if(($j == strlen($body)-1) &&($body[$j]!=" "&& $body[$j]!="," && $body[$j]!="#"))$j++;
+                                            $tag = substr($body,$i + 1, $j - $i - 1).",";
+                                            if(strlen($tag)!=1 && !strstr($tags,$tag)){
+                                                $tags .= $tag;
+                                            }
+                                        break;
+                                        }
+                                    }
+                                }
+                            }
+                            if(strlen($body)!=0 && $valid){
                             if($pattern[0]=='G'){$post_to ='group'; $post_to_id =substr($pattern,1);}
                             else if($pattern[0]=='P'){$post_to ='page'; $post_to_id =substr($pattern,1);}
                             else if($pattern[0]=='F'){$post_to ='friend'; $post_to_id =substr($pattern,1);}
                             else {$post_to ='home'; $post_to_id='';}
-                            $connect->conn->query("INSERT INTO posts(post_from,post_to,post_to_id,body) VALUES('$this->user_id','$post_to','$post_to_id','$body')");
+                            $connect->conn->query("INSERT INTO posts(post_from,post_to,post_to_id,body,tags) VALUES('$this->user_id','$post_to','$post_to_id','$body','$tags')");
+                            }
                         }
                         function load_timeline_posts($offset){
                             $connect = new connection;
@@ -427,7 +491,7 @@
                                     else  echo '<button style="margin-top: 0px;" name="'.$post['id'].'" onclick="love(this.name)"><img id="love'.$post['id'].'" src="http://localhost/social-media-platform-web/assets/img/post_love2.png"></button>';
                                     echo'
                                     <p id="l'.$post['id'].'">'.substr_count($post['likes'],",").'</p>
-                                    <button  name="'.$post['id'].'" onclick="comment(this.name)" ><img src="http://localhost/social-media-platform-web/assets/img/post_comment.png"></button>
+                                    <button  name="'.$post['id'].'" onclick="comment(this.name)" ><img id="comment'.$post['id'].'" src="http://localhost/social-media-platform-web/assets/img/post_comment.png"></button>
                                     <p>';
                                     $id = $post['id'];
                                     $comments = $connect->conn->query("SELECT * FROM comments WHERE post_id='$id'");
@@ -444,9 +508,10 @@
                                 $_SESSION['offset'] = $_SESSION['offset'] + mysqli_num_rows($posts); 
                             }
                         }
-                        function load_profile_posts($offset){
+                        function load_profile_posts($offset,$viewer_id){
                             $connect = new connection;
                             $user = new user($this->user_id);
+                            $viewer = new user($viewer_id);
                             $posts = $connect->conn->query("SELECT * FROM posts WHERE (post_from='$this->user_id' and post_to='home') or shared LIKE CONCAT('%', '$this->user_id', '%') order by date DESC LIMIT 5 OFFSET $offset");
                             
                             if(mysqli_num_rows($posts) == 0){
@@ -484,11 +549,11 @@
                                     <textarea readonly class="body">'.$post['body'].'</textarea>
                                     <div class="toolbar">';
                                     
-                                    if(!(strstr($post['likes'],$this->user_id))) echo '<button style="margin-top: 0px;" name="'.$post['id'].'" onclick="love(this.name)"><img id="love'.$post['id'].'" src="http://localhost/social-media-platform-web/assets/img/post_love1.png"></button>';
+                                    if(!(strstr($post['likes'],$viewer_id))) echo '<button style="margin-top: 0px;" name="'.$post['id'].'" onclick="love(this.name)"><img id="love'.$post['id'].'" src="http://localhost/social-media-platform-web/assets/img/post_love1.png"></button>';
                                     else  echo '<button style="margin-top: 0px;" name="'.$post['id'].'" onclick="love(this.name)"><img id="love'.$post['id'].'" src="http://localhost/social-media-platform-web/assets/img/post_love2.png"></button>';
                                     echo'
                                     <p id="l'.$post['id'].'">'.substr_count($post['likes'],",").'</p>
-                                    <button  name="'.$post['id'].'" onclick="comment(this.name)" ><img src="http://localhost/social-media-platform-web/assets/img/post_comment.png"></button>
+                                    <button  name="'.$post['id'].'" onclick="comment(this.name)" ><img id="comment'.$post['id'].'" src="http://localhost/social-media-platform-web/assets/img/post_comment.png"></button>
                                     <p>';
                                     $id = $post['id'];
                                     $comments = $connect->conn->query("SELECT * FROM comments WHERE post_id='$id'");
@@ -497,7 +562,7 @@
                                     <button name="'.$post['id'].'" onclick="share(this.name)" ><img src="http://localhost/social-media-platform-web/assets/img/post_share.png"></button>
                                     <p id="s'.$post['id'].'">'.substr_count($post['shared'],",").'</p>';
 
-                                    if(!(strstr($post['saved'],$this->user_id))) echo '<button name="'.$post['id'].'" onclick="save(this.name)" ><img id="save'.$post['id'].'" src="http://localhost/social-media-platform-web/assets/img/post_save1.png"></button>';
+                                    if(!(strstr($post['saved'],$viewer_id))) echo '<button name="'.$post['id'].'" onclick="save(this.name)" ><img id="save'.$post['id'].'" src="http://localhost/social-media-platform-web/assets/img/post_save1.png"></button>';
                                     else echo '<button name="'.$post['id'].'" onclick="save(this.name)" ><img id="save'.$post['id'].'" src="http://localhost/social-media-platform-web/assets/img/post_save2.png"></button>';  
                                     echo '</div>
                                     </div>';
@@ -505,7 +570,6 @@
                                 $_SESSION['offset'] = $_SESSION['offset'] + mysqli_num_rows($posts); 
                             }
                         }
-
                         function load_saved_posts($offset){
                             $connect = new connection;
                             $user = new user($this->user_id);
@@ -552,7 +616,7 @@
                                     else  echo '<button style="margin-top: 0px;" name="'.$post['id'].'" onclick="love(this.name)"><img id="love'.$post['id'].'" src="http://localhost/social-media-platform-web/assets/img/post_love2.png"></button>';
                                     echo'
                                     <p id="l'.$post['id'].'">'.substr_count($post['likes'],",").'</p>
-                                    <button  name="'.$post['id'].'" onclick="comment(this.name)" ><img src="http://localhost/social-media-platform-web/assets/img/post_comment.png"></button>
+                                    <button  name="'.$post['id'].'" onclick="comment(this.name)" ><img id="comment'.$post['id'].'" src="http://localhost/social-media-platform-web/assets/img/post_comment.png"></button>
                                     <p>';
                                     $id = $post['id'];
                                     $comments = $connect->conn->query("SELECT * FROM comments WHERE post_id='$id'");
@@ -569,8 +633,6 @@
                                 $_SESSION['offset'] = $_SESSION['offset'] + mysqli_num_rows($posts); 
                             }
                         }
-
-
                         function load_group_posts($offset,$group_id){
                             $connect = new connection;
                             $user = new user($this->user_id);
@@ -601,7 +663,7 @@
                                     else  echo '<button style="margin-top: 0px;" name="'.$post['id'].'" onclick="love(this.name)"><img id="love'.$post['id'].'" src="http://localhost/social-media-platform-web/assets/img/post_love2.png"></button>';
                                     echo'
                                     <p id="l'.$post['id'].'">'.substr_count($post['likes'],",").'</p>
-                                    <button  name="'.$post['id'].'" onclick="comment(this.name)" ><img src="http://localhost/social-media-platform-web/assets/img/post_comment.png"></button>
+                                    <button  name="'.$post['id'].'" onclick="comment(this.name)" ><img id="comment'.$post['id'].'" src="http://localhost/social-media-platform-web/assets/img/post_comment.png"></button>
                                     <p>';
                                     $id = $post['id'];
                                     $comments = $connect->conn->query("SELECT * FROM comments WHERE post_id='$id'");
@@ -618,9 +680,6 @@
                                 $_SESSION['offset'] = $_SESSION['offset'] + mysqli_num_rows($posts); 
                             }
                         }
-
-
-
                         function load_page_posts($offset,$page_id){
                             $connect = new connection;
                             $user = new user($this->user_id);
@@ -651,7 +710,7 @@
                                     else  echo '<button style="margin-top: 0px;" name="'.$post['id'].'" onclick="love(this.name)"><img id="love'.$post['id'].'" src="http://localhost/social-media-platform-web/assets/img/post_love2.png"></button>';
                                     echo'
                                     <p id="l'.$post['id'].'">'.substr_count($post['likes'],",").'</p>
-                                    <button  name="'.$post['id'].'" onclick="comment(this.name)" ><img src="http://localhost/social-media-platform-web/assets/img/post_comment.png"></button>
+                                    <button  name="'.$post['id'].'" onclick="comment(this.name)" ><img id="comment'.$post['id'].'" src="http://localhost/social-media-platform-web/assets/img/post_comment.png"></button>
                                     <p>';
                                     $id = $post['id'];
                                     $comments = $connect->conn->query("SELECT * FROM comments WHERE post_id='$id'");
@@ -668,9 +727,6 @@
                                 $_SESSION['offset'] = $_SESSION['offset'] + mysqli_num_rows($posts); 
                             }
                         }
-
-
-
                         function love_post($post_id){
                             $connect = new connection;
                             $likes = $connect->conn->query("SELECT likes FROM posts WHERE id='$post_id'");
@@ -686,8 +742,9 @@
                             $shares = $connect->conn->query("SELECT * FROM posts WHERE id='$post_id'");
                             $shares = mysqli_fetch_assoc($shares);
                             $post_from = $shares['post_from'];
+                            $post_to = $shares['post_to'];
                             $shares = $shares['shared'];
-                            if(!(strstr($shares,$this->user_id)) && $this->user_id != $post_from)
+                            if(!(strstr($shares,$this->user_id)) && ($this->user_id != $post_from || $post_to!="home"))
                             {
                                 $shares = $shares.$this->user_id.",";
                                 $stat = 1;
@@ -749,6 +806,7 @@
                         function get_requests_no(){return $this->data['requests_no'];}
                         static function create($name,$user_id){
                             $connect = new connection;
+                            if(strlen($name) > 1 && strlen($name) < 15){
                             $connect->conn->query("INSERT INTO groups(group_name,group_owner) VALUES('$name','$user_id')");
                             $last_id = $connect->conn->insert_id;
                             $result = $connect->conn->query("SELECT groups,groups_no FROM users WHERE id='$user_id'");
@@ -757,6 +815,7 @@
                             $num = $result['groups_no'] + 1;
                             $connect->conn->query("UPDATE users SET groups='$groups' WHERE id='$user_id'");
                             $connect->conn->query("UPDATE users SET groups_no='$num' WHERE id='$user_id'");
+                            }
                         }
                         function join_group(){
                         $connect = new connection;
@@ -865,6 +924,7 @@
                         function get_followers(){return $this->data['followers'];}
                         function get_followers_no(){return $this->data['followers_no'];}
                         static function create($name,$user_id){
+                            if(strlen($name) > 1 && strlen($name) < 15){
                             $connect = new connection;
                             $connect->conn->query("INSERT INTO pages(page_name,page_owner) VALUES('$name','$user_id')");
                             $last_id = $connect->conn->insert_id;
@@ -874,6 +934,7 @@
                             $num = $result['pages_no'] + 1;
                             $connect->conn->query("UPDATE users SET pages='$pages' WHERE id='$user_id'");
                             $connect->conn->query("UPDATE users SET pages_no='$num' WHERE id='$user_id'");
+                            }
                         }
 
                         function follow_page(){

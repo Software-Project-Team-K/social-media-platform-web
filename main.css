@@ -19,10 +19,10 @@ body{
 }
 #writepost > img{
     width: 8%;
-    height: 40px;
+    height: 43px;
     margin: 10px;
     border-radius: 30px;
-    border: black 2px solid;
+    border: royalblue 2px solid;
     display: inline-block;
     vertical-align: top;
 }
@@ -40,6 +40,7 @@ body{
     background-color: rgba(0, 0, 0, 0.3);
     border:rgb(145, 145, 145) 3px solid;
     color: white;
+    resize: none;
 }
 ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
     color:indigo;
@@ -56,12 +57,12 @@ body{
 }
 .post > img{
     width: 7%;
-    height: 35px;
+    height: 38px;
     margin: 4px 10px;
     border-radius: 30px;
     display: inline-block;
     vertical-align: middle;
-    border: 2px solid whitesmoke;
+    border: 2px solid ghostwhite;
 }
 .post > p{
     margin: 10px 0;
@@ -97,6 +98,7 @@ body{
     text-align: left;
     display: inline-block;
     color: black;
+    resize: none;
 }
 .post > .toolbar{
     height: 200px;
@@ -217,6 +219,7 @@ background-color: rgb(119, 87, 172);
     height: 80px;
     width: 70%;
     margin: 0 10px;
+    resize: none;
 }
 /**/
 #groups_pages{

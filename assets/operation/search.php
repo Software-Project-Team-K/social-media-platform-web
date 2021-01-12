@@ -31,7 +31,7 @@
                         echo '
                         <a href="http://localhost/social-media-platform-web/group.php?group='.$group["id"].'">
                         <div class="searchUnit">
-                        <img src="http://localhost/social-media-platform-web/assets/img/group_icon.jpg"><p>'.$group["group_name"].'</p>
+                        <img src="http://localhost/social-media-platform-web/assets/img/group_icon.png"><p>'.$group["group_name"].'</p>
                         </div></a>';
                     }
                 }
@@ -92,7 +92,7 @@
                             echo '
                             <a href="http://localhost/social-media-platform-web/group.php?group='.$group["id"].'">
                             <div class="searchUnit">
-                            <img src="http://localhost/social-media-platform-web/assets/img/group_icon.jpg"><p>'.$group["group_name"].'</p>
+                            <img src="http://localhost/social-media-platform-web/assets/img/group_icon.png"><p>'.$group["group_name"].'</p>
                             </div></a>';
                         }
                         for($i = 0; $i < mysqli_num_rows($pages);$i++){

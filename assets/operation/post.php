@@ -43,7 +43,7 @@
                 }
                 else {
                     $myPost = new post($_SESSION['target']->get_id());
-                    $myPost->load_profile_posts($_SESSION['offset']);
+                    $myPost->load_profile_posts($_SESSION['offset'],$_SESSION['user']->get_id());
                 }
                 die();
             }

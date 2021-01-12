@@ -101,6 +101,7 @@
                         post_to VARCHAR (10) NOT NULL,
                         post_to_id VARCHAR (10) NOT NULL,
                         body TEXT NOT NULL,
+                        tags TEXT NOT NULL,
                         date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                         likes VARCHAR(200),
                         shared TEXT NOT NULL,

@@ -264,12 +264,12 @@ body{
 }
 .post > img{
     width: 7%;
-    height: 35px;
+    height: 38px;
     margin: 4px 10px;
     border-radius: 30px;
     display: inline-block;
     vertical-align: middle;
-    border: 2px solid whitesmoke;
+    border: 2px solid ghostwhite;
 }
 .post > p{
     margin: 10px 0;

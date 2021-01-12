@@ -97,7 +97,7 @@
                                     myVar = setInterval(function () {
                                         $("#searchbox").slideUp();
                                         clearInterval(myVar);
-                                    }, 100);
+                                    }, 200);
                                 }
 
 
@@ -116,16 +116,23 @@
                                 </script>
 
                                 <audio  id="sound1">
-                                <source src="assets/audio/clickon.mp3" type="audio/mpeg">
+                                <source src="assets/audio/clickon.wav" type="audio/x-wav">
                                 </audio>
                                 <audio id="sound2">
-                                <source src="assets/audio/clickoff.mp3" type="audio/mpeg">
+                                <source src="assets/audio/clickoff.wav" type="audio/x-wav">
+                                </audio>
+                                <audio  id="sound3">
+                                <source src="assets/audio/saveon.wav" type="audio/x-wav">
+                                </audio>
+                                <audio id="sound4">
+                                <source src="assets/audio/saveoff.wav" type="audio/x-wav">
                                 </audio>
 
-
-
                             </head>
-                        <body id="body">'
+                        <body id="body" style="overflow:hidden;">
+                        <img id="welcome" style="position:absolute; display:';
+                        if(isset($_SESSION['success'])){unset($_SESSION['success']); echo 'block;';} else echo 'none;';
+                        echo 'width:100%; height:100%; top:0%; left:0%; z-index:2; " src="assets/img/welcome.gif">';
 ?>
         <!-- LETS GO BABY -->
 
@@ -152,7 +159,7 @@
                 </div>
                 <div id="pages" style="height: 46%; padding:10px 0px;">
                     <img style="width:12%; margin:5px 5px 10px 25px; vertical-align:top; display:inline-block;" src="assets/img/page_icon.png">
-                    <p style="color:indigo; display:inline-block; font-size:105%; text-align:center; border:2px gray solid; box-shadow: 1px 3px 5px indigo; font-weight:bolder; background-color:white; width:45%; margin:5px auto; padding:0; border-radius:5px;">Pages (<?php echo $_SESSION['user']->get_groups_no(); ?>)</p>                    <div id="show" style="height: 80%; border:0; text-align:left; padding: 10px 20px; overflow-y:auto;">
+                    <p style="color:indigo; display:inline-block; font-size:105%; text-align:center; border:2px gray solid; box-shadow: 1px 3px 5px indigo; font-weight:bolder; background-color:white; width:45%; margin:5px auto; padding:0; border-radius:5px;">Pages (<?php echo $_SESSION['user']->get_pages_no(); ?>)</p>                    <div id="show" style="height: 80%; border:0; text-align:left; padding: 10px 20px; overflow-y:auto;">
                     <?php
                     $pages = $_SESSION['user']->get_pages();
                     $pages_no = $_SESSION['user']->get_pages_no();
@@ -188,10 +195,11 @@
                 <div id="writepost">
                     <img src="<?php echo $_SESSION['user']->get_id()."/".$_SESSION['user']->get_profile_pic()  ?>">
                     <form id="writepostform" method="POST" action="http://localhost/social-media-platform-web/assets/operation/post.php">
-                        <textarea rows="5" placeholder="Write a Timeline Post" id="postbody" type="textbox" name="body"></textarea>
+                        <textarea rows="5" placeholder="Whats in your mind ?" id="postbody" type="textbox" name="body"></textarea>
                         <input type="hidden" placeholder="Write the Post To..." style="width:30%; float:left; margin:0;" name="post_to" value="H"> <input style="width:18%; float:right; margin: 2px 0; border-radius:5px; border:gray 2px solid; background-color:indigo; color:white;" name="submit" type="submit" value="Post">
                     </form>
                 </div>
+                
                 <!-- Load Posts -->
             </div>
             
@@ -220,6 +228,7 @@
                                 var body = document.getElementById("body");
                                 var newsfeed = document.getElementById("newsfeed");
                                 var execute = true;
+                                var current_comm;
                                 body.onscroll=function(){
                                     if(execute && html.scrollHeight - html.scrollTop <= html.clientHeight + 2){
                                         execute = false;
@@ -235,6 +244,7 @@
                                     }
                                 }
                                 body.onload=function(){
+                                        $("#welcome").fadeOut(2000,function(){$("body").css({"overflow":"auto"});});
                                         var xhttp = new XMLHttpRequest();
                                         xhttp.onreadystatechange = function() {
                                         if (this.readyState == 4 && this.status == 200) {
@@ -266,14 +276,14 @@
 
                                             if(img.src == "http://localhost/social-media-platform-web/assets/img/post_love1.png") 
                                             {
-                                            c1.play();
                                             img.src = "http://localhost/social-media-platform-web/assets/img/post_love2.png";
+                                            c1.play();
                                             num.innerHTML = Number(num.innerHTML) + 1;
                                             }
                                             else 
                                             {
-                                            c2.play();
                                             img.src = "http://localhost/social-media-platform-web/assets/img/post_love1.png";
+                                            c2.play();
                                             num.innerHTML = Number(num.innerHTML) - 1;
                                             }
                                         }
@@ -283,7 +293,9 @@
                                 }
                                 function comment(post_id){
                                     var commentbox = document.getElementById("comments");
-                                    if(commentbox.style.display=="block"){$("#comments").fadeOut(); return;}
+                                    if(commentbox.style.display=="block"){$("#comments").fadeOut(); current_comm.src = "http://localhost/social-media-platform-web/assets/img/post_comment.png"; return;}
+                                    current_comm = document.getElementById("comment" + post_id);
+                                    current_comm.src = "http://localhost/social-media-platform-web/assets/img/post_comment1.png";
                                     var comments = document.getElementById("load");
                                     var xhttp = new XMLHttpRequest();
                                         xhttp.onreadystatechange = function() {
@@ -293,11 +305,10 @@
                                         };
                                         xhttp.open("GET","http://localhost/social-media-platform-web/assets/operation/post.php?op=loadcomments&id="+post_id);
                                         xhttp.send();
-                                    $("#comments").fadeIn();
-                                   
+                                        $("#comments").fadeIn();
                                 }
                                 function closecomment(){
-                                    var commentbox = document.getElementById("comments");
+                                    current_comm.src = "http://localhost/social-media-platform-web/assets/img/post_comment.png";
                                     $("#comments").fadeOut();
                                 }
                                 function share(post_id){
@@ -317,12 +328,16 @@
                                         xhttp.onreadystatechange = function() {
                                         if (this.readyState == 4 && this.status == 200) {
                                             var img = document.getElementById("save" + post_id);
+                                            var c3 = document.getElementById("sound3");
+                                            var c4 = document.getElementById("sound4");
                                             if(img.src == "http://localhost/social-media-platform-web/assets/img/post_save1.png") 
                                             {
+                                            c3.play();
                                             img.src = "http://localhost/social-media-platform-web/assets/img/post_save2.png";
                                             }
                                             else 
                                             {
+                                            c4.play();
                                             img.src = "http://localhost/social-media-platform-web/assets/img/post_save1.png";
                                             }
                                         }

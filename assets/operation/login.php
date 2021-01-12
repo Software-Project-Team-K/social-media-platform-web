@@ -1,6 +1,4 @@
-<?php
-
-                    
+<?php   
                     require '../classes.php';
                     $connect = new connection();
                     session_start();
@@ -16,15 +14,14 @@
                         if (mysqli_num_rows($result) == 0) {$_SESSION['msg']="Invalid Google Credential!";  $_SESSION['color']="red"; header("location: ../../"); die();}
                         $row = mysqli_fetch_assoc($result);
                         $_SESSION['user'] = new user($row['id']);
-                        header("Location: ../../");
+                        $_SESSION['success'] = true;
+                        header("Location: ../../hello");
                     }
 
-                    //Get User Input
                     if ($_SERVER["REQUEST_METHOD"] == "POST") {
+                    //Get User Input
                     $logID = strtolower(test_input($_POST["logID"]));
-                    $password = test_input($_POST["password"]);}
-                    
-
+                    $password = test_input($_POST["password"]);
                     //Check If Its admin
                     $result = $connect->conn->query("SELECT * FROM admins WHERE username='$logID' AND password='$password'");
                     if (mysqli_num_rows($result) != 0) {
@@ -43,6 +40,8 @@
                     //Check If The Password is right
                     if ($password==$realpass){
                     $_SESSION['user'] = new user($logID);
-                    header("Location: ../../");}
-                    else {$_SESSION['msg']="Invalid Password!";  $_SESSION['color']="red"; header("location: ../../");}              
+                    $_SESSION['success'] = true;
+                    header("Location: ../../hello");}
+                    else {$_SESSION['msg']="Invalid Password!";  $_SESSION['color']="red"; header("location: ../../");}  
+                    }            
 ?>

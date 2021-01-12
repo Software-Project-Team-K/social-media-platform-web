@@ -54,6 +54,7 @@
                                <div style="height:40px; background-color: white;"></div>
 
          
+                               <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
                                <script>
                                var arrow = document.getElementById("arrow");
                                var notiBtn = document.getElementById("notiBtn");
@@ -61,36 +62,39 @@
                                var menu = document.getElementById("menu");  
                                var noti = document.getElementById("noti");
                                arrow.onclick = function() {
-                                   if(menu.style.display == "block")menu.style.display = "none"
-                                   else menu.style.display = "block";}
+                                   $("#menu").slideToggle();
+                               }
                                notiBtn.onclick = function() {
-                                   if(noti.style.display == "block")noti.style.display = "none"
+                                   if(noti.style.display == "block")$("#noti").slideUp();
                                    else {
-
                                        var xhttp = new XMLHttpRequest();
                                        xhttp.onreadystatechange = function() {
                                          if (this.readyState == 4 && this.status == 200) {
                                           document.getElementById("noti_img").src = "../assets/img/icn_notification.png";
                                          }
                                        };
-                                       xhttp.open("GET","../assets/operation/db_update.php");
+                                       xhttp.open("GET","assets/operation/db_update.php");
                                        xhttp.send();
-                                       noti.style.display = "block";
+                                       $("#noti").slideDown();
                                    }
                                }
+
+
+        
 
                                /////////
 
                                var searchBar = document.getElementById("searchbar");
                                var searchBox = document.getElementById("searchbox");
                                searchBar.onfocus= function(){
-                                   searchBox.style.display = "block";
+                                   $("#searchbox").slideDown();
+        
                                }
                                searchBar.onblur= function(){
                                    myVar = setInterval(function () {
-                                       searchBox.style.display = "none";
+                                       $("#searchbox").slideUp();
                                        clearInterval(myVar);
-                                   }, 100);
+                                   }, 200);
                                }
 
 
@@ -105,9 +109,7 @@
                                xhttp.send();
                                }
 
-
                                </script>
-
 
                             </head>
                         <body>'
@@ -128,19 +130,24 @@ if(isset($_GET["code"]))
   $data = $google_service->userinfo->get();
   if(!empty($data['id']))
   {
-   $_SESSION['user']->link_google($data['id']);
+    $_SESSION['g'] = $_SESSION['user']->link_google($data['id']);
    $google_client2->revokeToken();
    unset($_SESSION['access_token']);
   }
  }
 }   
 ?>
-<div style="width:15%; display:inline-block; background-color:rgb(180,180,180); border-right:2px solid indigo; border-bottom:2px solid indigo; padding:0 30px 30px 30px; border-radius:0 0 50px 0; vertical-align:top; text-align:center;">
-<h3 style="color:blue; background-color:whitesmoke; border:1px solid indigo; border-radius:5px">Account Settings</h3>
+<div style="width:10%; display:inline-block; background-color:rgba(220,220,220,0.5); border-right:2px solid indigo; border-bottom:2px solid indigo; padding:0 15px 15px 15px; border-radius:0 0 50px 0; vertical-align:top; text-align:center;">
+<h3 style="color:white; background-color:rgba(160,50,180,0.5); border:1px solid indigo; border-radius:5px">Account Settings</h3>
 <img style="width:100%;" src="../assets/img/acc_settings.png">
 </div>
 <div class="wrapper">
 
+                    <?php if(isset($_SESSION['g'])){
+                    echo '<h2 class="header" style="color:orange; background-color:whitesmoke;">
+                        '.$_SESSION['g'].'
+                    </h2>'; unset($_SESSION['g']);}
+                    ?>
                     <h4 class="header">
                         General Settings
                     </h4>
@@ -219,7 +226,7 @@ if(isset($_GET["code"]))
                                         //This is for check user has login into system by using Google account, if User not login into system then it will execute if block of code and make code for display Login link for Login using Google account.
                                         if(!isset($_SESSION['access_token']))
                                         {
-                                        echo $login_button = '<a style="margin: auto 0;" href="'.$google_client2->createAuthUrl().'"><img style="width:80px; border-radius:10px;" src="http://localhost/social-media-platform-web/assets/img/google.png" /></a>';
+                                        echo $login_button = '<a onclick="g()" style="margin: auto 0;"  href="'.$google_client2->createAuthUrl().'"><img style="width:80px; border-radius:10px;" src="http://localhost/social-media-platform-web/assets/img/google.png" /></a>';
                                         }
                                         ?>
                                 </div>
@@ -228,12 +235,9 @@ if(isset($_GET["code"]))
 
 
 
-
-
-
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
         <script type="text/javascript">
-        
+
         var frm0 = $('#change0');
         frm0.submit(function (e) {
 
