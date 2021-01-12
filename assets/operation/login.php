@@ -26,11 +26,11 @@
                     
 
                     //Check If Its admin
-                    /*$result = $connect->conn->query("SELECT * FROM admins WHERE username='$logID' AND password='$password'");
+                    $result = $connect->conn->query("SELECT * FROM admins WHERE username='$logID' AND password='$password'");
                     if (mysqli_num_rows($result) != 0) {
                         $_SESSION['admin'] = new admin($logID);
                         header("Location: ../../");
-                    }*/
+                    }
 
                     //Check If The User not Exists
                     $result = $connect->conn->query("SELECT * FROM users WHERE email='$logID' or id='$logID' or phone_num='$logID'");
