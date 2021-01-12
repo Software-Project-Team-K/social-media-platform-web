@@ -133,7 +133,8 @@
                         id INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
                         page_name VARCHAR(30) NOT NULL,
                         page_owner VARCHAR(30) NOT NULL,
-                        admins TEXT NOT NULL,     
+                        admins TEXT NOT NULL,   
+                        admins_no INT(10) NOT NULL,
                         followers TEXT NOT NULL,
                         followers_no INT(10) NOT NULL
                     )";

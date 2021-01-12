@@ -4,26 +4,23 @@
 
             if ($_SERVER["REQUEST_METHOD"] == "GET") {
                 switch ($_GET['op']) {
-                    case 'join':
-                        $_SESSION['group']->join_group();
+                    case 'follow':
+                        $_SESSION['page']->follow_page();
                         break;
-                    case 'cancel':
-                        $_SESSION['group']->cancel_request();
-                        break;
-                    case 'leave':
-                        $_SESSION['group']->leave_group();
+                    case 'unfollow':
+                        $_SESSION['page']->unfollow_page();
                         break;
                     case 'delete':
-                        $_SESSION['group']->delete_group();
+                        $_SESSION['page']->delete_page();
                         break;
-                    case 'kick':
-                        $_SESSION['group']->kick_member($_GET['id']);
+                    case 'leave':
+                        $_SESSION['page']->leave_admin();
                         break;
-                    case 0:
-                        $_SESSION['group']->accept_request($_GET['id']);
+                    case 'promote':
+                        $_SESSION['page']->give_admin($_GET['id']);
                         break;
-                    case 1:
-                        $_SESSION['group']->refuse_request($_GET['id']);
+                    case 'demote':
+                        $_SESSION['page']->take_admin($_GET['id']);
                         break;
                 }
                 die();

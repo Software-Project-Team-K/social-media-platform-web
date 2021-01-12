@@ -36,6 +36,11 @@
                     $myPost = new post($_SESSION['user']->get_id());
                     $myPost->load_group_posts($_SESSION['offset'],$_GET['id']);
                 }
+                else if($_GET['page']=="page")
+                {
+                    $myPost = new post($_SESSION['user']->get_id());
+                    $myPost->load_page_posts($_SESSION['offset'],$_GET['id']);
+                }
                 else {
                     $myPost = new post($_SESSION['target']->get_id());
                     $myPost->load_profile_posts($_SESSION['offset']);

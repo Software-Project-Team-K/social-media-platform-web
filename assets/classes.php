@@ -463,6 +463,57 @@
 
 
 
+                        function load_page_posts($offset,$page_id){
+                            $connect = new connection;
+                            $user = new user($this->user_id);
+                            $pattern = "P".$page_id;
+                            $posts = $connect->conn->query("SELECT * FROM posts WHERE post_to='$pattern' order by date DESC LIMIT 5 OFFSET $offset");
+                            
+                            if(mysqli_num_rows($posts) == 0){
+                                echo'
+                                <div class="post" style="text-align:center; background-color:transparent; width:60%;">
+                                <p style="font-weight:bolder; color:indigo; ">No More Page Posts.</p>
+                                </div>';
+                                $_SESSION['offset']=-1;
+                            }
+
+                            else{
+                                for($i=0;$i<mysqli_num_rows($posts);$i++){
+                                    $post = mysqli_fetch_assoc($posts);
+                                    $myPage = new page($_SESSION['user']->get_id(),$page_id);
+                                    echo' 
+                                    <div class="post">
+                                    <img src="http://localhost/social-media-platform-web/assets/img/page_icon.png">
+                                    <p>'.$myPage->get_name().'</p>
+                                    <samp>'.date_optimize($post['date']).'</samp>
+                                    <hr>
+                                    <textarea readonly class="body">'.$post['body'].'</textarea>
+                                    <div class="toolbar">';
+                                    
+                                    if(!(strstr($post['likes'],$this->user_id))) echo '<button style="margin-top: 0px;" name="'.$post['id'].'" onclick="love(this.name)"><img id="love'.$post['id'].'" src="http://localhost/social-media-platform-web/assets/img/post_love1.png"></button>';
+                                    else  echo '<button style="margin-top: 0px;" name="'.$post['id'].'" onclick="love(this.name)"><img id="love'.$post['id'].'" src="http://localhost/social-media-platform-web/assets/img/post_love2.png"></button>';
+                                    echo'
+                                    <p id="l'.$post['id'].'">'.substr_count($post['likes'],",").'</p>
+                                    <button  name="'.$post['id'].'" onclick="comment(this.name)" ><img src="http://localhost/social-media-platform-web/assets/img/post_comment.png"></button>
+                                    <p>';
+                                    $id = $post['id'];
+                                    $comments = $connect->conn->query("SELECT * FROM comments WHERE post_id='$id'");
+                                    echo mysqli_num_rows($comments);
+                                    echo'</p>
+                                    <button name="'.$post['id'].'" onclick="share(this.name)" ><img  src="http://localhost/social-media-platform-web/assets/img/post_share.png"></button>
+                                    <p id="s'.$post['id'].'">'.substr_count($post['shared'],",").'</p>';
+
+                                    if(!(strstr($post['saved'],$this->user_id))) echo '<button name="'.$post['id'].'" onclick="save(this.name)" ><img id="save'.$post['id'].'" src="http://localhost/social-media-platform-web/assets/img/post_save1.png"></button>';
+                                    else echo '<button name="'.$post['id'].'" onclick="save(this.name)" ><img id="save'.$post['id'].'" src="http://localhost/social-media-platform-web/assets/img/post_save2.png"></button>';  
+                                    echo '</div>
+                                    </div>';
+                                }
+                                $_SESSION['offset'] = $_SESSION['offset'] + mysqli_num_rows($posts); 
+                            }
+                        }
+
+
+
                         function love_post($post_id){
                             $connect = new connection;
                             $likes = $connect->conn->query("SELECT likes FROM posts WHERE id='$post_id'");
@@ -653,6 +704,11 @@
                         }
                         function get_id(){return $this->data['id'];}
                         function get_name(){return $this->data['page_name'];}
+                        function get_owner(){return $this->data['page_owner'];}
+                        function get_admins(){return $this->data['admins'];}
+                        function get_admins_no(){return $this->data['admins_no'];}
+                        function get_followers(){return $this->data['followers'];}
+                        function get_followers_no(){return $this->data['followers_no'];}
                         static function create($name,$user_id){
                             $connect = new connection;
                             $connect->conn->query("INSERT INTO pages(page_name,page_owner) VALUES('$name','$user_id')");
@@ -664,6 +720,82 @@
                             $connect->conn->query("UPDATE users SET pages='$pages' WHERE id='$user_id'");
                             $connect->conn->query("UPDATE users SET pages_no='$num' WHERE id='$user_id'");
                         }
+
+                        function follow_page(){
+                            $connect = new connection;
+                            $followers = $this->get_followers().$this->user_id.",";
+                            $followers_no = $this->get_followers_no() + 1;
+                            $connect->conn->query("UPDATE pages SET followers='$followers' WHERE id='$this->page_id'");
+                            $connect->conn->query("UPDATE pages SET followers_no='$followers_no' WHERE id='$this->page_id'");
+                            $id = $this->user_id;
+                            $user = new user($id);
+                            $pages = $user->get_pages().$this->page_id.",";
+                            $num = $user->get_pages_no() +1;
+                            $connect->conn->query("UPDATE users SET pages='$pages' WHERE id='$id'");
+                            $connect->conn->query("UPDATE users SET pages_no='$num' WHERE id='$id'");
+                            }
+                            function unfollow_page(){
+                            $connect = new connection;
+                            $followers = str_replace($this->user_id.",","",$this->get_followers());
+                            $followers_no = $this->get_followers_no() - 1;
+                            $connect->conn->query("UPDATE pages SET followers='$followers' WHERE id='$this->page_id'");
+                            $connect->conn->query("UPDATE pages SET followers_no='$followers_no' WHERE id='$this->page_id'");
+                            $id = $this->user_id;
+                            $user = new user($id);
+                            $pages = str_replace($this->page_id.",","",$user->get_pages());
+                            $num = $user->get_pages_no() - 1;
+                            $connect->conn->query("UPDATE users SET pages='$pages' WHERE id='$id'");
+                            $connect->conn->query("UPDATE users SET pages_no='$num' WHERE id='$id'");
+                            }
+                            function give_admin($id){
+                            $connect = new connection;
+                            $followers = str_replace($id.",","",$this->get_followers());
+                            $followers_no = $this->get_followers_no() - 1;
+                            $connect->conn->query("UPDATE pages SET followers='$followers' WHERE id='$this->page_id'");
+                            $connect->conn->query("UPDATE pages SET followers_no='$followers_no' WHERE id='$this->page_id'");
+                            $admins = $this->get_admins().$id.",";
+                            $admins_no = $this->get_admins_no() + 1;
+                            $connect->conn->query("UPDATE pages SET admins='$admins' WHERE id='$this->page_id'");
+                            $connect->conn->query("UPDATE pages SET admins_no='$admins_no' WHERE id='$this->page_id'");
+                            }
+                            function take_admin($id){
+                            $connect = new connection;
+                            $followers =  $this->get_followers().$id.",";
+                            $followers_no = $this->get_followers_no() + 1;
+                            $connect->conn->query("UPDATE pages SET followers='$followers' WHERE id='$this->page_id'");
+                            $connect->conn->query("UPDATE pages SET followers_no='$followers_no' WHERE id='$this->page_id'");
+                            $admins = str_replace($id.",","",$this->get_admins());
+                            $admins_no = $this->get_admins_no() - 1;
+                            $connect->conn->query("UPDATE pages SET admins='$admins' WHERE id='$this->page_id'");
+                            $connect->conn->query("UPDATE pages SET admins_no='$admins_no' WHERE id='$this->page_id'");
+                            }
+                            function leave_admin(){
+                            $this->take_admin($this->user_id);
+                            }
+                            function delete_page(){
+
+                                $connect = new connection;
+                                $members = $this->get_followers().$this->get_admins().$this->get_owner().",";
+                                $members_no = $this->get_followers_no() + $this->get_admins_no() + 1;
+    
+                                if($members_no!=0){
+                                    $start = 0;
+                                    for($i = 0; $i <$members_no; $i++){
+                                    $end = strpos($members,",",$start + 1);
+                                    $user = new user(substr($members,$start,$end - $start));
+                                    $start = $end + 1;
+                                    $pages = str_replace($this->page_id.",","",$user->get_pages());
+                                    $num = $user->get_pages_no() -1;
+                                    $user_id = $user->get_id();
+                                    $connect->conn->query("UPDATE users SET pages='$pages' WHERE id='$user_id'");
+                                    $connect->conn->query("UPDATE users SET pages_no='$num' WHERE id='$user_id'");
+                                    }
+                                }
+ 
+                                $connect->conn->query("DELETE FROM pages WHERE id='$this->page_id'");  
+
+                            }
+
                     }
 
                     class dynamic_validation{
