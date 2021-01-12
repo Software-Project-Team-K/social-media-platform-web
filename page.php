@@ -124,8 +124,8 @@
 ?>
         <!-- LETS GO BABY -->
 
-        <div id="groups_pages" style="text-align:center;">
-        <img src="assets/img/page_icon.png" style="width:60%; margin: 5px auto; border-radius:inherit;" >
+        <div id="groups_pages" style="text-align:center; height:82%;">
+        <img src="assets/img/page_icon.png" style="width:50%; margin: 5px auto; border-radius:inherit;" >
         <h3 style="margin:0 0 10px 0; color:green; font-style:italic;"> <?php echo $_SESSION['page']->get_name(); ?> </h3>
 
         <button id="p_button" style="border-radius:5px; color:indigo; font-weight:bolder;" onclick="page_button()"><?php
@@ -138,7 +138,7 @@
        
        ?></button>
         <hr>
-        <p style="margin:5px auto; width:70%; font-size:130%; color:white; border:2px solid black; border-radius:5px; background-color:indigo; font-weight:bolder; "> Fans (<?php echo $_SESSION['page']->get_followers_no();?>) </p>
+        <p style="margin:5px auto; width:70%; font-size:120%; color:white; border:2px solid black; border-radius:6px; background-color:indigo; font-weight:bolder; "> Fans (<?php echo $_SESSION['page']->get_followers_no();?>) </p>
         <div style="width:100%; text-align:left; padding:20px; height:30%; border:2px solid gray; border-radius:10px; overflow-y:auto; <?php if($_SESSION['type']=="fan") echo 'display:none;' ?>">
         <?php
                     $followers = $_SESSION['page']->get_followers();
@@ -152,10 +152,10 @@
                         echo'<div style="border:2px solid transparent;"> - <a style="font-size:95%; text-decoration:none;" href="http://localhost/social-media-platform-web/'.$follower->get_id().'"> '.$follower->get_name().'</a><button name="'.$follower->get_id().'" onclick="promote_button(this.name)" style="margin: 0 5px;'; if($_SESSION['type']!="owner") echo'display:none;';  echo'padding:1px 2px; border-radius:3px; font-size:80%;  float:right;">Promote</button></div>';
                         } 
                     }
-                    else echo '<p style="text-align:center; color:gray; font-weight:bolder; font-size:130%; margin: 60px auto;">No Fans</p>';
+                    else echo '<p style="text-align:center; color:gray; font-weight:bolder; font-size:130%; margin: 40px auto;">No Fans</p>';
         ?>
         </div>
-        <p style="margin:5px auto; width:80%; font-size:130%; color:white; border:2px solid black; border-radius:5px; background-color:indigo; font-weight:bolder; <?php if($_SESSION['type']!="owner") echo 'display:none;' ?>"> Admins (<?php echo $_SESSION['page']->get_admins_no(); ?>) </p>
+        <p style="margin:5px auto; width:70%; font-size:120%; color:white; border:2px solid black; border-radius:6px; background-color:indigo; font-weight:bolder; <?php if($_SESSION['type']!="owner") echo 'display:none;' ?>"> Admins (<?php echo $_SESSION['page']->get_admins_no(); ?>) </p>
         <div style="width:100%; text-align:left; padding:20px; height:30%; border:2px solid gray; border-radius:10px; overflow-y:auto; <?php if($_SESSION['type']!="owner") echo 'display:none;' ?>">
         <?php
                     $admins = $_SESSION['page']->get_admins();
@@ -169,7 +169,7 @@
                         echo'<div style="border:2px solid transparent;"> - <a style="font-size:95%; text-decoration:none;" href="http://localhost/social-media-platform-web/'.$admin->get_id().'"> '.$admin->get_name().'</a><button name="'.$admin->get_id().'" onclick="demote_button(this.name)" style="margin: 0 5px; padding:1px 2px; border-radius:3px; font-size:80%;  float:right;">Demote</button></div>';
                       }
                     }
-                    else echo '<p style="text-align:center; color:gray; font-weight:bolder; font-size:130%; margin: 60px auto;">No Requests</p>';
+                    else echo '<p style="text-align:center; color:gray; font-weight:bolder; font-size:130%; margin: 40px auto;">No Admins</p>';
         ?>
         </div>
         </div> 
