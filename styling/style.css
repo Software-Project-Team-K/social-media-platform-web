@@ -183,8 +183,8 @@ textarea:focus
 	margin: 0;
 	position: absolute;
 	border:none;
-	background-color: #20AAE5;
-	color: #156588;
+	background-color: indigo;
+	color: white;
 	border-radius: 5px;
 	font-family: 'Bellota-BoldItalic', sans-serif;
 	text-shadow: #73B6E2 0.5px 0.5px 0px;
@@ -220,8 +220,8 @@ textarea:focus
 	margin-bottom: 5px;
 }
 .message#green {
-	background-color: #2ecc71;
-	border-color: #27ae60;
+	background-color: #aab1b2;
+	border-color: #aab1b2;
 	float: left;
 	margin-bottom: 5px;
 }
