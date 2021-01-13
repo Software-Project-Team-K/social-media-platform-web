@@ -22,7 +22,48 @@
              echo '
                     <!DOCTYPE html>
                         <html id="html">
-        
+                        <div id="chat">
+                        <div id="roomsbig">
+                            <button id="newRoom" style="margin:20px 0;">Create a new room</button>
+                            <!-- rooms -->
+                            <div id="rooms">
+                            <!-- load here -->
+                            </div>
+                        </div><div id="msgsbig">
+                            <a style="float:right; font-weight:bolder; font-size:120%; cursor:pointer; color:red; margin:5px 40px;" id="chatClose">X</a>
+                            <div id="msgs">
+                            <p style="font-size:160%; color:royalblue; text-align:center; margin: 200px 40%;">Select Room To Start Chatting!</p>
+                            </div>
+                            <div id="send">
+                                <div class="ay" style="width:fit-content; height:60%;">
+                                    <textarea id="theMsg" rows="4" cols="40" type="textbox" name="body" style=" vertical-align:middle; resize:none;"></textarea>
+                                    <button onclick="sendMsg()" style="vertical-align:middle;">Send</button>
+                                </div><div class="ay" style="width:fit-content; height:25%;">
+                                    <button onclick="show_friends()">Add Members</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="friends">
+                        <button style="margin:10px;" onclick="hide_friends()">Close</button>';
+
+                        $friends = $_SESSION['user']->get_friends();
+                        $friends_no = $_SESSION['user']->get_friends_no();
+                        if($friends_no!=0){
+                            $start = 0;
+                            for($i=0; $i<$friends_no; $i++){
+                            $end = strpos($friends,",",$start + 1);
+                            $friend_id = substr($friends,$start,$end - $start);
+                            $friend = new user($friend_id);
+                            $start = $end + 1;
+                            echo'<p id="'.$friend_id.'" onclick="addMember(this.id)" class="friend">'.$friend->get_name().'</p>';
+                            }
+                        }
+                        else echo '<p style="text-align:center; color:gray; font-weight:bolder; font-size:120%; margin: 30px 0;">No Friends To Show</p>';
+                        
+                        
+                    echo '</div>
                             <head>
                                     <link rel="stylesheet" href="../profile/main.css">
                                     <meta charset="utf-8">
@@ -49,7 +90,7 @@
                                        
                                        <div id="navbuttons">
                                                    <button><a href="../'.$_SESSION["user"]->get_id().'"><img src="../'.$_SESSION["user"]->get_id()."/".$_SESSION["user"]->get_profile_pic().'"></a></button>
-                                                   <button><img src="../assets/img/icn_msg.png"></button>
+                                                   <button id="chatBtn"><img src="../assets/img/icn_msg.png"></button>
                                                    <button id="notiBtn"><img id="noti_img" src="../assets/img/icn_notification'.$_SESSION["user"]->get_noti_statues().'.png"></button>
                                                    <button id="arrow"><img src="../assets/img/icn_settings.png"></button>
                                                    <div id="noti">';
@@ -69,6 +110,99 @@
              
                                    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
                                    <script>
+
+
+
+                                   var chatBtn = document.getElementById("chatBtn");
+                                   var chat = document.getElementById("chat");
+                                   var chatClose = document.getElementById("chatClose");
+                                   var newRoom  = document.getElementById("newRoom");
+                                   var rooms  = document.getElementById("rooms");
+                                   var msgs = document.getElementById("msgs");
+                                   var send = document.getElementById("send");
+                                   var theMsg = document.getElementById("theMsg");
+                                   var currentRoom;
+    
+    
+                                   chatBtn.onclick = function() {
+                                       var xhttp = new XMLHttpRequest();
+                                       xhttp.onreadystatechange = function() {
+                                           rooms.innerHTML= this.responseText;
+                                           msgs.scrollTop = msgs.scrollHeight;
+                                           $("#chat").fadeIn();
+                                       };
+                                       xhttp.open("GET","../assets/operation/chat.php?op=load_rooms");
+                                       xhttp.send();  
+                                   }
+                                   chatClose.onclick = function() {
+                                       $("#chat").fadeOut();
+                                   }
+                                   newRoom.onclick = function() {
+                                       var xhttp = new XMLHttpRequest();
+                                       xhttp.onreadystatechange = function() {
+                                           
+                                           var xhttp2 = new XMLHttpRequest();
+                                           xhttp2.onreadystatechange = function() {
+                                               rooms.innerHTML= this.responseText;
+                                           };
+                                           xhttp2.open("GET","../assets/operation/chat.php?op=load_rooms");
+                                           xhttp2.send();  
+    
+                                       };
+                                       xhttp.open("GET","../assets/operation/chat.php?op=create_room");
+                                       xhttp.send();
+                                   }
+                                   
+                                   function loadRoom(id){
+                                       currentRoom = id;
+                                       var xhttp = new XMLHttpRequest();
+                                       xhttp.onreadystatechange = function() {
+                                           msgs.innerHTML= this.responseText;
+                                           msgs.scrollTop = msgs.scrollHeight;
+                                           send.style.display="block";
+                                       };
+                                       xhttp.open("GET","../assets/operation/chat.php?op=load_room&id="+id);
+                                       xhttp.send();  
+                                   }
+    
+                                   function sendMsg(){
+                                       if(theMsg.value!=""){
+                                           var xhttp = new XMLHttpRequest();
+                                           xhttp.onreadystatechange = function() {
+                                               var xhttp = new XMLHttpRequest();
+                                               xhttp.onreadystatechange = function() {
+                                                   msgs.innerHTML= this.responseText;
+                                                   msgs.scrollTop = msgs.scrollHeight;
+                                               };
+                                               xhttp.open("GET","../assets/operation/chat.php?op=load_room&id="+currentRoom);
+                                               xhttp.send();  
+                                           };
+                                           xhttp.open("GET","../assets/operation/chat.php?op=send_msg&body="+ theMsg.value);
+                                           xhttp.send();  
+                                       }
+                                   }
+    
+                                   function show_friends(){
+                                       $("#friends").fadeIn();
+                                   }
+                                   function hide_friends(){
+                                       $("#friends").fadeOut();
+                                   }
+    
+                                   function addMember(id){
+                                       var xhttp = new XMLHttpRequest();
+                                       xhttp.onreadystatechange = function() {
+                                           if(this.responseText == "yes") location.reload();
+                                       };
+                                       xhttp.open("GET","../assets/operation/chat.php?op=add_member&id="+id);
+                                       xhttp.send();  
+                                   }
+            
+
+
+
+
+
                                    var arrow = document.getElementById("arrow");
                                    var notiBtn = document.getElementById("notiBtn");
    

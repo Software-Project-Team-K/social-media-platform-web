@@ -62,6 +62,7 @@
                     $conn->query("INSERT INTO users(f_name,l_name,full_name,email,password,phone_num,gender,birth_date,friends_no,friends,profile_pic,cover_pic) VALUES('Rehab','Farag','Rehab Farag','rehab@gmail.com','rehab','0123456789','female','2000-1-1','2','1,2,','../5/rehab.jpg','../5/cover5.jpg')");
                     echo "Test users inserted successfully"."<br>";
                     $sql = "ALTER TABLE users AUTO_INCREMENT=1001";
+                    $conn->query($sql);
 
                    //CREATE ADMINS TABLE
                    $sql = "CREATE TABLE admins(
@@ -129,6 +130,26 @@
                     if ($conn->query($sql) === TRUE) echo "Table comments created successfully"."<br>";
                     else echo "Error creating Table: " . $conn->error."<br>";
 
+                    //CREATE ROOMS TABLE
+                     $sql = "CREATE TABLE rooms(
+                        id INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                        members TEXT NOT NULL
+                    )";
+                    if ($conn->query($sql) === TRUE) echo "Table rooms created successfully"."<br>";
+                    else echo "Error creating Table: " . $conn->error."<br>";
+
+                     //CREATE MESSEGES TABLE
+                     $sql = "CREATE TABLE messeges(
+                        id INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                        room_id INT(10) NOT NULL,
+                        messege_from VARCHAR(30) NOT NULL,
+                        body TEXT NOT NULL,     
+                        date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                    )";
+                    if ($conn->query($sql) === TRUE) echo "Table messeges created successfully"."<br>";
+                    else echo "Error creating Table: " . $conn->error."<br>";
+
+
                     //CREATE GROUPS TABLE
                      $sql = "CREATE TABLE groups(
                         id INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -141,6 +162,8 @@
                     )";
                     if ($conn->query($sql) === TRUE) echo "Table groups created successfully"."<br>";
                     else echo "Error creating Table: " . $conn->error."<br>";
+                    $sql = "ALTER TABLE groups AUTO_INCREMENT=1001";
+                    $conn->query($sql);
 
                     //CREATE PAGES TABLE
                      $sql = "CREATE TABLE pages(
@@ -154,6 +177,8 @@
                     )";
                     if ($conn->query($sql) === TRUE) echo "Table pages created successfully"."<br>";
                     else echo "Error creating Table: " . $conn->error."<br>";
+                    $sql = "ALTER TABLE pages AUTO_INCREMENT=1001";
+                    $conn->query($sql);
 
                     //CLOSE THE CONNECTION
                     $conn->close();

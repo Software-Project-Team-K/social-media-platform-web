@@ -192,21 +192,6 @@
                         }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                         function ban_unit($pattern){
 
                             $connect = new connection;
@@ -1142,6 +1127,71 @@
                         }
                         function get_errors(){
                             return $this->errors;
+                        }
+                    }
+                    class chat{
+                        private $user_id;
+                        private $user;
+                        private $room_id;
+
+                        function __construct($user_id,$room_id){
+                            $this->user_id = $user_id;
+                            $this->user = new user($user_id);
+                            $this->room_id = $room_id;
+                        }
+                        static function create_room($user_id){
+                            $connect = new connection;
+                            $member = $user_id.",";
+                            $connect->conn->query("INSERT INTO rooms(members) VALUES('$member')");
+                        }
+                        static function load_rooms($user_id){
+                            $connect = new connection;
+                            $rooms = $connect->conn->query("SELECT * FROM rooms WHERE members LIKE '%$user_id,%' ");
+                            for($i=0;$i<mysqli_num_rows($rooms);$i++){
+                                $room = mysqli_fetch_assoc($rooms);
+                                $ids = $room['members'];
+                                $names = "";
+                                for($start=0; $start <strlen($ids); $start++){
+                                $end = strpos($ids,",",$start + 1);
+                                $member = new user(substr($ids,$start,$end - $start));
+                                $names .= $member->get_name().",";
+                                $start = $end;
+                                }
+                                echo '<div class="room" id="'.$room['id'].'" onclick="loadRoom(this.id)"><p>'.$names.'</p></div>'; 
+                            }
+                        }
+                        function load_conversation(){
+                            $connect = new connection;
+                            $messeges = $connect->conn->query("SELECT * FROM messeges WHERE room_id='$this->room_id' order by date ASC LIMIT 100");
+                            for($i=0; $i<mysqli_num_rows($messeges); $i++){
+                                $messege = mysqli_fetch_assoc($messeges);
+                                $writer_id = $messege['messege_from'];
+                                $name = "";
+                                $body = $messege['body'];
+                                $date = $messege['date'];
+                                $date = date_optimize($date);
+                                if($this->user_id != $writer_id){
+                                    $writer = new user($writer_id);
+                                    $name = $writer->get_name();
+                                }
+                                echo '<div class="msg"'; if($name=="")echo 'style="float:right; background-color:indigo;"'; echo'><samp style="float:left; color:Orange;">'.$name.'</samp><samp style="float:right; color:rgb(200,200,200);">'.$date.'</samp><br>'.'<p>'.$body.'</p></div>';
+                            }
+                        }
+                        function send_msg($body){
+                            $connect = new connection;
+                            $connect->conn->query("INSERT INTO messeges(room_id,messege_from,body) VALUES('$this->room_id','$this->user_id','$body')");
+                        }
+                        function add_member($target_id){
+                            $connect = new connection;
+                            $members = $connect->conn->query("SELECT members FROM rooms WHERE id='$this->room_id'");
+                            $members = mysqli_fetch_assoc($members);
+                            $members = $members['members'];
+                            if(!strstr($members,$target_id.",")){
+                            $members = $members.$target_id.",";
+                            $connect->conn->query("UPDATE rooms SET members='$members' WHERE id='$this->room_id'");
+                            return 'yes';
+                            }
+                            return 'no';
                         }
                     }
                     //Some Functions

@@ -16,6 +16,50 @@
             echo '
                  <!DOCTYPE html>
                     <html id="html">
+
+                        <div id="chat">
+                            <div id="roomsbig">
+                                <button id="newRoom" style="margin:20px 0;">Create a new room</button>
+                                <!-- rooms -->
+                                <div id="rooms">
+                                <!-- load here -->
+                                </div>
+                            </div><div id="msgsbig">
+                                <a style="float:right; font-weight:bolder; font-size:120%; cursor:pointer; color:red; margin:5px 40px;" id="chatClose">X</a>
+                                <div id="msgs">
+                                <p style="font-size:160%; color:royalblue; text-align:center; margin: 200px 40%;">Select Room To Start Chatting!</p>
+                                </div>
+                                <div id="send">
+                                    <div class="ay" style="width:fit-content; height:60%;">
+                                        <textarea id="theMsg" rows="4" cols="40" type="textbox" name="body" style=" vertical-align:middle; resize:none;"></textarea>
+                                        <button onclick="sendMsg()" style="vertical-align:middle;">Send</button>
+                                    </div><div class="ay" style="width:fit-content; height:25%;">
+                                        <button onclick="show_friends()">Add Members</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="friends">
+                            <button style="margin:10px;" onclick="hide_friends()">Close</button>';
+
+                            $friends = $_SESSION['user']->get_friends();
+                            $friends_no = $_SESSION['user']->get_friends_no();
+                            if($friends_no!=0){
+                                $start = 0;
+                                for($i=0; $i<$friends_no; $i++){
+                                $end = strpos($friends,",",$start + 1);
+                                $friend_id = substr($friends,$start,$end - $start);
+                                $friend = new user($friend_id);
+                                $start = $end + 1;
+                                echo'<p id="'.$friend_id.'" onclick="addMember(this.id)" class="friend">'.$friend->get_name().'</p>';
+                                }
+                            }
+                            else echo '<p style="text-align:center; color:gray; font-weight:bolder; font-size:120%; margin: 30px 0;">No Friends To Show</p>';
+                            
+                            
+                        echo '</div>
+
                         <head>
                                 <link rel="stylesheet" href="main.css">
                                 <meta charset="utf-8">
@@ -35,14 +79,13 @@
                                     <div class="searchUnit" style="text-align:center; width:100%;">
                                     <samp style="color:brown;"> Results will be shown here.</samp></div>
                                     <div style="text-align:center; border:0;">
-                                    <img style="width:50%; margin:0 10%; height:130px; border:0;" src="http://localhost/social-media-platform-web/assets/img/icn_search.png"></div>
+                                    <img style="width:50%; margin:0 10%; height:130px; border:0;" src="assets/img/icn_search.png"></div>
                                     </div>
 
 
                                         <div id="navbuttons">
                                                 <button><a href='.$_SESSION["user"]->get_id().'><img src="'.$_SESSION["user"]->get_id()."/".$_SESSION["user"]->get_profile_pic().'"></a></button>
-                                                <button><img src="assets/img/icn_msg.png"></button>
-                                                
+                                                <button id="chatBtn"><img src="assets/img/icn_msg.png"></button>
                                                 <button id="notiBtn"><img id="noti_img" src="assets/img/icn_notification'.$_SESSION["user"]->get_noti_statues().'.png"></button>
                                                 <button id="arrow"><img src="assets/img/icn_settings.png"></button>
                                                 <div id="noti">';
@@ -60,9 +103,102 @@
 
                                 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
                                 <script>
+
+                                var chatBtn = document.getElementById("chatBtn");
+                                var chat = document.getElementById("chat");
+                                var chatClose = document.getElementById("chatClose");
+                                var newRoom  = document.getElementById("newRoom");
+                                var rooms  = document.getElementById("rooms");
+                                var msgs = document.getElementById("msgs");
+                                var send = document.getElementById("send");
+                                var theMsg = document.getElementById("theMsg");
+                                var currentRoom;
+
+
+                                chatBtn.onclick = function() {
+                                    var xhttp = new XMLHttpRequest();
+                                    xhttp.onreadystatechange = function() {
+                                        rooms.innerHTML= this.responseText;
+                                        msgs.scrollTop = msgs.scrollHeight;
+                                        $("#chat").fadeIn();
+                                    };
+                                    xhttp.open("GET","assets/operation/chat.php?op=load_rooms");
+                                    xhttp.send();  
+                                }
+                                chatClose.onclick = function() {
+                                    $("#chat").fadeOut();
+                                }
+                                newRoom.onclick = function() {
+                                    var xhttp = new XMLHttpRequest();
+                                    xhttp.onreadystatechange = function() {
+                                        
+                                        var xhttp2 = new XMLHttpRequest();
+                                        xhttp2.onreadystatechange = function() {
+                                            rooms.innerHTML= this.responseText;
+                                        };
+                                        xhttp2.open("GET","assets/operation/chat.php?op=load_rooms");
+                                        xhttp2.send();  
+
+                                    };
+                                    xhttp.open("GET","assets/operation/chat.php?op=create_room");
+                                    xhttp.send();
+                                }
+                                
+                                function loadRoom(id){
+                                    currentRoom = id;
+                                    var xhttp = new XMLHttpRequest();
+                                    xhttp.onreadystatechange = function() {
+                                        msgs.innerHTML= this.responseText;
+                                        msgs.scrollTop = msgs.scrollHeight;
+                                        send.style.display="block";
+                                    };
+                                    xhttp.open("GET","assets/operation/chat.php?op=load_room&id="+id);
+                                    xhttp.send();  
+                                }
+
+                                function sendMsg(){
+                                    if(theMsg.value!=""){
+                                        var xhttp = new XMLHttpRequest();
+                                        xhttp.onreadystatechange = function() {
+                                            var xhttp = new XMLHttpRequest();
+                                            xhttp.onreadystatechange = function() {
+                                                msgs.innerHTML= this.responseText;
+                                                msgs.scrollTop = msgs.scrollHeight;
+                                            };
+                                            xhttp.open("GET","assets/operation/chat.php?op=load_room&id="+currentRoom);
+                                            xhttp.send();  
+                                        };
+                                        xhttp.open("GET","assets/operation/chat.php?op=send_msg&body="+ theMsg.value);
+                                        xhttp.send();  
+                                    }
+                                }
+
+                                function show_friends(){
+                                    $("#friends").fadeIn();
+                                }
+                                function hide_friends(){
+                                    $("#friends").fadeOut();
+                                }
+
+                                function addMember(id){
+                                    var xhttp = new XMLHttpRequest();
+                                    xhttp.onreadystatechange = function() {
+                                        if(this.responseText == "yes") location.reload();
+                                    };
+                                    xhttp.open("GET","assets/operation/chat.php?op=add_member&id="+id);
+                                    xhttp.send();  
+                                }
+
+
+
+
+
+
+
+
+
                                 var arrow = document.getElementById("arrow");
                                 var notiBtn = document.getElementById("notiBtn");
-
                                 var menu = document.getElementById("menu");  
                                 var noti = document.getElementById("noti");
                                 arrow.onclick = function() {
@@ -83,10 +219,8 @@
                                     }
                                 }
 
-
-         
-
-                                /////////
+                                //////////
+                                //////////
 
                                 var searchBar = document.getElementById("searchbar");
                                 var searchBox = document.getElementById("searchbox");
@@ -130,10 +264,9 @@
                                 </audio>
 
                             </head>
-                        <body id="body" style="overflow:hidden;">
-                        <img id="welcome" style="position:absolute; display:';
-                        if(isset($_SESSION['success'])){unset($_SESSION['success']); echo 'block;';} else echo 'none;';
-                        echo 'width:100%; height:100%; top:0%; left:0%; z-index:2; " src="assets/img/welcome.gif">';
+                        <body id="body" style="overflow:hidden; display:';
+                        if(isset($_SESSION['success'])){unset($_SESSION['success']); echo 'none;">';} else echo 'block;">';
+
 ?>
         <!-- LETS GO BABY -->
 
@@ -181,7 +314,7 @@
                 <button onclick="create()"; style="color:white; background-color:indigo; width:50%; font-weight:bold; margin: 0 25%; border-radius:8px;">Create a new</button>
 
                 <div id="create" style="height: 15%; display:none; border: 2px darkblue  solid; border-radius:10px; position: absolute; bottom: 0%; left:110%;">
-                <form method="POST" action="http://localhost/social-media-platform-web/assets/operation/db_update.php">
+                <form method="POST" action="assets/operation/db_update.php">
                     <p>Name:</p><input style="width:60%" name="name" type="text"><br>
                     <input type="radio" id="male" name="type" value="Page" checked="checked"><samp> Page &emsp;</samp>
                     <input type="radio" id="female" name="type" value="Group"><samp> Group</samp><br>
@@ -195,7 +328,7 @@
             <div id="newsfeed">
                 <div id="writepost">
                     <img src="<?php echo $_SESSION['user']->get_id()."/".$_SESSION['user']->get_profile_pic()  ?>">
-                    <form id="writepostform" method="POST" action="http://localhost/social-media-platform-web/assets/operation/post.php">
+                    <form id="writepostform" method="POST" action="assets/operation/post.php">
                         <textarea rows="5" placeholder="Whats in your mind ?" id="postbody" type="textbox" name="body"></textarea>
                         <input type="hidden" placeholder="Write the Post To..." style="width:30%; float:left; margin:0;" name="post_to" value="H"> <input style="width:18%; float:right; margin: 2px 0; border-radius:5px; border:gray 2px solid; background-color:indigo; color:white;" name="submit" type="submit" value="Post">
                     </form>
@@ -214,7 +347,7 @@
                 <!-- Write Comment -->
                 <div id="writecomment">
                     <img src="<?php echo $_SESSION['user']->get_id()."/".$_SESSION['user']->get_profile_pic()  ?>">
-                    <form id="writecommentform" method="POST" action="http://localhost/social-media-platform-web/assets/operation/post.php">
+                    <form id="writecommentform" method="POST" action="assets/operation/post.php">
                         <textarea  placeholder="Write a comment" type="textbox" name="body"></textarea>
                         <input style="width:20%; height:40px; border-radius:5px;  float:right; font-size:90%; margin: 20px 1px" name="submit" type="submit" value="Write">
                     </form>
@@ -245,7 +378,7 @@
                                     }
                                 }
                                 body.onload=function(){
-                                        $("#welcome").fadeOut(2000,function(){$("body").css({"overflow":"auto"});});
+                                        $("#body").fadeIn(1000,function(){$("body").css({"overflow":"auto"});});
                                         var xhttp = new XMLHttpRequest();
                                         xhttp.onreadystatechange = function() {
                                         if (this.readyState == 4 && this.status == 200) {

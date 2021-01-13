@@ -51,14 +51,12 @@ if(!isset($_SESSION['access_token']))
         <link rel="icon" href="../assets/img/icn_logo.png">
     </head>
     
-    <body>
-            <img id="welcome" style="position:absolute; display:none; width:100%; height:100%; top:0%; left:0%; z-index:3; " src="../assets/img/welcome.gif">
-            
+    <body id="body">
             <?php 
             if(isset($_SESSION['success'])){
             echo '<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
             <script>
-            $("#welcome").fadeIn(1000,function(e){location.replace("../")});
+            $("#body").fadeOut(400,function(e){location.replace("../")});
             $("body").css({"overflow":"hidden"});
             </script>
             ';
@@ -100,8 +98,8 @@ if(!isset($_SESSION['access_token']))
                         <p>Full Name:</p>
                         <div style="float: right; margin: 15px 0; height: 20px; padding: 0; width: 50%;">
                         <input type="text" name="f_name" class="reg"  onblur="checker(this.value,this.name)" placeholder="Firstname" style="width: 50%; height:100%;"><input type="text" class="reg" name="l_name" onblur="checker(this.value,this.name)" placeholder="Lastname" style="width: 50%;height:100%;"></div>
-                        <p>Email address:</p><input  type="email" class="reg" onblur="checker(this.value,this.name)" name="email" placeholder="Enter Email">
-                        <p>Password:</p><input  type="password" class="reg" onblur="checker(this.value,this.name)" name="password" placeholder="Enter Password">
+                        <p>Email address:</p><input  type="email" id="x1" disabled class="reg" onblur="checker(this.value,this.name)" name="email" placeholder="Enter Email">
+                        <p>Password:</p><input  type="password" id="x2" disabled class="reg" onblur="checker(this.value,this.name)" name="password" placeholder="Enter Password">
                         <p>RE-Enter Password:</p><input type="password" class="reg" onblur="checker(this.value,this.name)" name="password2" placeholder="Re-Enter Password">
                         <p>Phone Number:</p><input type="text" name="phone_num" class="reg" onblur="checker(this.value,this.name)" placeholder="Enter Mobile Number">
                         <p>Date of Birth:</p><input class="reg" onblur="checker(this.value,this.name)" name="birth_date" type="date">
@@ -137,6 +135,8 @@ if(!isset($_SESSION['access_token']))
         $("#register").css("display","block");
         $("#login").css("display","none");
         $("#errMsg").css("color","yellow");
+        $("#x1").prop('disabled', false);
+        $("#x2").prop('disabled', false);
         document.getElementById("errMsg").innerHTML = "Please fill the data form to register!";
         });      
         });
