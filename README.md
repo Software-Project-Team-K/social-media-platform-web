@@ -13,7 +13,7 @@ and provide it with package of required functionality units that satisfy the nee
 * [Languages Used](#languages-used)
 
 ## How To Run
-To run this project, do the following:
+To run this project -Locally- on your pc, do the following:
 ```
 1- Download and Install XAMPP. (localhost application
 2- Run XAMPP and turn on Apache and MySQL. [*Note:port shoud be 80, if not manually change it to 80.]
@@ -27,6 +27,9 @@ To run this project, do the following:
 9- Run this file in the url to initialize the database and set the tables.
 10- All Set! Now you can head to the website and enjoy the Chatverse journey!
 ```
+To run this website on the internet visit:
+ 	[http://chatverse.great-site.net]
+
 ## Requirements
 * Operation system with a Browser application (IE7+,Edge,Opera,...) 
 * Display (14.1 to 17 inch)

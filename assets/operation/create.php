@@ -32,24 +32,24 @@
                         full_name VARCHAR(40) NOT NULL,
                         phone_num INT(25) UNSIGNED,
                         gender VARCHAR(10),
-                        bio TEXT DEFAULT 'Hey there! im a new Chatverse User!',
-                        google_id VARCHAR(25) DEFAULT 'X',
+                        bio VARCHAR(100) DEFAULT 'Hey there! im a new Chatverse User!',
+                        google_id VARCHAR(30) DEFAULT 'X',
                         reg_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                         birth_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                        profile_pic TEXT NOT NULL DEFAULT '../assets/img/default_pp.jpg',
-                        cover_pic TEXT NOT NULL DEFAULT '../assets/img/default_cover.jpg',
-                        friends TEXT NOT NULL DEFAULT '',
+                        profile_pic VARCHAR(200) NOT NULL DEFAULT '../assets/img/default_pp.jpg',
+                        cover_pic VARCHAR(200) NOT NULL DEFAULT '../assets/img/default_cover.jpg',
+                        friends TEXT NOT NULL,
                         friends_no INT(10) UNSIGNED DEFAULT 0,
-                        fr_requests TEXT DEFAULT '',
-                        groups TEXT NOT NULL DEFAULT '',
+                        fr_requests TEXT NOT NULL,
+                        groups TEXT NOT NULL,
                         groups_no INT(10) UNSIGNED DEFAULT 0,
-                        pages TEXT NOT NULL DEFAULT '',
+                        pages TEXT NOT NULL,
                         pages_no INT(10) UNSIGNED DEFAULT 0,
                         new_noti VARCHAR(5) DEFAULT '',
                         products_no INT(10) UNSIGNED DEFAULT 0,
                         enable_market INT(2) UNSIGNED DEFAULT 0,
                         is_online VARCHAR(5) DEFAULT 'NO',
-                        saved_posts TEXT NOT NULL DEFAULT ''
+                        saved_posts TEXT NOT NULL
                     )";
                     if ($conn->query($sql) === TRUE) echo "Table users created successfully"."<br>";
                     else echo "Error creating Table: " . $conn->error."<br>";

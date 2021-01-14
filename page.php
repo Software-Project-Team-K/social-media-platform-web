@@ -26,6 +26,7 @@
             echo '
                  <!DOCTYPE html>
                     <html id="html">
+                    <link rel="icon" href="assets/img/icn_logo.png">
 
                     <div id="chat">
                     <div id="roomsbig">
@@ -73,11 +74,11 @@
 
                         <head>
                                 <link rel="stylesheet" href="main.css">
+                                <link rel="icon" href="assets/img/icn_logo.png">
                                 <meta charset="utf-8">
                                 <meta http-equiv="X-UA-Compatible" content="IE=edge">
                                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
                                 <title>Chatverse | '.$_SESSION['page']->get_name()./*$_SESSION['x'].*/'</title>
-                                <link rel="icon" href="assets/img/icn_logo.png">
             
                                  <!--Navigation Bar-->
                                  <div id="nav">

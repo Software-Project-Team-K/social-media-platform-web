@@ -35,20 +35,20 @@ if(!isset($_SESSION['access_token']))
 
 <!DOCTYPE html>
 <html>
-    
+
+<link rel="icon" href="../assets/img/icn_logo.png">
     <head>
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
   <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>
   
-
+        <link rel="icon" href="../assets/img/icn_logo.png">
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Chatverse | Hello!</title>
         <link rel="stylesheet" href="main.css">
-        <link rel="icon" href="../assets/img/icn_logo.png">
     </head>
     
     <body id="body">
