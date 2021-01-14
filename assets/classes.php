@@ -109,8 +109,8 @@
                             $connect = new connection;
                             $result = $connect->conn->query("SELECT * FROM users");
                             $users_no = mysqli_num_rows($result);
-                            $result = $connect->conn->query("SELECT * FROM users WHERE is_online='YES'");
-                            $online_no = mysqli_num_rows($result);
+                            $result = $connect->conn->query("SELECT * FROM marketplace");
+                            $products_no = mysqli_num_rows($result);
                             $result = $connect->conn->query("SELECT * FROM groups");
                             $groups_no = mysqli_num_rows($result);
                             $result = $connect->conn->query("SELECT * FROM pages");
@@ -120,10 +120,11 @@
 
                             echo'
                             <div class="data"><img src="assets/img/user_icon.png"><p>Total Users Number:</p><samp> '.$users_no.'</samp></div>
-                            <div class="data"><img src="assets/img/online_icon.png"><p>Online Users Number:</p><samp> '.$online_no.'</samp></p></div>
                             <div class="data"><img src="assets/img/page_icon.png"><p>Total Pages Number:</p><samp> '.$pages_no.'</samp></p></div>
                             <div class="data"><img src="assets/img/group_icon.png"><p>Total Groups Number:</p><samp> '.$groups_no.'</samp> </p></div>
-                            <div class="data" style="border:0;"><img src="assets/img/post_icon.png"><p>Total Posts Number:</p><samp> '.$posts_no.'</samp></p></div>';
+                            <div class="data"><img src="assets/img/post_icon.png"><p>Total Posts Number:</p><samp> '.$posts_no.'</samp></p></div>
+                            <div class="data" style="border:0;"><img src="assets/img/market.png"><p>Total Products Number:</p><samp> '.$products_no.'</samp></p></div>';
+
                         }
                         static function get_trends($period){
                             if($period == ""){echo '<p style="width:100%; text-align:center;">Trends will appear here!</p>'; return;}
